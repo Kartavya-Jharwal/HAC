@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt-a-thon Team Worksheet</title>
+    <style>
+        @media print {
+            .page-break {
+                page-break-after: always;
+            }
+            body {
+                margin: 0.5in;
+            }
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        
+        .team-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .team-info input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .section-header {
+            background: #5a67d8;
+            color: white;
+            padding: 10px 15px;
+            margin: -20px -20px 15px -20px;
+            border-radius: 6px 6px 0 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .problem-selection {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .problem-option {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .problem-option input[type="radio"] {
+            margin-right: 8px;
+        }
+        
+        .prompt-box {
+            width: 100%;
+            min-height: 120px;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            background: #f7fafc;
+            resize: vertical;
+        }
+        
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        .metrics-table th {
+            background: #edf2f7;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .metrics-table td {
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .rating-circles {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .rating-circle {
+            width: 25px;
+            height: 25px;
+            border: 2px solid #cbd5e0;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .notes-area {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        .strategy-section {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .strategy-title {
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .comparison-matrix {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .comparison-matrix th {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .comparison-matrix td {
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .comparison-matrix input {
+            width: 100%;
+            border: none;
+            padding: 5px;
+            background: transparent;
+        }
+        
+        .presentation-outline {
+            background: #fef5e7;
+            padding: 15px;
+            border-left: 4px solid #f39c12;
+            margin: 15px 0;
+        }
+        
+        .timer-note {
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 10px 0;
+        }
+        
+        .checkbox-item {
+            margin: 8px 0;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        
+        label {
+            font-weight: 600;
+            color: #4a5568;
+            display: block;
+            margin: 10px 0 5px 0;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            .problem-selection {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 AI PROMPT-A-THON</h1>
+        <p style="margin: 5px 0;">Team Worksheet - 90 Minute Challenge</p>
+    </div>
+
+    <div class="team-info">
+        <div class="two-column">
+            <div>
+                <label>Team Name:</label>
+                <input type="text" placeholder="Enter your team name">
+            </div>
+            <div>
+                <label>Date & Time:</label>
+                <input type="text" placeholder="MM/DD/YYYY - HH:MM">
+            </div>
+        </div>
+        <label>Team Members:</label>
+        <input type="text" placeholder="List all team member names">
+        <label>AI Tool(s) Being Used:</label>
+        <input type="text" placeholder="ChatGPT, Claude, Gemini, etc.">
+    </div>
+
+    <!-- PART 1 -->
+    <div class="section">
+        <div class="section-header">PART 1: Problem Selection (10 minutes)</div>
+        <div class="timer-note">⏱️ START TIME: _____ : _____ | END TIME: _____ : _____</div>
+        
+        <p><strong>Select ONE challenge:</strong></p>
+        <div class="problem-selection">
+            <div class="problem-option">
+                <label>
+                    <input type="radio" name="problem" value="business">
+                    <strong>🏢 Business Innovation</strong><br>
+                    <small>Pivot retail clothing brand's business model</small>
+                </label>
+            </div>
+            <div class="problem-option">
+                <label>
+                    <input type="radio" name="problem" value="sustainability">
+                    <strong>🌍 Sustainability Solution</strong><br>
+                    <small>Reduce city food waste by 50%</small>
+                </label>
+            </div>
+            <div class="problem-option">
+                <label>
+                    <input type="radio" name="problem" value="education">
+                    <strong>📚 Education Transformation</strong><br>
+                    <small>Redesign CS curriculum for AI era</small>
+                </label>
+            </div>
+            <div class="problem-option">
+                <label>
+                    <input type="radio" name="problem" value="healthcare">
+                    <strong>🏥 Healthcare Accessibility</strong><br>
+                    <small>Improve rural clinic patient engagement</small>
+                </label>
+            </div>
+        </div>
+        
+        <label>Or define your own challenge:</label>
+        <textarea class="notes-area" placeholder="Describe your custom challenge here (must be specific and solvable)"></textarea>
+        
+        <label>Why this problem matters (key stakeholders & impact):</label>
+        <textarea class="notes-area" placeholder="Who is affected? What's at stake? Why solve this now?"></textarea>
+    </div>
+
+    <!-- PART 2 -->
+    <div class="section page-break">
+        <div class="section-header">PART 2: Prompt Crafting Round (40 minutes)</div>
+        <div class="timer-note">⏱️ START TIME: _____ : _____ | END TIME: _____ : _____</div>
+
+        <!-- Strategy 1 -->
+        <div class="strategy-section">
+            <div class="strategy-title">📎 STRATEGY 1: Role Prompting (15 min)</div>
+            <label>Define the AI's role/identity:</label>
+            <input type="text" placeholder="e.g., Senior UX Designer with 10 years experience in e-commerce" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+            
+            <label>Write your complete role-based prompt:</label>
+            <textarea class="prompt-box" placeholder="You are a [role]. You have [experience]. Your task is to [objective]. Consider [constraints]. Provide [format]."></textarea>
+            
+            <div class="two-column" style="margin-top: 10px;">
+                <div>
+                    <label>Key characteristics given to AI:</label>
+                    <textarea class="notes-area" placeholder="• Expertise area:&#10;• Experience level:&#10;• Perspective:"></textarea>
+                </div>
+                <div>
+                    <label>Expected output tone/style:</label>
+                    <textarea class="notes-area" placeholder="• Formal/Casual:&#10;• Technical depth:&#10;• Creativity level:"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strategy 2 -->
+        <div class="strategy-section">
+            <div class="strategy-title">📐 STRATEGY 2: Structured Prompting (15 min)</div>
+            <label>Choose your structure type:</label>
+            <div style="display: flex; gap: 15px; margin: 10px 0;">
+                <div class="checkbox-item">
+                    <input type="checkbox"> Numbered steps
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox"> Specific sections
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox"> Word limits
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox"> Required format
+                </div>
+            </div>
+            
+            <label>Write your complete structured prompt:</label>
+            <textarea class="prompt-box" placeholder="Analyze [problem] using this framework:&#10;1. Current State: [...]&#10;2. Desired Outcome: [...]&#10;3. Constraints: [...]&#10;Format: [specific requirements]"></textarea>
+            
+            <label>Document constraints/requirements used:</label>
+            <textarea class="notes-area" placeholder="• Output format:&#10;• Length limits:&#10;• Must include:&#10;• Must avoid:"></textarea>
+        </div>
+
+        <!-- Strategy 3 -->
+        <div class="strategy-section">
+            <div class="strategy-title">🔄 STRATEGY 3: Iterative Prompting (10 min)</div>
+            <label>Prompt 1 (Broad start):</label>
+            <textarea class="prompt-box" style="min-height: 60px;" placeholder="Generate ideas for [problem]"></textarea>
+            
+            <label>Prompt 2 (Narrowing):</label>
+            <textarea class="prompt-box" style="min-height: 60px;" placeholder="Focus on [specific aspect from Prompt 1 response]"></textarea>
+            
+            <label>Prompt 3 (Refining):</label>
+            <textarea class="prompt-box" style="min-height: 60px;" placeholder="Modify considering [new constraint or requirement]"></textarea>
+            
+            <label>Prompt 4 (If needed - Polishing):</label>
+            <textarea class="prompt-box" style="min-height: 60px;" placeholder="Finalize with [specific criteria]"></textarea>
+            
+            <label>Key pivot points/decisions:</label>
+            <textarea class="notes-area" placeholder="What changed between iterations? Why?"></textarea>
+        </div>
+    </div>
+
+    <!-- PART 3 -->
+    <div class="section page-break">
+        <div class="section-header">PART 3: Testing & Iteration (30 minutes)</div>
+        <div class="timer-note">⏱️ START TIME: _____ : _____ | END TIME: _____ : _____</div>
+
+        <p><strong>Rate each strategy's output (1=Poor, 5=Excellent):</strong></p>
+        <table class="metrics-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Role Prompting</th>
+                    <th>Structured Prompting</th>
+                    <th>Iterative Prompting</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Relevance to Problem</td>
+                    <td><div class="rating-circles">
+                        <span class="rating-circle">1</span>
+                        <span class="rating-circle">2</span>
+                        <span class="rating-circle">3</span>
+                        <span class="rating-circle">4</span>
+                        <span class="rating-circle">5</span>
+                    </div></td>
+                    <td><div class="rating-circles">
+                        <span class="rating-circle">1</span>
+                        <span class="rating-circle">2</span>
+                        <span class="rating-circle">3</span>
+                        <span class="rating-circle">4</span>
+                        <span class="rating-circle">5</span>
+                    </div></td>
+                    <td><div class="rating-circles">
+                        <span class="rating-circle">1</span>
+                        <span class="rating-circle">2</span>
+                        <span class="rating-circle">3</span>
+                        <span class="rating-circle">4</span>
+                        <span class="rating-circle">5</span>
+                    </div></td>
+                </tr>
+                <tr>
+                    <td>Creativity/Innovation</td>
+                    <td><div class="rating-circles">
+                        <span class="rating-circle">1</span>
+                        <span class="rating-circle">2</span>
+                        <span class="rating-circle">3</span>
+                        <span class="rating-circle">4</span>
+                        <span class="rating-circle">5</span>
+                    </div></td>
+                    <td><div class="rating-circles">
+                        <span class="rating-circle">1</span>
+                        <span class="rating-circle">2</span>
+                        <span class="rating-circle">3</span>
+                        <span class="rating-circle">4</span>
+                        <span class="rating-circle">5</span>
+                    </div></td>
+                    <td><div class="rating-circles">
+                        <span class="rating-circle">1</span>
+                        <span class="rating-circle">2</span>
+                        <span class="rating-circle">3</span>
+                        <span class="rating-circle">4</span>
+                        <span class="rating-circle">5</span>
+                    </div></td>
+                </tr>
+                <tr>
+                    <td>Practical Feasibility</td>
+                    <td><div class="rating-circles">
+                        <span class="rating-circle">1</span>
+                        <span class="rating-circle">2</span>
+                        <span class="rating-circle">3</span>
+                        <span class="rating-circle">4</span>
+                        <span class="rating-circle">5</span>
+                    </div></td>
+                    <td><div class="rating-circles">
+                        <span class="rating-circle">1</span>
+                        <span class="rating-circle">2</span>
+                        <span class="rating-circle">3</span>
+                        <span class="rating-circle">4</span>
+                        <span class="rating-circle">5</span>
+                    </div></td>
+                    <td><div class="rating-circles">
+                        <span class="rating-circle">1</span>
+                        <span class="rating-circle">2</span>
+                        <span class="rating-circle">3</span>
+                        <span class="rating-circle">4</span>
+                        <span class="rating-circle">5</span>
+                    </div></td>
+                </tr>
+                <tr>
+                    <td>Completeness</td>
+                    <td><div class="rating-circles">
+                        <span class="rating-circle">1</span>
+                        <span class="rating-circle">2</span>
+                        <span class="rating-circle">3</span>
+                        <span class="rating-circle">4</span>
+                        <span class="rating-circle">5</span>
+                    </div></td>
+                    <td><div class="rating-circles">
+                        <span class="rating-circle">1</span>
+                        <span class="rating-circle">2</span>
+                        <span class="rating-circle">3</span>
+                        <span class="rating-circle">4</span>
+                        <span class="rating-circle">5</span>
+                    </div></td>
+                    <td><div class="rating-circles">
+                        <span class="rating-circle">1</span>
+                        <span class="rating-circle">2</span>
+                        <span class="rating-circle">3</span>
+                        <span class="rating-circle">4</span>
+                        <span class="rating-circle">5</span>
+                    </div></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <label><strong>AI Behavior Observations:</strong></label>
+        <div class="two-column">
+            <div>
+                <p><strong>Did the AI:</strong></p>
+                <div class="checkbox-item">
+                    <input type="checkbox"> Stay in assigned role?
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox"> Follow instructions precisely?
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox"> Produce consistent results when repeated?
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox"> Show any unexpected creativity?
+                </div>
+            </div>
+            <div>
+                <p><strong>Issues noticed:</strong></p>
+                <div class="checkbox-item">
+                    <input type="checkbox"> Misunderstood instructions
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox"> Added unwanted elements
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox"> Showed bias/assumptions
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox"> Inconsistent outputs
+                </div>
+            </div>
+        </div>
+
+        <label>Most surprising finding:</label>
+        <textarea class="notes-area" placeholder="What unexpected behavior or output did you discover?"></textarea>
+
+        <label>Refinement notes (what you changed to improve outputs):</label>
+        <textarea class="notes-area" placeholder="• Added:&#10;• Removed:&#10;• Clarified:"></textarea>
+
+        <h3 style="margin-top: 20px;">Final Comparison Matrix</h3>
+        <table class="comparison-matrix">
+            <thead>
+                <tr>
+                    <th>Strategy</th>
+                    <th>Best For...</th>
+                    <th>Main Weakness</th>
+                    <th>Surprise Finding</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Role</strong></td>
+                    <td><input type="text" placeholder="When is this strategy most effective?"></td>
+                    <td><input type="text" placeholder="What limitation did you find?"></td>
+                    <td><input type="text" placeholder="Unexpected discovery"></td>
+                </tr>
+                <tr>
+                    <td><strong>Structured</strong></td>
+                    <td><input type="text" placeholder="When is this strategy most effective?"></td>
+                    <td><input type="text" placeholder="What limitation did you find?"></td>
+                    <td><input type="text" placeholder="Unexpected discovery"></td>
+                </tr>
+                <tr>
+                    <td><strong>Iterative</strong></td>
+                    <td><input type="text" placeholder="When is this strategy most effective?"></td>
+                    <td><input type="text" placeholder="What limitation did you find?"></td>
+                    <td><input type="text" placeholder="Unexpected discovery"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PART 4 -->
+    <div class="section">
+        <div class="section-header">PART 4: Presentation Preparation (10 minutes)</div>
+        <div class="timer-note">⏱️ START TIME: _____ : _____ | END TIME: _____ : _____</div>
+
+        <div class="presentation-outline">
+            <h3>📊 3-Minute Presentation Outline</h3>
+            <p><em>Assign speakers and prepare your key points:</em></p>
+        </div>
+
+        <label><strong>1. Problem & Approach (30 seconds)</strong> - Speaker: ________________</label>
+        <textarea class="notes-area" placeholder="• Which challenge we selected:&#10;• Why this problem matters:&#10;• Our approach:"></textarea>
+
+        <label><strong>2. Winning Strategy (90 seconds)</strong> - Speaker: ________________</label>
+        <textarea class="notes-area" placeholder="• Best performing strategy:&#10;• Specific prompt that worked best:&#10;• Why it succeeded:&#10;• Key output highlights:"></textarea>
+
+        <label><strong>3. Lessons Learned (60 seconds)</strong> - Speaker: ________________</label>
+        <textarea class="notes-area" placeholder="• Most surprising discovery:&#10;• Prompt engineering principle we'd recommend:&#10;• Bias/limitation we encountered:&#10;• Future applications:"></textarea>
+
+        <label><strong>4. Live Demo (30 seconds - optional)</strong> - Speaker: ________________</label>
+        <textarea class="notes-area" placeholder="• Prompt to demonstrate:&#10;• Key point to highlight:"></textarea>
+
+        <h3 style="margin-top: 20px;">Key Takeaways & Reflections</h3>
+        
+        <label>Our #1 prompt engineering insight:</label>
+        <textarea class="notes-area" placeholder="The most important thing we learned about crafting effective prompts..."></textarea>
+
+        <label>How we'll apply these skills:</label>
+        <textarea class="notes-area" placeholder="In our studies/work, we can use prompt engineering to..."></textarea>
+
+        <label>Ethical consideration we discovered:</label>
+        <textarea class="notes-area" placeholder="A bias, limitation, or ethical issue we need to be aware of..."></textarea>
+
+        <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-top: 20px;">
+            <h3 style="margin-top: 0;">✅ Pre-Presentation Checklist</h3>
+            <div class="checkbox-item">
+                <input type="checkbox"> Best prompt saved/copied for demo
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox"> Timing rehearsed (3 minutes total)
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox"> All team members have speaking roles
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox"> Key insights are clear and specific
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox"> Visual aid prepared (if using)
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f0f4f8; border-radius: 8px;">
+        <p style="font-size: 18px; font-weight: bold;">🎯 Remember: The goal isn't perfect outputs—it's understanding how prompt design shapes AI behavior!</p>
+        <p style="margin-top: 10px;">Great prompting = Clear intent + Specific constraints + Iterative refinement</p>
+    </div>
+</body>
+</html>
