@@ -1,0 +1,187 @@
+/* 
+ * ══════════════════════════════════════════════════════════════════════════════
+ * HAC ACCESS - Animations & Keyframes
+ * ══════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * EASING CURVES REFERENCE (for JS usage)
+ * ═══════════════════════════════════════════════════════════════════════════════
+ * InOutCirc  → cubic-bezier(0.785, 0.135, 0.15, 0.86)
+ * OutQuint   → cubic-bezier(0.22, 1, 0.36, 1)
+ * InExpo     → cubic-bezier(0.95, 0.05, 0.795, 0.035)
+ * OutExpo    → cubic-bezier(0.19, 1, 0.22, 1)
+ * InSine     → cubic-bezier(0.47, 0, 0.745, 0.715)
+ * OutCubic   → cubic-bezier(0.33, 1, 0.68, 1)
+ * InCubic    → cubic-bezier(0.32, 0, 0.67, 0)
+ * InQuart    → cubic-bezier(0.5, 0, 0.75, 0)
+ * InCirc     → cubic-bezier(0.6, 0.04, 0.98, 0.335)
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * CURSOR BLINK
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@keyframes cursor-blink {
+    0%    { opacity: 1; }
+    45%   { opacity: 1; }
+    50%   { opacity: 0; }
+    72%   { opacity: 0; }
+    77%   { opacity: 1; }
+    100%  { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * SPINNER CHASE (8-cell clockwise)
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@keyframes spinner-chase {
+    0%, 100% { background: var(--text-secondary); }
+    12.5%    { background: var(--background); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * BREATHING (confirmation text pulse)
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@keyframes breathe {
+    0%   { opacity: 1; }
+    50%  { opacity: 0.8; }
+    100% { opacity: 1; }
+}
+
+.breathing {
+    animation: breathe 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * PROGRESS BAR ANIMATIONS
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@keyframes progress-grow-phase1 {
+    from { width: 0%; }
+    to   { width: 40%; }
+}
+
+@keyframes progress-grow-phase2 {
+    from { width: 40%; }
+    to   { width: 100%; }
+}
+
+@keyframes progress-scale-y {
+    from { transform: scaleY(0.02); }
+    to   { transform: scaleY(1); }
+}
+
+@keyframes progress-retract {
+    from { width: 100%; }
+    to   { width: 73%; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * SPLASH SLIDE
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@keyframes splash-slide-up {
+    from { top: 50%; }
+    to   { top: 40.6%; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * FADE ANIMATIONS
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * SURFACE ANIMATIONS
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@keyframes surface-bar-scale {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+}
+
+@keyframes surface-content-expand {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * GLOW PULSE
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@keyframes glow-pulse {
+    0%, 100% {
+        text-shadow: 
+            0 0 5px rgba(var(--color_r), var(--color_g), var(--color_b), 0.5),
+            0 0 10px rgba(var(--color_r), var(--color_g), var(--color_b), 0.3);
+    }
+    50% {
+        text-shadow: 
+            0 0 10px rgba(var(--color_r), var(--color_g), var(--color_b), 0.8),
+            0 0 20px rgba(var(--color_r), var(--color_g), var(--color_b), 0.5),
+            0 0 30px rgba(var(--color_r), var(--color_g), var(--color_b), 0.3);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * SLIDE IN ANIMATIONS
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@keyframes slide-in-bottom {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * REDUCED MOTION
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

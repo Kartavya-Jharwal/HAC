@@ -1,0 +1,210 @@
+Welcome to HAC - Hult AI Collective!
+vm_page_bootstrap: 987323 free pages and 53061 wired pages
+kext submap [0xffffff7f8072e000 - 0xffffff8000000000], kernel text [0xffffff8000200000 - 0xffffff800072e000]
+zone leak detection enabled
+standard timeslicing quantum is 10000 us
+mig_table_max_displ = 72
+TSC Deadline Timer supported and enabled
+HACACPICPU: ProcessorId=1 LocalApicId=0 Enabled
+HACACPICPU: ProcessorId=2 LocalApicId=2 Enabled
+HACACPICPU: ProcessorId=3 LocalApicId=1 Enabled
+HACACPICPU: ProcessorId=4 LocalApicId=3 Enabled
+HACACPICPU: ProcessorId=5 LocalApicId=255 Disabled
+HACACPICPU: ProcessorId=6 LocalApicId=255 Disabled
+HACACPICPU: ProcessorId=7 LocalApicId=255 Disabled
+HACACPICPU: ProcessorId=8 LocalApicId=255 Disabled
+calling mpo_policy_init for HACSecurityNet
+Security policy loaded: Collective access control (HACSecurityNet)
+calling mpo_policy_init for Sandbox
+Security policy loaded: Member sandbox policy (Sandbox)
+calling mpo_policy_init for BuildGuard
+Security policy loaded: Project protection (BuildGuard)
+Copyright (c) 2024, 2025, 2026
+Hult AI Collective. All rights reserved.
+
+HN_ Framework successfully initialized
+using 16384 buffer headers and 10240 cluster IO buffer headers
+IOAPIC: Version 0x20 Vectors 64:87
+ACPI: System State [S0 S3 S4 S5] (S3)
+PFM64 0xf10000000, 0xf0000000
+[ PCI configuration begin ]
+HACIntelCoreManagement: Turbo Ratios 0046
+HACIntelCoreManagement: (built 09:15:45 Feb 16 2026) initialization complete
+console relocated to 0xf10000000
+PCI configuration changed (bridge=16 device=4 cardbus=0)
+[ PCI configuration end, bridges 12 devices 16 ]
+mbinit: done [64 MB total pool size, (42/21) split]
+Pthread support ABORTS when sync kernel primitives misused
+WARN: Legacy peripheral mode disabled for security
+com.HAC.HACFSCompressionTypeZlib kmod start
+com.HAC.HACBootScreen kmod start
+com.HAC.HACFSCompressionTypeZlib load succeeded
+com.HAC.HACFSCompressionTypeDataless load succeeded
+Initializing HAC Neural Interface...
+
+HACIntelCoreManagementClient: ready
+BTCOEXIST off
+wl0: Broadcom BCM4331 802.11 Wireless Controller
+5.100.98.75
+Loading collective workspace modules...
+HAC_MODULE: ai_core v3.2.1 ... loaded
+HAC_MODULE: neural_bridge v1.8.0 ... loaded
+HAC_MODULE: data_mesh v2.4.3 ... loaded
+HAC_MODULE: collective_sync v4.0.0 ... loaded
+HAC_MODULE: project_forge v1.5.7 ... loaded
+HAC_MODULE: member_auth v2.1.0 ... loaded
+Initializing tensor pipeline...
+Tensor allocation: 4096 slots reserved
+Pipeline ready: inference mode active
+Connecting to collective mesh network...
+Mesh node discovery: 47 nodes found
+Route optimization: 12ms avg latency
+Mesh handshake complete: AUTHENTICATED
+
+FireWire (OHCI) Lucent ID 5901 built-in now active, GUID c82a14fffee4a086; max speed s800.
+rooting via boot-uuid from /chosen: HAC70083-AC74-33D3-8361-HAC1977EE4AA2
+Waiting on <dict ID="0"><key>IOProviderClass</key><string ID="1">
+IOResources</string><key>IOResourceMatch</key><string ID="2">boot-uuid-media</string></dict>
+Got boot device = IOService:/HACACPIPlatformExpert/PCI0@0/HACACPIPCI/SATA@1F,2/
+HACIntelPchSeriesAHCI/PRT0@0/IOAHCIDevice@0/HACAHCIDiskDriver/AICollective@sBlockStorageDevice/IOBlockStorageDriver/
+HAC SSD TS256C Media/IOGUIDPartitionScheme/Member@2
+BSD root: disk0s2, major 14, minor 2
+[    0.000000] microkernel: init_sequence() called from firmware
+[    0.000012] mm: zone_reclaim: watermark low at 2048 pages
+[    0.000134] kexec: fallback handler registered
+[    0.000256] cpu0: microcode update applied (rev 0x1f)
+[    0.000378] pci 0000:00:1f.2: AHCI 0000:00:1f.2: clearing HBA reset
+[    0.000489] ahci 0000:00:1f.2: ports: 8, version: 1.3
+[    0.000512] usbcore: registered new interface driver usbfs
+[    0.000623] bcmwl: firmware: loaded image: brcmfmac43455-sdio
+[    0.000734] net: registered interface driver hacnet
+[    0.000845] RNG: hwrng (HAC_RNG) registered
+[    0.000956] EXT4-fs (sda2): mounted filesystem with ordered data mode. Opts: (null)
+[    0.001067] audit: type=1400 audit(0.00:0): apparmor="STATUS" operation="profile_load" name="collective.agent" pid=113 comm="apparmor_parser"
+[    0.001178] systemd[1]: Reached target Local File Systems.
+[    0.001289] systemd[1]: Starting Network Name Resolution...
+[    0.001400] netfilter: nf_tables: (C) 2009-2023 Netfilter Core Team
+[    0.001511] firewall: HACFW v2.7 initialized, ruleset size: 128 entries
+[    0.001622] mountall: running fsck overlays
+[    0.001733] zswap: loaded using pool z3fold
+[    0.001844] rtc_cmos 00: RTC can wake from S4
+[    0.001955] modprobe: WARNING: Module deprecated_mod is deprecated and will be removed in a future release
+[    0.002066] thermal: HAC_THERM: temperature sensor registered (zone0)
+[    0.002177] gpu: HAC-RX firmware verification OK (sig 0xC0DEBA5E)
+[    0.002288] drm: hogging: GPU reset succeeded after 7ms
+[    0.002399] btcoex: coexistence policy negotiated: prefer-wifi
+[    0.002510] NTP: time sync client started, jitter threshold 50us
+[    0.002621] swap: enabling delayed zram swap (size 1.5G)
+[    0.002732] fscrypt: enabling per-file encryption
+[    0.002843] iscsi: iscsi subsystem initialized
+[    0.002954] DMI: HAC/FusionBoard v3.4, BIOS HAC-BIOS 20260216
+[    0.003065] usb 1-1: new high-speed USB device number 2 using xhci_hcd
+[    0.003176] perf: interrupt took too long (2500 > 2500), lowering calibration
+[    0.003287] rp_filter: initial config set to 2
+[    0.003398] bpfilter: loaded, configured 4096 filters
+[    0.003509] blk-mq: hw_flush_on_completion: YES
+[    0.003620] md: md0: detected RAID metadata version 1.2
+[    0.003731] cgroup: cgroup2: unknown option 'legacy' ignored
+[    0.003842] iptables: nf_tables bridge support registered
+[    0.003953] audit: type=1334 audit(0.00:1): auid=4294967295 uid=0 gid=0 ses=4294967295 subj=system_u:system_r:collective_t:s0 op="module_load" name="neural_bridge"
+[    0.004064] kernel: softdog: initialized. pool size: 256
+[    0.004175] sdhci: Secure Digital Host Controller Interface driver loaded
+[    0.004286] loop: module loaded
+[    0.004397] ipv6: ADDRCONF(NETDEV_UP): enp0s31f6: link is not ready
+[    0.004508] mount: switching to remount-ro for /var/log
+[    0.004619] audit: type=1130 audit(0.00:2): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:collective_t:s0 msg='unit="collective-watchdog.service" comm="systemd" exe="/usr/lib/systemd/systemd"'
+[    0.004730] kernel: WARNING: CPU:1 at sched/sched.c:892 preempt_disable() abused
+[    0.004841] ipv6: ADDRCONF(NETDEV_CHANGE): enp0s31f6: link becomes ready
+[    0.004952] hacnet0: link up, 10Gbps full-duplex, mtu 9216
+[    0.005063] ntp: peer 10.0.0.1 reachable, offset -0.000123s
+[    0.005174] sctp: hash table entries: 1024 (order: 1, 8192 bytes)
+[    0.005285] audit: type=1101 audit(0.00:3): pid=214 comm="collective_init" op="execve" path="/usr/bin/collective_init" subj=system_u:system_r:collective_t:s0
+[    0.005396] systemd[1]: Started HAC Neural Scheduler.
+[    0.005507] systemd[1]: Starting HAC Mesh Heartbeat...
+[    0.005618] daemon: handshake with mesh node 0x2a succeeded
+[    0.005729] storage: SMART status: PASSED on /dev/sda
+[    0.005840] kernel: random: crng init done
+[    0.005951] audit: type=1131 audit(0.00:4): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:collective_t:s0 msg='unit="network.service" comm="systemd"'
+[    0.006062] usbcore: registered new interface driver uas
+[    0.006173] perf: No PMU available, using software events
+[    0.006284] HAC-LOG: rotating logs: /var/log/collective.log -> /var/log/collective.log.1
+[    0.006395] kernel: CPU frequency governor: ondemand
+[    0.006506] firewall: reloading policy, version 42
+[    0.006617] iscsi: session established with target iqn.2026.hac:target0
+[    0.006728] mountall: all overlays applied
+[    0.006839] HAC-SEC: keyring unlocked
+[    0.006950] tracer: task 1024 blocked for more than 120 seconds.
+[    0.007061] systemd[1]: Reached target Multi-User System.
+[    0.007172] systemd[1]: Starting Cleanup of Temporary Directories...
+[    0.007283] BUG: scheduling while atomic: swapper/0/0x0
+[    0.007394] usb: registered new interface driver uvcvideo
+[    0.007505] MeshSync: synctime=2026-02-16T12:34:56Z, drift=+0.000089s
+[    0.007616] HAC-DIAG: all self-tests passed (cpu,mem,gpu,io)
+Kernel is LP64
+IOThunderboltSwitch::i2cWriteDWord - status = 0xe00002ed
+IOThunderboltSwitch::i2cWriteDWord - status = 0x00000000
+IOThunderboltSwitch::i2cWriteDWord - status = 0xe00002ed
+IOThunderboltSwitch::i2cWriteDWord - status = 0xe00002ed
+HACUSBMultitouchDriver::checkStatus - received Status Packet, Payload 2: device was reinitialized
+CollectiveBuilder::checkstatus - true, Build::Ready
+[IOBluetoothHCIController::setConfigState] calling registerService
+AirPort_Brcm4331: Ethernet address e4:ce:8f:46:18:d2
+IO80211Controller::dataLinkLayerAttachComplete():  adding HACEFINVRAM notification
+IO80211Interface::efiNVRAMPublished():
+Created virtif 0xffffff800c32ee00 p2p0
+BCM5701Enet: Ethernet address c8:2a:14:57:a4:7a
+Previous Shutdown Cause: 3
+HACFS driver 3.8 [Flags: R/W].
+HACFS volume name COLLECTIVE, version 3.1.
+HACMOS has arrived
+en1: 802.11d country code set to 'UK'.
+en1: Supported channels 1 2 3 4 5 6 7 8 9 10 11 36 40 44 48 52 56 60 64 100 104 108 112 116 120 124 128 132 136 140 149 153 157 161 165
+builders_ready
+HACAuthEvent en1   Auth result for: 00:60:64:1e:e9:e4  COLLECTIVE AUTH succeeded
+HACAuthEvent en1   Auth result for: 00:60:64:1e:e9:e4 Unsolicited  Auth
+wlEvent: en1 en1 Link UP
+AirPort: Link Up on en1
+en1: BSSID changed to 00:60:64:1e:e9:e4
+Loading collective services...
+HAC_SVC: identity_provider ... started
+HAC_SVC: access_gateway ... started
+HAC_SVC: project_registry ... started
+HAC_SVC: build_orchestrator ... started
+HAC_SVC: knowledge_graph ... started
+HAC_SVC: event_stream ... started
+Verifying collective integrity...
+Checksum: 0xA7F3B21D ... PASS
+Checksum: 0x8C1E4F90 ... PASS
+Checksum: 0xD5B2A847 ... PASS
+Integrity verification complete: ALL CLEAR
+Mounting collective filesystem...
+/dev/hac0 on /collective (hacfs, local, journaled)
+/dev/hac1 on /collective/projects (hacfs, local, journaled)
+/dev/hac2 on /collective/members (hacfs, local, journaled, noatime)
+Filesystem mounted successfully
+virtual bool IOHIDEventSystemUserClient::initWithTask(task*, void*, UInt32):
+Client task not privileged to open IOHIDSystem for mapping memory (e00002c1)
+Initializing display subsystem...
+GPU: HAC-RX 8192MB VRAM detected
+Display pipeline: 4K@120Hz active
+Compositor: hardware acceleration enabled
+Starting HAC-OS services...
+HAC_DAEMON: collective_watchdog ... running [PID 1024]
+HAC_DAEMON: neural_scheduler ... running [PID 1025]
+HAC_DAEMON: mesh_heartbeat ... running [PID 1026]
+HAC_DAEMON: auth_sentinel ... running [PID 1027]
+Initializing Collective Interface Module...
+Interface theme: DARK_CYBER
+Resolution: adaptive
+Font subsystem: loaded (4 families)
+Scanning for active projects...
+Active projects: 23
+Active members: 47
+Pending builds: 8
+System health: OPTIMAL
+All subsystems nominal
+HAC-OS ready for operation
+
+
+Boot Complete
+

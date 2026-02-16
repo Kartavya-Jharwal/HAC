@@ -1,0 +1,385 @@
+/* 
+ * ══════════════════════════════════════════════════════════════════════════════
+ * HAC ACCESS - Boot Screen Styles
+ * ══════════════════════════════════════════════════════════════════════════════
+ * Terminal-style boot log + title screen animation (SAM/eDEX-UI aesthetic)
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * BOOT SCREEN CONTAINER
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+section#boot_screen {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 3vh 4vw;
+    overflow: hidden;
+    z-index: 2000;
+
+    /* Typography - LARGER terminal font */
+    font-family: var(--font_mono, 'Fira Mono', 'SF Mono', 'Consolas', monospace);
+    font-size: clamp(14px, 1.8vh, 20px);
+    line-height: 1.6;
+    letter-spacing: 0.03em;
+    text-align: left;
+    
+    /* Terminal GREEN color */
+    color: var(--terminal-green, #00ff41);
+    
+    /* Layout - align to bottom-left like a real terminal */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    
+    /* Phosphor glow effect - GREEN */
+    text-shadow: 
+        0 0 2px var(--terminal-green, #00ff41),
+        0 0 8px var(--terminal-green-glow, rgba(0, 255, 65, 0.4)),
+        0 0 15px var(--terminal-green-glow, rgba(0, 255, 65, 0.2));
+    
+    /* GPU acceleration for smooth scrolling */
+    transform: translateZ(0);
+    will-change: contents;
+    
+    /* Background during boot */
+    background: var(--color_light_black, #05080d);
+}
+
+/* Boot log content wrapper */
+section#boot_screen > .boot-content {
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 1vw;
+}
+
+/* Centered mode for title screen */
+section#boot_screen.center {
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    text-shadow: none;
+    background: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * BOOT LOG LINE ANIMATIONS
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Blinking cursor at end of boot log */
+section#boot_screen::after {
+    content: '█';
+    display: inline-block;
+    margin-left: 0.3em;
+    animation: cursorBlink 1s step-end infinite;
+    opacity: 0.8;
+}
+
+section#boot_screen.center::after {
+    display: none;
+}
+
+@keyframes cursorBlink {
+    0%, 50% { opacity: 0.8; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Individual line animation */
+section#boot_screen .line {
+    animation: lineReveal 0.1s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes lineReveal {
+    from { 
+        opacity: 0;
+        transform: translateX(-5px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * TITLE SCREEN - Main Logo
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+section#boot_screen h1 {
+    /* Bai Jamjuree Bold */
+    font-family: var(--font_title, 'Bai Jamjuree'), "United Sans Medium", sans-serif;
+    font-size: clamp(60px, 14vh, 180px);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-align: center;
+    text-transform: uppercase;
+    
+    /* Primary accent color for title */
+    color: rgb(var(--color_r), var(--color_g), var(--color_b));
+    
+    /* Underline accent */
+    border-bottom: 0.6vh solid rgb(var(--color_r), var(--color_g), var(--color_b));
+    padding: 2.5vh 4vh 2vh;
+    background-color: transparent;
+    
+    /* Override green text shadow from boot screen */
+    text-shadow: none;
+    
+    /* Initial state */
+    opacity: 0;
+    
+    /* Smooth transitions */
+    transition: 
+        background-color 0.15s ease-out,
+        border 0.15s ease-out,
+        box-shadow 0.3s ease-out;
+    
+    /* Entrance animation */
+    animation: fadeInTitle 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    
+    /* GPU acceleration */
+    transform: translateZ(0);
+    will-change: opacity, transform;
+}
+
+@keyframes fadeInTitle {
+    from { 
+        opacity: 0;
+        transform: translateY(10px) translateZ(0);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0) translateZ(0);
+    }
+}
+
+/* Title with glow effect */
+section#boot_screen h1.glow-active {
+    text-shadow: 
+        0 0 5px rgba(var(--color_r), var(--color_g), var(--color_b), 0.9),
+        0 0 20px rgba(var(--color_r), var(--color_g), var(--color_b), 0.6),
+        0 0 40px rgba(var(--color_r), var(--color_g), var(--color_b), 0.3);
+    box-shadow: 
+        0 0 30px rgba(var(--color_r), var(--color_g), var(--color_b), 0.2),
+        inset 0 0 20px rgba(var(--color_r), var(--color_g), var(--color_b), 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * GLITCH EFFECT - Advanced Cyberpunk Style
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+section#boot_screen h1.glitch {
+    border: none;
+    color: transparent;
+    position: relative;
+    animation: glitchMain 0.3s ease-in-out infinite;
+}
+
+@keyframes glitchMain {
+    0%, 100% { transform: translateX(0) translateZ(0); filter: none; }
+    7% { transform: translateX(-3px) skewX(-0.5deg); }
+    10% { transform: translateX(3px) skewX(0.5deg); }
+    13% { transform: translateX(-2px); filter: hue-rotate(90deg); }
+    20% { transform: translateX(2px) skewX(-0.3deg); }
+    27% { transform: translateX(-1px); }
+    30% { transform: translateX(1px) skewX(0.2deg); }
+    40% { transform: translateX(0); filter: none; }
+}
+
+/* Top glitch slice - Red/Cyan chromatic */
+section#boot_screen h1::before {
+    content: var(--app_name, "HAC");
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Slice positioning */
+    transform: translateY(0) translateX(-2%);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 45%, 0% 45%);
+    color: rgba(var(--color_r), var(--color_g), var(--color_b), 0.9);
+    
+    /* Animation */
+    animation-name: derezzer_top;
+    animation-duration: 45ms;
+    animation-timing-function: steps(2, end);
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+    animation-play-state: paused;
+    
+    /* Hidden by default */
+    opacity: 0;
+    pointer-events: none;
+    
+    /* Chromatic aberration */
+    text-shadow: -3px 0 #ff0040, 3px 0 #00ffff;
+}
+
+section#boot_screen h1.glitch::before {
+    opacity: 1;
+    animation-play-state: running;
+}
+
+@keyframes derezzer_top {
+    0% { transform: translateY(0) translateX(-1%); clip-path: polygon(0% 0%, 100% 0%, 100% 48%, 0% 42%); }
+    20% { transform: translateY(-1px) translateX(-4%); clip-path: polygon(0% 0%, 100% 0%, 100% 44%, 0% 46%); }
+    40% { transform: translateY(0) translateX(-2%); clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 40%); }
+    60% { transform: translateY(1px) translateX(-5%); clip-path: polygon(0% 0%, 100% 0%, 100% 42%, 0% 48%); }
+    80% { transform: translateY(-1px) translateX(-3%); clip-path: polygon(0% 0%, 100% 0%, 100% 46%, 0% 44%); }
+    100% { transform: translateY(0) translateX(-6%); clip-path: polygon(0% 0%, 100% 0%, 100% 45%, 0% 45%); }
+}
+
+/* Bottom glitch slice */
+section#boot_screen h1::after {
+    content: var(--app_name, "HAC");
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Slice positioning */
+    transform: translateY(0) translateX(2%);
+    clip-path: polygon(0% 45%, 100% 45%, 100% 100%, 0% 100%);
+    color: rgba(var(--color_r), var(--color_g), var(--color_b), 0.95);
+    
+    /* Animation */
+    animation-name: derezzer_bottom;
+    animation-duration: 35ms;
+    animation-timing-function: steps(3, end);
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+    animation-play-state: paused;
+    
+    /* Hidden by default */
+    opacity: 0;
+    pointer-events: none;
+    
+    /* Chromatic aberration */
+    text-shadow: 3px 0 #ff0040, -3px 0 #00ffff;
+}
+
+section#boot_screen h1.glitch::after {
+    opacity: 1;
+    animation-play-state: running;
+}
+
+@keyframes derezzer_bottom {
+    0% { transform: translateY(0) translateX(1%); clip-path: polygon(0% 52%, 100% 48%, 100% 100%, 0% 100%); }
+    16% { transform: translateY(1px) translateX(3%); clip-path: polygon(0% 46%, 100% 54%, 100% 100%, 0% 100%); }
+    33% { transform: translateY(-1px) translateX(5%); clip-path: polygon(0% 50%, 100% 50%, 100% 100%, 0% 100%); }
+    50% { transform: translateY(0) translateX(2%); clip-path: polygon(0% 54%, 100% 46%, 100% 100%, 0% 100%); }
+    66% { transform: translateY(1px) translateX(4%); clip-path: polygon(0% 48%, 100% 52%, 100% 100%, 0% 100%); }
+    83% { transform: translateY(-1px) translateX(6%); clip-path: polygon(0% 45%, 100% 55%, 100% 100%, 0% 100%); }
+    100% { transform: translateY(0) translateX(3%); clip-path: polygon(0% 45%, 100% 45%, 100% 100%, 0% 100%); }
+}
+
+/* Additional noise/scanline overlay during glitch */
+section#boot_screen h1.glitch::before,
+section#boot_screen h1.glitch::after {
+    mix-blend-mode: screen;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * SYSTEM READY STATE
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+section#boot_screen h1.ready {
+    animation: readyPulse 2s ease-in-out infinite;
+}
+
+@keyframes readyPulse {
+    0%, 100% {
+        box-shadow: 
+            0 0 10px rgba(var(--color_r), var(--color_g), var(--color_b), 0.2),
+            inset 0 0 10px rgba(var(--color_r), var(--color_g), var(--color_b), 0.05);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px rgba(var(--color_r), var(--color_g), var(--color_b), 0.4),
+            inset 0 0 20px rgba(var(--color_r), var(--color_g), var(--color_b), 0.1);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * FADE OUT ANIMATION
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+section#boot_screen.fade-out {
+    animation: bootFadeOut 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes bootFadeOut {
+    0% { 
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% { 
+        opacity: 0;
+        transform: scale(1.02);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * RESPONSIVE ADJUSTMENTS
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    section#boot_screen {
+        font-size: clamp(8px, 2vh, 12px);
+        padding: 1.5vh 3vw;
+    }
+    
+    section#boot_screen h1 {
+        font-size: clamp(32px, 8vh, 60px);
+        letter-spacing: 0.1em;
+        padding: 1.5vh 2vh 1vh;
+    }
+}
+
+@media (max-width: 480px) {
+    section#boot_screen h1 {
+        font-size: clamp(24px, 7vh, 48px);
+    }
+}
+
+/* High DPI / Retina displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    section#boot_screen {
+        text-shadow: 
+            0 0 0.5px rgba(var(--color_r), var(--color_g), var(--color_b), 0.6),
+            0 0 2px rgba(var(--color_r), var(--color_g), var(--color_b), 0.2);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * REDUCED MOTION - Accessibility
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+    section#boot_screen h1,
+    section#boot_screen h1::before,
+    section#boot_screen h1::after,
+    section#boot_screen::after {
+        animation: none !important;
+    }
+    
+    section#boot_screen h1.glitch::before,
+    section#boot_screen h1.glitch::after {
+        animation: none !important;
+        transform: none;
+        clip-path: none;
+        opacity: 0 !important;
+    }
+    
+    section#boot_screen h1.glitch {
+        color: rgb(var(--color_r), var(--color_g), var(--color_b));
+    }
+    
+    section#boot_screen h1 {
+        opacity: 1;
+    }
+}

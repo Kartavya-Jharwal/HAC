@@ -1,0 +1,1200 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * HAC ACCESS - Main Orchestration Engine
+ * ═══════════════════════════════════════════════════════════════════════════════
+ * 
+ * FLOW:
+ *   1. Click to start → enables audio
+ *   2. Boot log → terminal scrolling (opening sequence)
+ *   3. HAC title → glitch animation (title card)
+ *   4. Greeter → name + password (enter protagonist name)
+ *   5. Identity card → view mode (printed) or edit mode (first-time setup)
+ *      - Optional EDIT toggle, EXPORT download, ENTER to proceed
+ *   6. ENTER → zoom-out → redirect to dashboard
+ */
+
+(() => {
+    'use strict';
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // CONFIGURATION
+    // ═══════════════════════════════════════════════════════════════════════════
+    const CONFIG = {
+        appName: 'HAC',
+        version: '2.0.0',
+        redirectUrl: './dashboard.html',
+        audio: { enabled: true, volume: 0.4, basePath: './assets/audio/' },
+        colors: { r: 0, g: 212, b: 212 },
+        bootLogPath: './assets/boot_log.txt'
+    };
+
+    const EASING = {
+        inOutCirc: 'cubic-bezier(0.785, 0.135, 0.15, 0.86)',
+        outQuint: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        inExpo: 'cubic-bezier(0.95, 0.05, 0.795, 0.035)',
+        outExpo: 'cubic-bezier(0.19, 1, 0.22, 1)',
+        inSine: 'cubic-bezier(0.47, 0, 0.745, 0.715)',
+        outCubic: 'cubic-bezier(0.33, 1, 0.68, 1)',
+        inCubic: 'cubic-bezier(0.32, 0, 0.67, 0)',
+        inQuart: 'cubic-bezier(0.5, 0, 0.75, 0)',
+        inCirc: 'cubic-bezier(0.6, 0.04, 0.98, 0.335)',
+    };
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // STATE MACHINE
+    // ═══════════════════════════════════════════════════════════════════════════
+    const State = {
+        BOOT: 0,          // Boot log scrolling
+        BOOT_TITLE: 1,    // HAC logo with glitch
+        SPLASH: 2,        // Progress bar animation
+        STARTUP: 3,       // Form slides in
+        IDLE: 4,          // Waiting for name + password
+        LOADING: 5,       // Fake verification
+        IDENTITY: 6,      // Identity card (view or edit mode)
+        EXIT: 7,          // Exit animation
+        REDIRECT: 8       // Redirect to dashboard
+    };
+
+    let currentState = State.BOOT;
+    let passwordValue = '';
+    let nameValue = '';
+    let emailValue = '';
+    let cardMode = 'view'; // 'view' or 'edit'
+    let terminalQueue = [];
+    let terminalLineCount = 0;
+    const MAX_TERMINAL_LINES = 10;
+
+    // Boot state
+    let bootLog = [];
+    let lineIndex = 0;
+    let isBooting = true;
+    let audioManager = null;
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // DOM REFS
+    // ═══════════════════════════════════════════════════════════════════════════
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
+    const dom = {};
+
+    function cacheDom() {
+        dom.bootScreen = $('#boot_screen');
+        dom.hacAccess = $('#hac-access');
+        dom.blackout = $('#blackout');
+        dom.bar = $('#bar');
+        dom.time = $('#time');
+        dom.timeInfo = $('#time-info');
+        dom.clock = $('#clock');
+        dom.date = $('#date');
+        dom.status = $('#status');
+        dom.splashContainer = $('#splash-container');
+        dom.splash = $('#splash');
+        dom.splashBar = $('#splash-bar');
+        dom.splashCt = $('#splash-ct');
+        dom.splashOs = $('#splash-os');
+        dom.splashFinalBar = $('#splash-final-bar');
+        dom.fieldGroup = $('#field-group');
+        dom.nameInput = $('#name-input');
+        dom.emailInput = $('#email-input');
+        dom.passwordWrapper = $('#password-wrapper');
+        dom.passwordInput = $('#password-input');
+        dom.passwordDisplay = $('#password-display');
+        dom.loginBtn = $('#login-btn');
+        dom.spinner = $('#spinner');
+        dom.spinnerCells = $$('.spinner__cell:not(.spinner__cell--center)');
+        dom.typewriter = $('#typewriter');
+        dom.typewriterText = $('#typewriter-text');
+        dom.disclaimer = $('#disclaimer');
+        dom.disclaimerTextBlock = $('#disclaimer-text');
+        dom.terminal = $('#terminal');
+        dom.terminalLog = $('#terminal-log');
+        dom.deviceId = $('#device-id');
+
+        // Identity card
+        dom.identityCard = $('#identity-card');
+        dom.avatarImg = $('#avatar-img');
+        dom.avatarPlaceholder = $('#avatar-placeholder');
+        dom.uploadAvatarBtn = $('#upload-avatar-btn');
+        dom.avatarInput = $('#avatar-input');
+        dom.cardNameInput = $('#card-name-input');
+        dom.cardEmailInput = $('#card-email-input');
+        dom.cardClearanceInput = $('#card-clearance-input');
+        dom.cardDesignationInput = $('#card-designation-input');
+        dom.cardNameValue = $('#card-name-value');
+        dom.cardEmailValue = $('#card-email-value');
+        dom.cardClearanceValue = $('#card-clearance-value');
+        dom.cardDesignationValue = $('#card-designation-value');
+        dom.cardId = $('#card-id');
+        dom.cardConfirmBtn = $('#card-confirm-btn');
+        dom.cardEditBtn = $('#card-edit-btn');
+        dom.cardDownloadBtn = $('#card-download-btn');
+        dom.cardExportCanvas = $('#card-export-canvas');
+
+        // Panels
+        dom.panelLeft = $('#panel-left');
+        dom.panelRight = $('#panel-right');
+        dom.panelLatency = $('#panel-latency');
+        dom.panelCpu = $('#panel-cpu');
+        dom.panelMem = $('#panel-mem');
+
+        dom.toast = $('#toast');
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // LOCAL STORAGE
+    // ═══════════════════════════════════════════════════════════════════════════
+    const STORAGE_KEY = 'hac_profile';
+
+    function loadProfile() {
+        try {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : null;
+        } catch (e) { return null; }
+    }
+
+    function saveProfile(profile) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+        } catch (e) { console.warn('Failed to save profile:', e); }
+    }
+
+    function generateMemberId() {
+        const year = new Date().getFullYear();
+        const num = String(Math.floor(Math.random() * 9999) + 1).padStart(4, '0');
+        return `HAC-${year}-${num}`;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // PANEL UPDATES
+    // ═══════════════════════════════════════════════════════════════════════════
+    let panelUpdateInterval = null;
+
+    function startPanelUpdates() {
+        updatePanelData();
+        panelUpdateInterval = setInterval(updatePanelData, 2500);
+    }
+
+    function stopPanelUpdates() {
+        if (panelUpdateInterval) { clearInterval(panelUpdateInterval); panelUpdateInterval = null; }
+    }
+
+    function updatePanelData() {
+        if (dom.panelLatency) dom.panelLatency.textContent = (Math.floor(Math.random() * 40) + 10) + 'ms';
+        if (dom.panelCpu) dom.panelCpu.textContent = (Math.floor(Math.random() * 30) + 15) + '%';
+        if (dom.panelMem) dom.panelMem.textContent = (Math.floor(Math.random() * 30) + 40) + '%';
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // UTILITIES
+    // ═══════════════════════════════════════════════════════════════════════════
+    function randomHex(len = 8) {
+        let hex = '';
+        for (let i = 0; i < len; i++) hex += Math.floor(Math.random() * 16).toString(16);
+        return hex.toUpperCase();
+    }
+
+    function randomUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+            const r = Math.random() * 16 | 0;
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        }).toUpperCase();
+    }
+
+    function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+    function _rafDelay(ms) {
+        return new Promise(resolve => {
+            const start = performance.now();
+            const tick = (now) => { if (now - start >= ms) resolve(); else requestAnimationFrame(tick); };
+            requestAnimationFrame(tick);
+        });
+    }
+
+    function animate(el, keyframes, options) {
+        return new Promise(resolve => {
+            const anim = el.animate(keyframes, options);
+            anim.onfinish = () => {
+                if (options.fill !== 'none') {
+                    const last = keyframes[keyframes.length - 1];
+                    for (const [k, v] of Object.entries(last)) el.style[k] = v;
+                }
+                resolve();
+            };
+        });
+    }
+
+    function randomDelay(min = 200, max = 500) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // VIEWPORT & LAYOUT
+    // ═══════════════════════════════════════════════════════════════════════════
+    function computeVh() {
+        const vh = window.innerHeight / 1080;
+        document.documentElement.style.setProperty('--vh', vh);
+        return vh;
+    }
+
+    function layoutPositions() {
+        const H = window.innerHeight;
+        const REM_PW = Math.max(12, H / 60);
+        document.documentElement.style.setProperty('--rem-pw', REM_PW + 'px');
+
+        const splashW = 21.2 * REM_PW;
+        const splashH = 3.7 * REM_PW;
+        dom.splashContainer.style.width = splashW + 'px';
+        dom.splashContainer.style.height = splashH + 'px';
+        dom.fieldGroup.style.width = splashW + 'px';
+    }
+
+    function positionFieldGroup() {
+        const splashRect = dom.splashContainer.getBoundingClientRect();
+        dom.fieldGroup.style.top = (splashRect.bottom + 24) + 'px';
+    }
+
+    function positionDisclaimer() {
+        const splashRect = dom.splashContainer.getBoundingClientRect();
+        const fieldRect = dom.fieldGroup.getBoundingClientRect();
+        dom.disclaimer.style.left = splashRect.left + 'px';
+        dom.disclaimer.style.top = (fieldRect.bottom + 20) + 'px';
+    }
+
+    function positionTypewriter() {
+        const splashRect = dom.splashContainer.getBoundingClientRect();
+        dom.typewriter.style.top = (splashRect.top - 40) + 'px';
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // CLOCK
+    // ═══════════════════════════════════════════════════════════════════════════
+    function updateClock() {
+        const now = new Date();
+        dom.clock.textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        dom.date.textContent = `${days[now.getDay()]} ${String(now.getDate()).padStart(2, '0')} ${months[now.getMonth()]}`;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // GREETER TERMINAL (bottom-left log)
+    // ═══════════════════════════════════════════════════════════════════════════
+    function terminalPush(msg) { terminalQueue.push(msg); }
+
+    async function terminalProcess() {
+        while (terminalQueue.length > 0) {
+            const msg = terminalQueue.shift();
+            addTerminalLine(msg);
+            await sleep(randomDelay(150, 400));
+        }
+    }
+
+    function addTerminalLine(text) {
+        const li = document.createElement('div');
+        li.className = 'terminal__line';
+        if (/^---.*---$/.test(text)) {
+            li.classList.add('terminal__line--separator');
+            li.textContent = `——— ${text.replace(/^-+/, '').replace(/-+$/, '')} ———`;
+        } else {
+            li.textContent = `» ${text}`;
+        }
+        dom.terminalLog.appendChild(li);
+        terminalLineCount++;
+        void li.offsetWidth;
+        li.classList.add('visible');
+        while (dom.terminalLog.children.length > MAX_TERMINAL_LINES) {
+            dom.terminalLog.removeChild(dom.terminalLog.firstChild);
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // PASSWORD & FORM FIELDS
+    // ═══════════════════════════════════════════════════════════════════════════
+    function renderPassword() {
+        const blocks = passwordValue.split('').map(() => '█').join('');
+        dom.passwordDisplay.innerHTML = blocks + '<span class="password-cursor">▁</span>';
+    }
+
+    function setupFormInputs() {
+        // Name input - just track value, minimal audio
+        dom.nameInput.addEventListener('input', (e) => { nameValue = e.target.value; });
+        dom.nameInput.addEventListener('focus', () => { if (audioManager) audioManager.expand.play(); });
+
+        // Email input
+        dom.emailInput.addEventListener('input', (e) => { emailValue = e.target.value; });
+
+        // Password wrapper click → focus hidden input
+        dom.passwordWrapper.addEventListener('click', () => {
+            if (currentState === State.IDLE) dom.passwordInput.focus();
+        });
+
+        dom.passwordInput.addEventListener('input', (e) => {
+            if (currentState !== State.IDLE) return;
+            passwordValue = e.target.value;
+            renderPassword();
+        });
+
+        // Enter key handling
+        dom.passwordInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (currentState === State.IDLE && passwordValue.length > 0 && nameValue.trim().length > 0) {
+                    handleLogin();
+                }
+            }
+        });
+
+        // Global Enter for identity card confirmation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && currentState === State.IDENTITY) {
+                handleCardConfirm();
+            }
+        });
+
+        dom.loginBtn.addEventListener('click', () => {
+            if (currentState === State.IDLE && passwordValue.length > 0 && nameValue.trim().length > 0) {
+                handleLogin();
+            }
+        });
+
+        // Avatar upload
+        if (dom.uploadAvatarBtn && dom.avatarInput) {
+            dom.uploadAvatarBtn.addEventListener('click', () => {
+                dom.avatarInput.click();
+                if (audioManager) audioManager.folder.play();
+            });
+            dom.avatarInput.addEventListener('change', handleAvatarUpload);
+        }
+
+        // Card confirm button (ENTER)
+        if (dom.cardConfirmBtn) {
+            dom.cardConfirmBtn.addEventListener('click', handleCardConfirm);
+        }
+
+        // Card EDIT toggle button
+        if (dom.cardEditBtn) {
+            dom.cardEditBtn.addEventListener('click', () => {
+                if (audioManager) audioManager.expand.play();
+                if (cardMode === 'view') {
+                    setCardMode('edit');
+                } else {
+                    // Save edits and switch back to view
+                    syncCardDisplayFromInputs();
+                    setCardMode('view');
+                }
+            });
+        }
+
+        // Card DOWNLOAD/EXPORT button
+        if (dom.cardDownloadBtn) {
+            dom.cardDownloadBtn.addEventListener('click', () => {
+                if (audioManager) audioManager.scan.play();
+                exportCardAsImage();
+            });
+        }
+
+        // Sync input → display values on every keystroke (for live preview)
+        [dom.cardNameInput, dom.cardEmailInput, dom.cardDesignationInput].forEach(inp => {
+            if (inp) inp.addEventListener('input', syncCardDisplayFromInputs);
+        });
+        if (dom.cardClearanceInput) {
+            dom.cardClearanceInput.addEventListener('change', syncCardDisplayFromInputs);
+        }
+    }
+
+    function handleAvatarUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const dataUrl = event.target.result;
+            if (dom.avatarImg) {
+                dom.avatarImg.src = dataUrl;
+                dom.avatarImg.classList.add('visible');
+            }
+            if (audioManager) audioManager.scan.play();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // IDENTITY CARD MODE MANAGEMENT
+    // ═══════════════════════════════════════════════════════════════════════════
+    function setCardMode(mode) {
+        cardMode = mode;
+        dom.identityCard.classList.remove('identity-card--view', 'identity-card--edit');
+        dom.identityCard.classList.add(`identity-card--${mode}`);
+
+        if (dom.cardEditBtn) {
+            const icon = dom.cardEditBtn.querySelector('.identity-card__action-icon');
+            if (mode === 'edit') {
+                if (icon) icon.textContent = '✓';
+                dom.cardEditBtn.lastChild.textContent = ' SAVE';
+                dom.cardConfirmBtn.textContent = 'SAVE & ENTER';
+            } else {
+                if (icon) icon.textContent = '✎';
+                dom.cardEditBtn.lastChild.textContent = ' EDIT';
+                dom.cardConfirmBtn.textContent = 'ENTER';
+            }
+        }
+
+        terminalPush(mode === 'edit' ? 'CARD_EDIT_MODE' : 'CARD_VIEW_MODE');
+    }
+
+    function syncCardDisplayFromInputs() {
+        if (dom.cardNameValue && dom.cardNameInput) dom.cardNameValue.textContent = dom.cardNameInput.value || 'HAC MEMBER';
+        if (dom.cardEmailValue && dom.cardEmailInput) dom.cardEmailValue.textContent = dom.cardEmailInput.value || 'member@hac.edu';
+        if (dom.cardClearanceValue && dom.cardClearanceInput) dom.cardClearanceValue.textContent = dom.cardClearanceInput.value || 'BUILDER';
+        if (dom.cardDesignationValue && dom.cardDesignationInput) dom.cardDesignationValue.textContent = dom.cardDesignationInput.value || 'AI COLLECTIVE MEMBER';
+    }
+
+    function syncCardInputsFromProfile(profile) {
+        if (!profile) return;
+        if (dom.cardNameInput) dom.cardNameInput.value = profile.name || 'HAC MEMBER';
+        if (dom.cardEmailInput) dom.cardEmailInput.value = profile.email || 'member@hac.edu';
+        if (dom.cardClearanceInput) dom.cardClearanceInput.value = profile.clearance || 'BUILDER';
+        if (dom.cardDesignationInput) dom.cardDesignationInput.value = profile.designation || 'AI COLLECTIVE MEMBER';
+        syncCardDisplayFromInputs();
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // CARD EXPORT (canvas-based PNG download)
+    // ═══════════════════════════════════════════════════════════════════════════
+    function exportCardAsImage() {
+        const canvas = dom.cardExportCanvas;
+        if (!canvas) return;
+
+        const DPR = 2; // High-res export
+        const W = 600 * DPR;
+        const H = 380 * DPR;
+        canvas.width = W;
+        canvas.height = H;
+        const ctx = canvas.getContext('2d');
+        ctx.scale(DPR, DPR);
+
+        const w = 600, h = 380;
+        const accent = `rgb(${CONFIG.colors.r}, ${CONFIG.colors.g}, ${CONFIG.colors.b})`;
+        const bg = '#0E0E0E';
+        const textPrimary = '#E0E0E0';
+        const textSecondary = '#7A7A7A';
+
+        // Background
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, w, h);
+
+        // Border
+        ctx.strokeStyle = accent;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(1, 1, w - 2, h - 2);
+
+        // Header bar
+        ctx.fillStyle = accent;
+        ctx.fillRect(0, 0, w, 52);
+
+        // Header text
+        ctx.fillStyle = bg;
+        ctx.font = 'bold 26px "Bai Jamjuree", sans-serif';
+        ctx.fillText('HAC', 20, 36);
+        ctx.font = '600 12px "Bai Jamjuree", sans-serif';
+        ctx.fillText('MEMBER ID', 72, 34);
+
+        // Avatar area
+        const avatarX = 24, avatarY = 72, avatarW = 100, avatarH = 120;
+        ctx.strokeStyle = accent;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(avatarX, avatarY, avatarW, avatarH);
+
+        // Draw avatar if available
+        if (dom.avatarImg && dom.avatarImg.classList.contains('visible') && dom.avatarImg.naturalWidth > 0) {
+            try {
+                ctx.drawImage(dom.avatarImg, avatarX, avatarY, avatarW, avatarH);
+            } catch (e) {
+                // Fallback: placeholder
+                drawAvatarPlaceholder(ctx, avatarX, avatarY, avatarW, avatarH, accent);
+            }
+        } else {
+            drawAvatarPlaceholder(ctx, avatarX, avatarY, avatarW, avatarH, accent);
+        }
+
+        // Field data
+        const fields = [
+            { label: 'NAME', value: dom.cardNameValue?.textContent || 'HAC MEMBER' },
+            { label: 'EMAIL', value: dom.cardEmailValue?.textContent || 'member@hac.edu' },
+            { label: 'CLEARANCE', value: dom.cardClearanceValue?.textContent || 'BUILDER' },
+            { label: 'DESIGNATION', value: dom.cardDesignationValue?.textContent || 'AI COLLECTIVE MEMBER' }
+        ];
+
+        const fieldX = 148;
+        let fieldY = 82;
+        fields.forEach(f => {
+            ctx.font = '600 9px "Bai Jamjuree", sans-serif';
+            ctx.fillStyle = textSecondary;
+            ctx.fillText(f.label, fieldX, fieldY);
+            ctx.font = '500 15px "Bai Jamjuree", sans-serif';
+            ctx.fillStyle = textPrimary;
+            ctx.fillText(f.value, fieldX, fieldY + 18);
+            fieldY += 52;
+        });
+
+        // Footer separator
+        ctx.fillStyle = 'rgba(255,255,255,0.1)';
+        ctx.fillRect(0, h - 52, w, 1);
+
+        // Footer background
+        ctx.fillStyle = 'rgba(14,14,14,0.95)';
+        ctx.fillRect(0, h - 51, w, 51);
+
+        // Member ID
+        ctx.font = '500 11px "Fira Mono", "JetBrains Mono", monospace';
+        ctx.fillStyle = textSecondary;
+        ctx.fillText(dom.cardId?.textContent || 'HAC-2025-0001', 20, h - 22);
+
+        // Hult AI Collective watermark
+        ctx.font = '600 10px "Bai Jamjuree", sans-serif';
+        ctx.fillStyle = accent;
+        ctx.textAlign = 'right';
+        ctx.fillText('HULT AI COLLECTIVE', w - 20, h - 22);
+        ctx.textAlign = 'left';
+
+        // Download
+        canvas.toBlob((blob) => {
+            if (!blob) return;
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const name = (dom.cardNameValue?.textContent || 'HAC_MEMBER').replace(/\s+/g, '_').toUpperCase();
+            a.download = `HAC_ID_${name}.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('◈ Card exported successfully');
+        }, 'image/png');
+    }
+
+    function drawAvatarPlaceholder(ctx, x, y, w, h, color) {
+        ctx.fillStyle = 'rgba(14,14,14,0.8)';
+        ctx.fillRect(x, y, w, h);
+        ctx.font = '48px serif';
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.4;
+        ctx.textAlign = 'center';
+        ctx.fillText('◉', x + w / 2, y + h / 2 + 16);
+        ctx.textAlign = 'left';
+        ctx.globalAlpha = 1;
+    }
+
+    function showToast(message) {
+        if (!dom.toast) return;
+        dom.toast.textContent = message;
+        dom.toast.classList.add('visible');
+        setTimeout(() => { dom.toast.classList.remove('visible'); }, 3000);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // SURFACE ANIMATIONS
+    // ═══════════════════════════════════════════════════════════════════════════
+    async function animateSurface(surfaceEl) {
+        const barLeft = surfaceEl.querySelector('.surface__bar-left');
+        const barRight = surfaceEl.querySelector('.surface__bar-right');
+        const content = surfaceEl.querySelector('.surface__content');
+
+        await Promise.all([
+            animate(barLeft, [{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: 320, easing: EASING.outCubic, fill: 'forwards' }),
+            animate(barRight, [{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: 320, easing: EASING.outCubic, fill: 'forwards' })
+        ]);
+        await animate(content, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 400, easing: EASING.outQuint, fill: 'forwards' });
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // TYPEWRITER
+    // ═══════════════════════════════════════════════════════════════════════════
+    function setTypewriterText(text) { dom.typewriterText.textContent = text; }
+
+    async function typewriterOverwrite(newText) {
+        const oldText = dom.typewriterText.textContent;
+        const maxLen = Math.max(oldText.length, newText.length);
+        const padOld = oldText.padEnd(maxLen);
+        const padNew = newText.padEnd(maxLen);
+        for (let i = 0; i < maxLen; i++) {
+            dom.typewriterText.textContent = padNew.substring(0, i + 1) + padOld.substring(i + 1);
+            await sleep(50);
+        }
+        dom.typewriterText.textContent = newText;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // SPINNER
+    // ═══════════════════════════════════════════════════════════════════════════
+    let spinnerRAF = null;
+    let spinnerIndex = 0;
+    const SPINNER_ORDER = [0, 1, 2, 5, 8, 7, 6, 3];
+
+    function startSpinner() {
+        dom.spinner.classList.add('active');
+        spinnerIndex = 0;
+        spinnerRAF = requestAnimationFrame(spinnerTick);
+    }
+
+    function spinnerTick() {
+        dom.spinnerCells.forEach((c) => c.classList.remove('lit'));
+        dom.spinnerCells[SPINNER_ORDER[spinnerIndex % SPINNER_ORDER.length]].classList.add('lit');
+        spinnerIndex++;
+        spinnerRAF = requestAnimationFrame(() => setTimeout(spinnerTick, 80));
+    }
+
+    function stopSpinner() {
+        if (spinnerRAF) cancelAnimationFrame(spinnerRAF);
+        dom.spinner.classList.remove('active');
+        dom.spinnerCells.forEach(c => c.classList.remove('lit'));
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // SAM BOOT SEQUENCE
+    // ═══════════════════════════════════════════════════════════════════════════
+    function scrollToBottom(element) {
+        requestAnimationFrame(() => { element.scrollTop = element.scrollHeight; });
+    }
+
+    function displayBootLine() {
+        if (!dom.bootScreen || !isBooting) return;
+
+        if (typeof bootLog[lineIndex] === 'undefined') {
+            setTimeout(displayTitleScreen, 300);
+            return;
+        }
+
+        const line = bootLog[lineIndex];
+
+        // Audio during boot - important lines get distinct sounds
+        if (line === 'Boot Complete') {
+            if (audioManager) audioManager.granted.play();
+        } else if (line.includes('ERROR') || line.includes('WARN')) {
+            if (audioManager) audioManager.error.play();
+        } else if (line.includes('Initializing') || line.includes('Starting')) {
+            if (audioManager) audioManager.expand.play();
+        } else if (line.includes('loaded') || line.includes('started') || line.includes('PASS')) {
+            if (audioManager) audioManager.info.play();
+        } else if (lineIndex % 15 === 0) {
+            if (audioManager) audioManager.stdout.play();
+        }
+
+        const lineText = document.createTextNode(line);
+        dom.bootScreen.appendChild(lineText);
+        dom.bootScreen.appendChild(document.createElement('br'));
+        scrollToBottom(dom.bootScreen);
+
+        lineIndex++;
+
+        // Timing
+        switch (true) {
+            case lineIndex === 2:
+                const kernelLine = `${CONFIG.appName} Kernel version ${CONFIG.version} boot at ${Date().toString()}; root:xnu-1699.22.73~1/RELEASE_X86_64`;
+                dom.bootScreen.appendChild(document.createTextNode(kernelLine));
+                dom.bootScreen.appendChild(document.createElement('br'));
+                scrollToBottom(dom.bootScreen);
+            case lineIndex === 4:
+                setTimeout(displayBootLine, 500);
+                break;
+            case lineIndex > 4 && lineIndex < 25:
+                setTimeout(displayBootLine, 30);
+                break;
+            case lineIndex === 25:
+                setTimeout(displayBootLine, 400);
+                break;
+            case lineIndex === 42:
+                setTimeout(displayBootLine, 300);
+                break;
+            case lineIndex > 42 && lineIndex < 82:
+                setTimeout(displayBootLine, 25);
+                break;
+            case lineIndex >= 82 && lineIndex < 100:
+                setTimeout(displayBootLine, 20);
+                break;
+            case lineIndex >= bootLog.length - 2 && lineIndex < bootLog.length:
+                setTimeout(displayBootLine, 400);
+                break;
+            default:
+                const delay = Math.max(10, Math.pow(1 - (lineIndex / 1000), 3) * 25);
+                setTimeout(displayBootLine, delay);
+        }
+    }
+
+    async function displayTitleScreen() {
+        currentState = State.BOOT_TITLE;
+
+        if (!dom.bootScreen) {
+            dom.bootScreen = document.createElement('section');
+            dom.bootScreen.id = 'boot_screen';
+            dom.bootScreen.style.zIndex = '9999999';
+            document.body.appendChild(dom.bootScreen);
+        }
+
+        dom.bootScreen.innerHTML = '';
+        if (audioManager) audioManager.theme.play();
+
+        await _rafDelay(400);
+        document.body.classList.remove('solidBackground');
+        dom.bootScreen.classList.add('center');
+
+        const { r, g, b } = CONFIG.colors;
+        const title = document.createElement('h1');
+        title.textContent = CONFIG.appName;
+        dom.bootScreen.appendChild(title);
+
+        await _rafDelay(200);
+        document.body.classList.add('solidBackground');
+        await _rafDelay(100);
+
+        title.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+        title.style.borderBottom = `5px solid rgb(${r}, ${g}, ${b})`;
+        title.style.color = 'var(--color_black)';
+        title.classList.add('glow-active');
+        await _rafDelay(300);
+
+        title.style.backgroundColor = 'transparent';
+        title.style.color = '';
+        title.style.border = `5px solid rgb(${r}, ${g}, ${b})`;
+        title.classList.remove('glow-active');
+        await _rafDelay(100);
+
+        title.style.cssText = '';
+        title.classList.add('glitch');
+        await _rafDelay(500);
+
+        document.body.classList.remove('solidBackground');
+        title.classList.remove('glitch');
+        title.style.border = `5px solid rgb(${r}, ${g}, ${b})`;
+        title.classList.add('glow-active');
+        await _rafDelay(1000);
+
+        onBootComplete();
+    }
+
+    function onBootComplete() {
+        isBooting = false;
+
+        if (dom.bootScreen) {
+            dom.bootScreen.classList.add('fade-out');
+            dom.bootScreen.addEventListener('animationend', () => {
+                dom.bootScreen.remove();
+                dom.bootScreen = null;
+            }, { once: true });
+        }
+
+        document.body.classList.add('greeterMode');
+        setTimeout(() => phaseSplash(), 300);
+
+        console.log(
+            `%c✓ ${CONFIG.appName} Boot sequence complete`,
+            `color: rgb(${CONFIG.colors.r}, ${CONFIG.colors.g}, ${CONFIG.colors.b}); font-weight: bold;`
+        );
+    }
+
+    function generateFallbackBootLog() {
+        return [
+            `Welcome to ${CONFIG.appName}!`,
+            `${CONFIG.appName} Core Initializing...`,
+            'vm_page_bootstrap: 512000 free pages',
+            'Loading kernel modules...',
+            'zone leak detection enabled',
+            'standard timeslicing quantum is 10000 us',
+            'Security policy loaded: Sandbox',
+            'HN_ Framework initialized',
+            'PCI configuration complete',
+            'Pthread support enabled',
+            'Starting network services...',
+            'Boot Complete'
+        ];
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // GREETER PHASES
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    async function phaseSplash() {
+        currentState = State.SPLASH;
+        dom.hacAccess.classList.add('initialized');
+
+        // Show terminal
+        dom.terminal.style.opacity = '1';
+        if (audioManager) audioManager.expand.play();
+
+        terminalPush('REGION_LINK_ESTABLISHED : HULT-EU-LONDON');
+        terminalPush(`LOG_STREAM_CONNECTED // ${randomUUID()}`);
+        terminalPush(`AUTH_MODULE_LOADED: HAC-v${CONFIG.version}`);
+        terminalPush('---GREETER_UI_INITIALIZING---');
+        terminalProcess();
+
+        // Show panels
+        setTimeout(() => {
+            if (dom.panelLeft) { dom.panelLeft.classList.add('visible'); if (audioManager) audioManager.panels.play(); }
+        }, 300);
+        setTimeout(() => {
+            if (dom.panelRight) { dom.panelRight.classList.add('visible'); }
+        }, 500);
+
+        startPanelUpdates();
+
+        // Progress bar animation
+        const bar = dom.splashBar;
+        if (audioManager) audioManager.info.play();
+
+        await animate(bar, [{ width: '0%' }, { width: '40%' }], { duration: 700, easing: EASING.inSine, fill: 'forwards' });
+
+        triggerMidwayReveal();
+
+        await animate(bar, [{ width: '40%' }, { width: '100%' }], { duration: 300, easing: EASING.inSine, fill: 'forwards' });
+
+        bar.style.width = '100%';
+        bar.style.transformOrigin = 'center center';
+        await animate(bar, [{ transform: 'scaleY(0.04)' }, { transform: 'scaleY(1)' }], { duration: 350, easing: EASING.inSine, fill: 'forwards' });
+
+        dom.splashOs.style.opacity = '1';
+        await animate(dom.splashOs, [{ opacity: 0 }, { opacity: 1 }], { duration: 150, fill: 'forwards' });
+
+        await animate(bar, [{ width: '100%' }, { width: '73%' }], { duration: 300, easing: EASING.outCubic, fill: 'forwards' });
+
+        dom.splashCt.style.opacity = '1';
+        await animate(dom.splashCt, [{ opacity: 0 }, { opacity: 1 }], { duration: 150, fill: 'forwards' });
+
+        await sleep(100);
+        phaseStartup();
+    }
+
+    function triggerMidwayReveal() {
+        // Time
+        dom.time.style.opacity = '1';
+        setTimeout(() => {
+            dom.timeInfo.animate([
+                { opacity: 0, transform: 'translateY(12px)' },
+                { opacity: 1, transform: 'translateY(0)' }
+            ], { duration: 300, easing: EASING.inExpo, fill: 'forwards' });
+            dom.timeInfo.style.opacity = '1';
+        }, 200);
+
+        // Device ID
+        setTimeout(() => {
+            dom.deviceId.style.opacity = '1';
+            const barcode = dom.deviceId.querySelector('.device-id__barcode');
+            const text = dom.deviceId.querySelector('.device-id__text');
+            const rule = dom.deviceId.querySelector('.device-id__rule');
+            if (barcode) { barcode.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, fill: 'forwards' }); barcode.style.opacity = '1'; }
+            if (rule) { rule.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, fill: 'forwards' }); rule.style.opacity = '1'; }
+            if (text) {
+                setTimeout(() => {
+                    text.animate([{ opacity: 0, transform: 'translateX(20px)' }, { opacity: 1, transform: 'translateX(0)' }], { duration: 300, fill: 'forwards' });
+                    text.style.opacity = '1';
+                }, 150);
+            }
+        }, 100);
+
+        // Status
+        setTimeout(() => {
+            dom.status.style.opacity = '1';
+            animateSurface(dom.status.querySelector('.surface'));
+        }, 200);
+    }
+
+    async function phaseStartup() {
+        currentState = State.STARTUP;
+
+        await animate(dom.splashContainer, [
+            { top: '50%' }, { top: '33%' }
+        ], { duration: 800, easing: EASING.outQuint, fill: 'forwards' });
+
+        positionFieldGroup();
+
+        dom.fieldGroup.style.display = 'flex';
+        dom.fieldGroup.style.opacity = '1';
+
+        // Position disclaimer after field group is visible
+        await sleep(50);
+        positionDisclaimer();
+        dom.disclaimer.style.opacity = '1';
+
+        await sleep(200);
+        phaseIdle();
+    }
+
+    function phaseIdle() {
+        currentState = State.IDLE;
+        dom.nameInput.focus();
+        terminalPush('AWAITING_CREDENTIALS');
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // LOGIN
+    // ═══════════════════════════════════════════════════════════════════════════
+    async function handleLogin() {
+        currentState = State.LOADING;
+
+        // Validation
+        if (!nameValue || nameValue.trim() === '') {
+            if (audioManager) audioManager.error.play();
+            dom.nameInput.style.borderColor = 'var(--error)';
+            setTimeout(() => { dom.nameInput.style.borderColor = ''; }, 1000);
+            currentState = State.IDLE;
+            return;
+        }
+
+        dom.passwordWrapper.classList.add('state-loading');
+        dom.loginBtn.classList.add('loading');
+        startSpinner();
+        if (audioManager) audioManager.alarm.play();
+
+        terminalPush('AUTH_ATTEMPT_INITIATED');
+        terminalPush(`VERIFYING_HASH: ${randomHex(32)}`);
+
+        await sleep(1500 + Math.random() * 1000);
+        stopSpinner();
+
+        // Always succeed
+        phaseSuccess();
+    }
+
+    async function phaseSuccess() {
+        terminalPush('---AUTH_SUCCESS---');
+        terminalPush(`SESSION_ID: ${randomUUID()}`);
+
+        dom.passwordWrapper.classList.remove('state-loading');
+        dom.passwordWrapper.classList.add('state-success');
+        dom.loginBtn.classList.remove('loading');
+
+        if (audioManager) audioManager.granted.play();
+        await sleep(600);
+
+        // Hide login form
+        await animate(dom.fieldGroup, [{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' });
+        dom.fieldGroup.style.display = 'none';
+
+        // Hide disclaimer
+        await animate(dom.disclaimer, [{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' });
+
+        // Determine if first-time or returning user
+        const savedProfile = loadProfile();
+        const isFirstTime = !savedProfile || !savedProfile.profileSetupComplete;
+
+        // Show typewriter
+        positionTypewriter();
+        dom.typewriter.style.opacity = '1';
+        setTypewriterText(isFirstTime ? 'IDENTITY SETUP' : 'MEMBER CARD');
+
+        await sleep(400);
+
+        // Transition to identity card
+        phaseIdentity();
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // IDENTITY CARD (view mode = printed / edit mode = character creation)
+    // ═══════════════════════════════════════════════════════════════════════════
+    async function phaseIdentity() {
+        currentState = State.IDENTITY;
+        if (audioManager) audioManager.scan.play();
+
+        // Load saved profile to determine mode
+        const profile = loadProfile() || {};
+        const isFirstTime = !profile.profileSetupComplete;
+        const memberId = profile.memberId || generateMemberId();
+
+        // Pre-fill identity card with login data + saved profile
+        dom.cardNameInput.value = nameValue.trim() || profile.name || 'HAC MEMBER';
+        dom.cardEmailInput.value = emailValue.trim() || profile.email || 'member@hac.edu';
+        if (profile.clearance) dom.cardClearanceInput.value = profile.clearance;
+        if (profile.designation) dom.cardDesignationInput.value = profile.designation;
+        dom.cardId.textContent = memberId;
+
+        // Sync display values from inputs
+        syncCardDisplayFromInputs();
+
+        // Load avatar if saved
+        if (profile.avatar && dom.avatarImg) {
+            dom.avatarImg.src = profile.avatar;
+            dom.avatarImg.classList.add('visible');
+        }
+
+        // Set card mode: first time = edit, returning = view
+        if (isFirstTime) {
+            setCardMode('edit');
+            terminalPush('FIRST_TIME_SETUP: EDIT_MODE');
+        } else {
+            setCardMode('view');
+            terminalPush('PROFILE_LOADED: VIEW_MODE');
+        }
+
+        // Show identity card
+        dom.identityCard.classList.add('visible');
+
+        // Reveal fields with stagger
+        const fields = dom.identityCard.querySelectorAll('.identity-card__field');
+        for (let i = 0; i < fields.length; i++) {
+            await sleep(120);
+            fields[i].classList.add('visible');
+            if (i === 0 && audioManager) audioManager.stdin.play();
+        }
+
+        await sleep(200);
+        if (audioManager) audioManager.info.play();
+
+        terminalPush('IDENTITY_CARD_ACTIVE');
+        terminalPush(isFirstTime ? 'AWAITING_PROFILE_SETUP' : 'AWAITING_CONFIRMATION');
+    }
+
+    async function handleCardConfirm() {
+        if (currentState !== State.IDENTITY) return;
+        currentState = State.EXIT;
+
+        if (audioManager) audioManager.granted.play();
+
+        // Always save the latest values (whether from view or edit mode)
+        syncCardDisplayFromInputs();
+
+        const profile = loadProfile() || {};
+        profile.name = dom.cardNameInput.value || 'HAC MEMBER';
+        profile.email = dom.cardEmailInput.value || 'member@hac.edu';
+        profile.clearance = dom.cardClearanceInput.value || 'BUILDER';
+        profile.designation = dom.cardDesignationInput.value || 'AI COLLECTIVE MEMBER';
+        profile.memberId = dom.cardId.textContent;
+        profile.lastLogin = new Date().toISOString();
+        profile.profileSetupComplete = true;
+
+        // Save avatar if uploaded
+        if (dom.avatarImg && dom.avatarImg.src && dom.avatarImg.classList.contains('visible')) {
+            profile.avatar = dom.avatarImg.src;
+        }
+
+        saveProfile(profile);
+
+        terminalPush('---IDENTITY_CONFIRMED---');
+        terminalPush('PROFILE_SAVED_TO_LOCAL');
+
+        // Hide identity card
+        dom.identityCard.classList.remove('visible');
+        await sleep(400);
+
+        // Typewriter
+        await typewriterOverwrite('WELCOME TO HAC');
+        await sleep(500);
+
+        // Hide typewriter
+        await animate(dom.typewriter, [{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' });
+
+        // Final splash bar
+        dom.splashCt.style.opacity = '0';
+        dom.splashOs.style.opacity = '0';
+        if (audioManager) audioManager.scan.play();
+
+        await animate(dom.splashFinalBar, [{ width: '0%' }, { width: '100%' }], { duration: 1000, easing: EASING.inCirc, fill: 'forwards' });
+        await sleep(200);
+
+        stopPanelUpdates();
+        phaseRedirect();
+    }
+
+    async function phaseRedirect() {
+        currentState = State.REDIRECT;
+        if (audioManager) audioManager.theme.play();
+
+        // Hide panels
+        if (dom.panelLeft) dom.panelLeft.classList.remove('visible');
+        if (dom.panelRight) dom.panelRight.classList.remove('visible');
+
+        // Zoom out
+        dom.hacAccess.classList.add('zoom-out');
+        await sleep(800);
+
+        dom.blackout.classList.add('active');
+        await sleep(600);
+
+        window.location.href = CONFIG.redirectUrl;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // INITIALIZATION
+    // ═══════════════════════════════════════════════════════════════════════════
+    let clickToStartEl = null;
+
+    async function init() {
+        const root = document.documentElement;
+        const { r, g, b } = CONFIG.colors;
+        root.style.setProperty('--color_r', r);
+        root.style.setProperty('--color_g', g);
+        root.style.setProperty('--color_b', b);
+        root.style.setProperty('--app_name', `"${CONFIG.appName}"`);
+
+        // Initialize audio
+        if (typeof AudioManager !== 'undefined') {
+            audioManager = new AudioManager({
+                enabled: CONFIG.audio.enabled,
+                volume: CONFIG.audio.volume,
+                basePath: CONFIG.audio.basePath
+            });
+        }
+
+        cacheDom();
+        clickToStartEl = document.getElementById('click-to-start');
+
+        // Load boot log
+        try {
+            const response = await fetch(CONFIG.bootLogPath);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const text = await response.text();
+            bootLog = text.split('\n').filter(line => line.trim() !== '');
+        } catch (e) {
+            console.warn('Boot log fetch failed, using fallback:', e.message);
+            bootLog = generateFallbackBootLog();
+        }
+
+        // Setup
+        computeVh();
+        layoutPositions();
+        updateClock();
+        setupFormInputs();
+        setInterval(updateClock, 1000);
+
+        window.addEventListener('resize', () => {
+            computeVh();
+            layoutPositions();
+            if (currentState >= State.STARTUP && currentState <= State.LOADING) {
+                positionFieldGroup();
+                positionDisclaimer();
+            }
+            if (dom.typewriter.style.opacity === '1') {
+                positionTypewriter();
+            }
+        });
+
+        // Load saved profile
+        const savedProfile = loadProfile();
+        if (savedProfile) {
+            if (savedProfile.name && dom.nameInput) { dom.nameInput.value = savedProfile.name; nameValue = savedProfile.name; }
+            if (savedProfile.email && dom.emailInput) { dom.emailInput.value = savedProfile.email; emailValue = savedProfile.email; }
+        }
+
+        // Click to start
+        if (clickToStartEl) await waitForClickToStart();
+
+        currentState = State.BOOT;
+        displayBootLine();
+    }
+
+    function waitForClickToStart() {
+        return new Promise(resolve => {
+            if (!clickToStartEl) { resolve(); return; }
+            const handleClick = () => {
+                if (audioManager) audioManager.expand.play();
+                clickToStartEl.classList.add('hidden');
+                clickToStartEl.removeEventListener('click', handleClick);
+                setTimeout(resolve, 300);
+            };
+            clickToStartEl.addEventListener('click', handleClick);
+        });
+    }
+
+    // Start
+    if (document.fonts) {
+        document.fonts.ready.then(init);
+    } else {
+        document.addEventListener('DOMContentLoaded', init);
+    }
+})();

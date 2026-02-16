@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>HAC // DASHBOARD</title>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        :root {
+            --color-bg: #0E0E0E;
+            --color-accent: rgb(0, 212, 212);
+            --color-text: #ffffff;
+            --color-text-dim: #7a7a7a;
+        }
+        
+        body {
+            font-family: 'JetBrains Mono', 'Fira Mono', 'SF Mono', monospace;
+            background: var(--color-bg);
+            color: var(--color-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 600px;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+            text-shadow: 
+                0 0 10px rgba(0, 212, 212, 0.5),
+                0 0 30px rgba(0, 212, 212, 0.3);
+        }
+        
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 212, 0.1);
+            border-left: 3px solid var(--color-accent);
+            margin-bottom: 2rem;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .message {
+            font-size: 1.25rem;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+        
+        .welcome {
+            color: var(--color-accent);
+        }
+        
+        .info {
+            color: var(--color-text-dim);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-text-dim);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--color-text-dim);
+            transition: all 0.2s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+        
+        .footer {
+            position: fixed;
+            bottom: 1rem;
+            font-size: 0.75rem;
+            color: var(--color-text-dim);
+        }
+
+        /* Scanlines overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">HAC</div>
+        
+        <div class="status">
+            <div class="status-dot"></div>
+            <span>SYSTEM ONLINE</span>
+        </div>
+        
+        <p class="message">
+            <span class="welcome">Welcome to the Hult AI Collective.</span><br>
+            Access granted. You have successfully authenticated.
+        </p>
+        
+        <p class="info">
+            This is a placeholder dashboard. Replace this page with your actual<br>
+            internal content, member portal, or project workspace.
+        </p>
+        
+        <a href="./index.html" class="back-link">
+            ← Return to Access Portal
+        </a>
+    </div>
+    
+    <div class="footer">
+        HAC-OS v2.0.0 // HULT AI COLLECTIVE
+    </div>
+</body>
+</html>

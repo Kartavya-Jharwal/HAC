@@ -1,0 +1,174 @@
+/* 
+ * ══════════════════════════════════════════════════════════════════════════════
+ * HAC ACCESS - Theme Configuration
+ * ══════════════════════════════════════════════════════════════════════════════
+ * 
+ * Unified cyberpunk theme combining SAM's terminal aesthetic with ctOS corporate.
+ * Edit the CSS variables below to customize the entire interface.
+ * 
+ * COLOR PRESETS (uncomment --color_r/g/b values):
+ *   HAC CYAN (default):  r:0,   g:212, b:212  (teal/cyan)
+ *   TRON:                r:170, g:207, b:209  (light cyan)
+ *   MATRIX:              r:0,   g:255, b:65   (terminal green)
+ *   BLADE RUNNER:        r:255, g:60,  b:90   (neon red)
+ *   AMBER:               r:255, g:176, b:0    (retro orange)
+ *   SYNTHWAVE:           r:255, g:113, b:206  (hot pink)
+ * 
+ * ══════════════════════════════════════════════════════════════════════════════
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * GOOGLE FONTS - Bai Jamjuree
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap');
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * FONT FACES
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@font-face {
+    font-family: "United Sans Medium";
+    src: url("../assets/fonts/united_sans_medium.woff2") format("woff2");
+    font-display: swap;
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "United Sans Light";
+    src: url("../assets/fonts/united_sans_light.woff2") format("woff2");
+    font-display: swap;
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Fira Mono";
+    src: url("../assets/fonts/fira_mono.woff2") format("woff2");
+    font-display: swap;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* JetBrains Mono: no local woff2 — loaded from system or Google Fonts CDN fallback.
+   Font stack in --font_mono falls through to Fira Mono (bundled). */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * CSS CUSTOM PROPERTIES
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+:root {
+    /* ───────────────────────────────────────────────────────────────────────────
+     * PRIMARY ACCENT COLOR (HAC Cyan/Teal)
+     * ─────────────────────────────────────────────────────────────────────────── */
+    --color_r: 0;
+    --color_g: 212;
+    --color_b: 212;
+    
+    /* Terminal green for boot log (separate from accent) */
+    --terminal-green: #00ff41;
+    --terminal-green-dim: rgba(0, 255, 65, 0.7);
+    --terminal-green-glow: rgba(0, 255, 65, 0.3);
+    
+    /* Computed accent colors */
+    --accent-primary: rgb(var(--color_r), var(--color_g), var(--color_b));
+    --accent-primary-dim: rgba(var(--color_r), var(--color_g), var(--color_b), 0.7);
+    --accent-primary-glow: rgba(var(--color_r), var(--color_g), var(--color_b), 0.3);
+    
+    /* ───────────────────────────────────────────────────────────────────────────
+     * BACKGROUND COLORS
+     * ─────────────────────────────────────────────────────────────────────────── */
+    --color_black: #000000;
+    --color_light_black: #05080d;
+    --color_grey: #262828;
+    --background: #0E0E0E;
+    
+    /* Overlay variations */
+    --color_dark_overlay: rgba(0, 0, 0, 0.85);
+    --color_light_overlay: rgba(255, 255, 255, 0.03);
+    
+    /* ───────────────────────────────────────────────────────────────────────────
+     * GRAYSCALE PALETTE (ctOS-style)
+     * ─────────────────────────────────────────────────────────────────────────── */
+    --gray-50:  #ffffff;
+    --gray-100: #CACACA;
+    --gray-200: #D9D9D9;
+    --gray-300: #c3c3c3;
+    --gray-500: #7a7a7a;
+    --gray-800: #0E0E0E;
+    
+    /* ───────────────────────────────────────────────────────────────────────────
+     * SEMANTIC COLORS
+     * ─────────────────────────────────────────────────────────────────────────── */
+    --text-primary: var(--gray-50);
+    --text-primary-dim: var(--gray-100);
+    --text-primary-dimmer: var(--gray-300);
+    --text-secondary: var(--gray-500);
+    --text-accent: var(--accent-primary);
+    
+    --success: #1bfd9c;
+    --error: #fc3e38;
+    
+    --hac-gray: var(--gray-200);
+    --surface-bg: rgba(255, 255, 255, 0.08);
+    --card-bg: rgba(255, 255, 255, 0.12);
+    
+    --region-border: #414141;
+    --region-text: #B1B1B1;
+    --barcode-gray: #B6B6B6;
+    --status-bar: #626262;
+    
+    /* ───────────────────────────────────────────────────────────────────────────
+     * TYPOGRAPHY
+     * ─────────────────────────────────────────────────────────────────────────── */
+    --font_main: "Bai Jamjuree", "United Sans Medium", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font_main_light: "Bai Jamjuree", "United Sans Light", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font_mono: "JetBrains Mono", "Fira Mono", "SF Mono", "Consolas", "Monaco", monospace;
+    --font_title: "Bai Jamjuree", "United Sans Medium", sans-serif;
+    --font-family: var(--font_main);
+    
+    /* Font sizing scale */
+    --font_size_xs: clamp(10px, 1.2vh, 12px);
+    --font_size_sm: clamp(12px, 1.4vh, 14px);
+    --font_size_md: clamp(14px, 1.6vh, 16px);
+    --font_size_lg: clamp(18px, 2vh, 22px);
+    --font_size_xl: clamp(24px, 3vh, 32px);
+    --font_size_hero: clamp(40px, 10vh, 120px);
+    
+    /* ───────────────────────────────────────────────────────────────────────────
+     * SPACING SCALE
+     * ─────────────────────────────────────────────────────────────────────────── */
+    --space_xs: 0.25rem;
+    --space_sm: 0.5rem;
+    --space_md: 1rem;
+    --space_lg: 2rem;
+    --space_xl: 4rem;
+    
+    /* ───────────────────────────────────────────────────────────────────────────
+     * ANIMATION TIMING
+     * ─────────────────────────────────────────────────────────────────────────── */
+    --transition_fast: 150ms;
+    --transition_normal: 300ms;
+    --transition_slow: 500ms;
+    
+    /* ───────────────────────────────────────────────────────────────────────────
+     * UNITS (recalculated by JS on resize)
+     * ─────────────────────────────────────────────────────────────────────────── */
+    --vh: 1;
+    --rem-pw: 16px;
+    --rem-term: 14px;
+    
+    /* ───────────────────────────────────────────────────────────────────────────
+     * APP NAME (used in boot screen glitch effect)
+     * ─────────────────────────────────────────────────────────────────────────── */
+    --app_name: "HAC";
+}
+
+/* Base font assignment */
+html {
+    font-family: var(--font-family);
+    color: var(--text-primary);
+    background: var(--background);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}

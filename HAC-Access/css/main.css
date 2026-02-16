@@ -1,0 +1,219 @@
+/* 
+ * ══════════════════════════════════════════════════════════════════════════════
+ * HAC ACCESS - Core Styles
+ * ══════════════════════════════════════════════════════════════════════════════
+ * Base styles, resets, and CRT effects
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * RESET & BASE
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    font-family: var(--font_main);
+    color: rgb(var(--color_r), var(--color_g), var(--color_b));
+    background: var(--color_black);
+    
+    /* Grid background - matches eDEX-UI aesthetic */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    
+    /* Smooth transitions for background changes */
+    transition: background 0.3s ease-out;
+}
+
+/* Grid pattern background (during boot) */
+body:not(.solidBackground):not(.greeterMode) {
+    background: 
+        linear-gradient(90deg, var(--color_light_black) 1.85vh, transparent 1%) center, 
+        linear-gradient(var(--color_light_black) 1.85vh, transparent 1%) center, 
+        var(--color_grey);
+    background-size: 2.04vh 2.04vh;
+}
+
+/* Solid background mode (during title animation) */
+body.solidBackground {
+    background: var(--color_light_black);
+}
+
+/* Greeter mode (after boot completes) */
+body.greeterMode {
+    background: var(--background);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * CRT EFFECTS OVERLAY
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    
+    /* Subtle scanlines */
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.06) 0px,
+        rgba(0, 0, 0, 0.06) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    
+    animation: scanlines 8s linear infinite;
+}
+
+@keyframes scanlines {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100vh; }
+}
+
+/* Vignette effect */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 0%,
+        transparent 50%,
+        rgba(0, 0, 0, 0.3) 100%
+    );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * FULL-SCREEN CONTAINER
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+.hac-access {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Background */
+.hac-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: 
+        radial-gradient(ellipse at 20% 30%, rgba(var(--color_r), var(--color_g), var(--color_b), 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(var(--color_r), var(--color_g), var(--color_b), 0.02) 0%, transparent 50%),
+        var(--background);
+}
+
+/* Fade-to-black overlay (for exit) */
+.hac-blackout {
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    background: var(--background);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+}
+
+.hac-blackout.active {
+    opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * ACCESSIBILITY - REDUCED MOTION
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+    body::before {
+        animation: none !important;
+    }
+    
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * RESPONSIVE ADJUSTMENTS
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    body:not(.solidBackground):not(.greeterMode) {
+        background-size: 3vh 3vh;
+    }
+}
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * CLICK TO START OVERLAY
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+.click-to-start {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: var(--color_light_black, #05080d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.click-to-start.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.click-to-start__content {
+    text-align: center;
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+}
+
+.click-to-start__logo {
+    font-family: var(--font_title, 'Bai Jamjuree'), sans-serif;
+    font-size: clamp(60px, 15vw, 150px);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: rgb(var(--color_r, 0), var(--color_g, 212), var(--color_b, 212));
+    text-shadow: 
+        0 0 10px rgba(var(--color_r, 0), var(--color_g, 212), var(--color_b, 212), 0.5),
+        0 0 30px rgba(var(--color_r, 0), var(--color_g, 212), var(--color_b, 212), 0.3),
+        0 0 60px rgba(var(--color_r, 0), var(--color_g, 212), var(--color_b, 212), 0.2);
+    margin-bottom: 20px;
+}
+
+.click-to-start__text {
+    font-family: var(--font_mono);
+    font-size: 14px;
+    color: var(--gray-100, #cacaca);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.click-to-start__subtext {
+    font-family: var(--font_mono);
+    font-size: 11px;
+    color: var(--gray-500, #7a7a7a);
+    letter-spacing: 0.1em;
+}

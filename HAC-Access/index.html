@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#05080d">
+  <meta name="description" content="HAC - Hult AI Collective Access Portal">
+  
+  <title>HAC // ACCESS PORTAL</title>
+
+  <!-- 
+  ══════════════════════════════════════════════════════════════════════════════
+  HAC ACCESS PORTAL - Unified Boot + Authentication Experience
+  ══════════════════════════════════════════════════════════════════════════════
+  
+  FLOW:
+    1. Click to start (enables audio)
+    2. SAM-style boot log (terminal scrolling)
+    3. HAC title screen (glitch animation)
+    4. ctOS-style greeter (name + password)
+    5. Identity card (first-time: edit mode / returning: printed view)
+       - Optional EDIT button to modify fields
+       - Optional EXPORT button to download card as PNG
+    6. ENTER → zoom-out → redirect to dashboard
+  
+  ══════════════════════════════════════════════════════════════════════════════
+  -->
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="css/theme.css" as="style">
+  <link rel="preload" href="assets/fonts/united_sans_medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="assets/fonts/fira_mono.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="assets/boot_log.txt" as="fetch" crossorigin="anonymous">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/boot_screen.css">
+  <link rel="stylesheet" href="css/greeter.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <!-- Inline critical styles -->
+  <style>
+    .hac-access { opacity: 0; transition: opacity 0.1s ease; }
+    .hac-access.initialized { opacity: 1; }
+    section#boot_screen { z-index: 2000; }
+    .hac-greeter { z-index: 10; }
+  </style>
+</head>
+<body>
+  <noscript>
+    <div style="background:#0E0E0E;color:#E0E0E0;font-family:monospace;display:flex;align-items:center;justify-content:center;height:100vh;text-align:center;padding:2rem">
+      <p>HAC Access Portal requires JavaScript.<br>Please enable JavaScript to continue.</p>
+    </div>
+  </noscript>
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       CLICK TO START OVERLAY (required for audio playback)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="click-to-start" id="click-to-start">
+    <div class="click-to-start__content">
+      <div class="click-to-start__logo">HAC</div>
+      <div class="click-to-start__text">CLICK TO INITIALIZE</div>
+      <div class="click-to-start__subtext">Audio enabled experience</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       BOOT SCREEN (SAM-style terminal + title animation)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section id="boot_screen"></section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       GREETER (ctOS-style authentication interface)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="hac-access" id="hac-access">
+
+    <!-- Background -->
+    <div class="hac-background"></div>
+
+    <!-- Fade-to-black overlay -->
+    <div class="hac-blackout" id="blackout"></div>
+
+    <!-- Top Bar -->
+    <div class="bar" id="bar">
+      <div class="bar__system-label">
+        <span class="bar__hac-text">HAC</span>
+      </div>
+      <span class="bar__os-text">OS</span>
+      <div class="bar__divider"></div>
+    </div>
+
+    <!-- Time (top-left) -->
+    <div class="time" id="time">
+      <div class="time__icon-wrapper accents">
+        <div class="time__icon">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2"/>
+            <text x="50" y="58" text-anchor="middle" font-size="32" fill="currentColor">H</text>
+          </svg>
+        </div>
+      </div>
+      <div class="time__info" id="time-info">
+        <span class="time__clock" id="clock">--:--</span>
+        <div class="time__date-badge">
+          <span class="time__date" id="date">--- -- -------</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status (top-right) -->
+    <div class="status" id="status">
+      <div class="surface">
+        <div class="surface__bar-left"></div>
+        <div class="surface__content">
+          <div class="status__row">
+            <span class="status__label">ENV</span>
+            <span class="status__value" id="status-env">Collective</span>
+          </div>
+          <div class="status__row">
+            <span class="status__label">NODE</span>
+            <span class="status__value" id="status-node">HAC.HULT.EDU</span>
+          </div>
+        </div>
+        <div class="surface__bar-right"></div>
+      </div>
+    </div>
+
+    <!-- Left Panel - Network Status -->
+    <div class="panel panel--left" id="panel-left">
+      <div class="panel__header">
+        <span class="panel__title">NETWORK</span>
+        <span class="panel__indicator active"></span>
+      </div>
+      <div class="panel__content">
+        <div class="panel__row">
+          <span class="panel__label">LATENCY</span>
+          <span class="panel__value" id="panel-latency">--ms</span>
+        </div>
+        <div class="panel__row">
+          <span class="panel__label">UPLINK</span>
+          <span class="panel__value status-ok">ACTIVE</span>
+        </div>
+        <div class="panel__row">
+          <span class="panel__label">PROTOCOL</span>
+          <span class="panel__value">TLS 1.3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel - System Status -->
+    <div class="panel panel--right" id="panel-right">
+      <div class="panel__header">
+        <span class="panel__title">SYSTEM</span>
+        <span class="panel__indicator active"></span>
+      </div>
+      <div class="panel__content">
+        <div class="panel__row">
+          <span class="panel__label">CPU</span>
+          <span class="panel__value" id="panel-cpu">--</span>
+        </div>
+        <div class="panel__row">
+          <span class="panel__label">MEM</span>
+          <span class="panel__value" id="panel-mem">--</span>
+        </div>
+        <div class="panel__row">
+          <span class="panel__label">KERNEL</span>
+          <span class="panel__value">HAC-2.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typewriter header (above splash) -->
+    <div class="typewriter-header" id="typewriter">
+      <span class="typewriter-text" id="typewriter-text"></span>
+    </div>
+
+    <!-- Splash (center progress bar + HAC/OS) -->
+    <div class="splash-container" id="splash-container">
+      <div class="splash" id="splash">
+        <div class="splash__bar" id="splash-bar"></div>
+        <span class="splash__ct" id="splash-ct">HAC</span>
+        <span class="splash__os" id="splash-os">OS</span>
+        <div class="splash__final-bar" id="splash-final-bar"></div>
+      </div>
+    </div>
+
+    <!-- Field Group (name, email, password, login) -->
+    <div class="field-group" id="field-group">
+      <!-- Name field -->
+      <div class="name-wrapper" id="name-wrapper">
+        <label class="field-label">NAME</label>
+        <input class="field-input" id="name-input" type="text" autocomplete="off" spellcheck="false" placeholder="Enter your name">
+      </div>
+
+      <!-- Email field -->
+      <div class="email-wrapper" id="email-wrapper">
+        <label class="field-label">EMAIL</label>
+        <input class="field-input" id="email-input" type="email" autocomplete="off" spellcheck="false" placeholder="member@hac.edu">
+      </div>
+
+      <!-- Password field -->
+      <div class="password-wrapper" id="password-wrapper">
+        <label class="field-label">ACCESS KEY</label>
+        <input class="password-hidden-input" id="password-input" type="text" autocomplete="off" spellcheck="false">
+        <div class="password-display" id="password-display">
+          <span class="password-cursor">▁</span>
+        </div>
+      </div>
+
+      <!-- Login button -->
+      <div class="login-btn" id="login-btn">
+        <span class="login-btn__text">ACCESS</span>
+        <div class="spinner" id="spinner">
+          <div class="spinner__cell" data-index="0"></div>
+          <div class="spinner__cell" data-index="1"></div>
+          <div class="spinner__cell" data-index="2"></div>
+          <div class="spinner__cell" data-index="3"></div>
+          <div class="spinner__cell spinner__cell--center" data-index="4"></div>
+          <div class="spinner__cell" data-index="5"></div>
+          <div class="spinner__cell" data-index="6"></div>
+          <div class="spinner__cell" data-index="7"></div>
+          <div class="spinner__cell" data-index="8"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer" id="disclaimer">
+      <div class="disclaimer__inner">
+        <div class="disclaimer__text-block" id="disclaimer-text">
+          <span class="disclaimer__line">Property of Hult AI Collective.</span>
+          <span class="disclaimer__line">Authorized members only.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terminal (bottom-left) -->
+    <div class="terminal" id="terminal">
+      <div class="terminal__log" id="terminal-log"></div>
+      <div class="terminal__version-badge">
+        <span class="terminal__version-text">hac-krn-1.0.0 &lt;&gt; HAC-OS-2.0.0</span>
+      </div>
+    </div>
+
+    <!-- Device ID (bottom-right) -->
+    <div class="device-id" id="device-id">
+      <div class="device-id__column">
+        <div class="device-id__text">HULT AI COLLECTIVE</div>
+        <div class="device-id__rule"></div>
+      </div>
+      <div class="device-id__barcode">▌▐▌▌▐▐▌▐▌▐▌▌▐▐▌▐▌</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         IDENTITY CARD (dual mode: view/printed + edit)
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="identity-card identity-card--view" id="identity-card">
+      <div class="identity-card__inner">
+        <div class="identity-card__header">
+          <span class="identity-card__badge">HAC</span>
+          <span class="identity-card__badge-text">MEMBER ID</span>
+        </div>
+        <div class="identity-card__body">
+          <div class="identity-card__profile">
+            <div class="identity-card__avatar-wrapper">
+              <img class="identity-card__avatar-img" id="avatar-img" src="" alt="Profile">
+              <div class="identity-card__avatar-placeholder" id="avatar-placeholder">◉</div>
+            </div>
+            <!-- Edit-mode only: upload button -->
+            <button class="identity-card__upload-btn" id="upload-avatar-btn" title="Upload Photo">
+              <span>UPLOAD</span>
+            </button>
+            <input type="file" id="avatar-input" accept="image/*" hidden>
+          </div>
+          <div class="identity-card__fields">
+            <div class="identity-card__field">
+              <label class="identity-card__field-label">NAME</label>
+              <span class="identity-card__field-value" id="card-name-value">HAC MEMBER</span>
+              <input class="identity-card__field-input" id="card-name-input" type="text" value="HAC MEMBER" spellcheck="false">
+            </div>
+            <div class="identity-card__field">
+              <label class="identity-card__field-label">EMAIL</label>
+              <span class="identity-card__field-value" id="card-email-value">member@hac.edu</span>
+              <input class="identity-card__field-input" id="card-email-input" type="email" value="member@hac.edu" spellcheck="false">
+            </div>
+            <div class="identity-card__field">
+              <label class="identity-card__field-label">CLEARANCE</label>
+              <span class="identity-card__field-value" id="card-clearance-value">BUILDER</span>
+              <select class="identity-card__field-input identity-card__field-select" id="card-clearance-input">
+                <option value="BUILDER">BUILDER</option>
+                <option value="ARCHITECT">ARCHITECT</option>
+                <option value="STRATEGIST">STRATEGIST</option>
+                <option value="OPERATOR">OPERATOR</option>
+                <option value="VANGUARD">VANGUARD</option>
+              </select>
+            </div>
+            <div class="identity-card__field">
+              <label class="identity-card__field-label">DESIGNATION</label>
+              <span class="identity-card__field-value" id="card-designation-value">AI COLLECTIVE MEMBER</span>
+              <input class="identity-card__field-input" id="card-designation-input" type="text" value="AI COLLECTIVE MEMBER" spellcheck="false">
+            </div>
+          </div>
+        </div>
+        <div class="identity-card__footer">
+          <div class="identity-card__id" id="card-id">HAC-2025-0001</div>
+          <div class="identity-card__actions">
+            <button class="identity-card__action-btn identity-card__action-btn--edit" id="card-edit-btn" title="Edit Profile">
+              <span class="identity-card__action-icon">✎</span> EDIT
+            </button>
+            <button class="identity-card__action-btn identity-card__action-btn--download" id="card-download-btn" title="Download Card">
+              <span class="identity-card__action-icon">⤓</span> EXPORT
+            </button>
+            <button class="identity-card__confirm-btn" id="card-confirm-btn">
+              ENTER
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Hidden canvas for card export -->
+    <canvas id="card-export-canvas" style="display:none;"></canvas>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+      ◈ Welcome to the Hult AI Collective
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
