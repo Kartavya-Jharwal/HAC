@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#05080d">
+    <meta name="description" content="Boot sequence splash screen for tech projects">
+    
+    <title>Boot Sequence</title>
+    
+    <!-- 
+    ══════════════════════════════════════════════════════════════════════════
+    BOOT SEQUENCE - Plug & Play Splash Screen for Tech Projects
+    ══════════════════════════════════════════════════════════════════════════
+    
+    QUICK START:
+    1. Copy this folder into your project
+    2. Edit BOOT_CONFIG in js/boot.js or override below
+    3. Customize colors in css/theme.css
+    4. Add your own boot_log.txt in assets/
+    
+    URL PARAMETERS:
+    - ?skip       Skip boot sequence
+    - ?fast       2x speed
+    - ?ultrafast  5x speed (dev mode)
+    - ?silent     Mute audio
+    
+    EVENTS:
+    - window.addEventListener('bootComplete', (e) => { ... })
+    
+    ══════════════════════════════════════════════════════════════════════════
+    -->
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/theme.css" as="style">
+    <link rel="preload" href="assets/fonts/united_sans_medium.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/fira_mono.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/boot_log.txt" as="fetch" crossorigin>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/boot_screen.css">
+    
+    <!-- Inline critical styles for instant render -->
+    <style>
+        /* Prevent FOUC */
+        body { opacity: 1; }
+        section#boot_screen { opacity: 1; }
+        
+        /* Initial loading state */
+        .loading::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: #05080d;
+            z-index: 10000;
+        }
+    </style>
+    
+    <!-- Configuration override (edit this section) -->
+    <script>
+        // ════════════════════════════════════════════════════════════════════
+        // CONFIGURATION - Uncomment and edit to customize
+        // ════════════════════════════════════════════════════════════════════
+        /*
+        window.BOOT_CONFIG_OVERRIDE = {
+            appName: 'MY PROJECT',
+            version: '1.0.0',
+            
+            // Theme colors (RGB 0-255)
+            colors: { 
+                r: 0, 
+                g: 255, 
+                b: 136 
+            },
+            
+            // What happens after boot:
+            // 'ready'    - Show "SYSTEM READY"
+            // 'fade'     - Fade out
+            // 'remove'   - Remove immediately
+            // 'redirect' - Go to redirectUrl
+            // 'callback' - Run onComplete function
+            completionMode: 'ready',
+            
+            // For redirect mode
+            redirectUrl: '/app.html',
+            
+            // Custom completion handler
+            onComplete: function(bootScreen) {
+                bootScreen.classList.add('fade-out');
+                setTimeout(() => {
+                    bootScreen.remove();
+                    // Your app initialization here
+                }, 500);
+            }
+        };
+        */
+    </script>
+</head>
+<body class="solidBackground">
+    <!-- 
+    Boot Screen Container
+    This element displays the boot log and title animation.
+    It will be removed or modified based on completionMode.
+    -->
+    <section id="boot_screen" role="status" aria-live="polite" aria-label="System boot sequence"></section>
+
+    <!-- Scripts -->
+    <script src="js/audio.js"></script>
+    <script src="js/boot.js"></script>
+    
+    <!-- Boot completion handler -->
+    <script>
+        window.addEventListener('bootComplete', function(e) {
+            // Boot sequence finished
+            // e.detail.config    - Boot configuration used
+            // e.detail.skipped   - true if ?skip parameter was used
+            // e.detail.timestamp - Completion timestamp
+            
+            console.log('%c[Boot]', 'color: #aacfd1', 'Complete', e.detail);
+            
+            // Example: Track analytics
+            // gtag('event', 'boot_complete', { skipped: e.detail.skipped });
+            
+            // Example: Initialize your app
+            // initializeApp();
+        });
+    </script>
+    
+    <!-- Noscript fallback -->
+    <noscript>
+        <style>
+            body { 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                font-family: monospace;
+                color: #aacfd1;
+            }
+            section#boot_screen { display: none; }
+        </style>
+        <p>JavaScript is required for the boot sequence.</p>
+    </noscript>
+</body>
+</html>
+        });
+    </script>
+</body>
+</html>

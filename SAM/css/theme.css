@@ -1,0 +1,149 @@
+/* 
+ * ══════════════════════════════════════════════════════════════════════════
+ * THEME CONFIGURATION - Boot Sequence Splash Screen
+ * ══════════════════════════════════════════════════════════════════════════
+ * 
+ * Edit the CSS variables below to customize the look and feel.
+ * Colors use RGB component values (0-255) for flexible rgba() usage.
+ * 
+ * PRESET THEMES (uncomment one):
+ *   TRON (default):    r:170, g:207, b:209  (cyan)
+ *   MATRIX:            r:0,   g:255, b:65   (green)
+ *   BLADE RUNNER:      r:255, g:60,  b:90   (red/pink)
+ *   AMBER TERMINAL:    r:255, g:176, b:0    (orange)
+ *   NORD:              r:136, g:192, b:208  (frost blue)
+ *   CYBERPUNK:         r:255, g:0,   b:255  (magenta)
+ *   SYNTHWAVE:         r:255, g:113, b:206  (hot pink)
+ *   HACKER:            r:32,  g:194, b:14   (terminal green)
+ * 
+ * ══════════════════════════════════════════════════════════════════════════
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * FONT FACES
+ * ═══════════════════════════════════════════════════════════════════════════ */
+@font-face {
+    font-family: "United Sans Medium";
+    src: url("../assets/fonts/united_sans_medium.woff2") format("woff2");
+    font-display: swap;
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "United Sans Light";
+    src: url("../assets/fonts/united_sans_light.woff2") format("woff2");
+    font-display: swap;
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Fira Mono";
+    src: url("../assets/fonts/fira_mono.woff2") format("woff2");
+    font-display: swap;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Fallback for Fira Code if available */
+@font-face {
+    font-family: "Fira Code";
+    src: url("../assets/fonts/fira_code.woff2") format("woff2");
+    font-display: swap;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * CSS CUSTOM PROPERTIES (Variables)
+ * ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+    /* ───────────────────────────────────────────────────────────────────────
+     * PRIMARY ACCENT COLOR
+     * Change these three values to customize the entire color scheme
+     * ─────────────────────────────────────────────────────────────────────── */
+    --color_r: 170;
+    --color_g: 207;
+    --color_b: 209;
+    
+    /* ───────────────────────────────────────────────────────────────────────
+     * BACKGROUND COLORS
+     * ─────────────────────────────────────────────────────────────────────── */
+    --color_black: #000000;
+    --color_light_black: #05080d;
+    --color_grey: #262828;
+    
+    /* Computed background variations */
+    --color_dark_overlay: rgba(0, 0, 0, 0.85);
+    --color_light_overlay: rgba(255, 255, 255, 0.03);
+    
+    /* ───────────────────────────────────────────────────────────────────────
+     * TYPOGRAPHY
+     * ─────────────────────────────────────────────────────────────────────── */
+    --font_main: "United Sans Medium", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font_main_light: "United Sans Light", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font_mono: "Fira Code", "Fira Mono", "SF Mono", "Consolas", "Monaco", monospace;
+    
+    /* Font sizing scale */
+    --font_size_xs: clamp(10px, 1.2vh, 12px);
+    --font_size_sm: clamp(12px, 1.4vh, 14px);
+    --font_size_md: clamp(14px, 1.6vh, 16px);
+    --font_size_lg: clamp(18px, 2vh, 22px);
+    --font_size_xl: clamp(24px, 3vh, 32px);
+    --font_size_hero: clamp(40px, 10vh, 120px);
+    
+    /* ───────────────────────────────────────────────────────────────────────
+     * SPACING SCALE
+     * ─────────────────────────────────────────────────────────────────────── */
+    --space_xs: 0.25rem;
+    --space_sm: 0.5rem;
+    --space_md: 1rem;
+    --space_lg: 2rem;
+    --space_xl: 4rem;
+    
+    /* ───────────────────────────────────────────────────────────────────────
+     * ANIMATION TIMING
+     * ─────────────────────────────────────────────────────────────────────── */
+    --ease_out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease_in_out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    --duration_fast: 150ms;
+    --duration_normal: 300ms;
+    --duration_slow: 500ms;
+    
+    /* ───────────────────────────────────────────────────────────────────────
+     * EFFECTS
+     * ─────────────────────────────────────────────────────────────────────── */
+    --glow_subtle: 0 0 5px rgba(var(--color_r), var(--color_g), var(--color_b), 0.3);
+    --glow_medium: 0 0 10px rgba(var(--color_r), var(--color_g), var(--color_b), 0.5),
+                   0 0 20px rgba(var(--color_r), var(--color_g), var(--color_b), 0.3);
+    --glow_strong: 0 0 10px rgba(var(--color_r), var(--color_g), var(--color_b), 0.8),
+                   0 0 30px rgba(var(--color_r), var(--color_g), var(--color_b), 0.5),
+                   0 0 60px rgba(var(--color_r), var(--color_g), var(--color_b), 0.3);
+    
+    /* Border styling */  
+    --border_width: 0.5vh;
+    --border_color: rgb(var(--color_r), var(--color_g), var(--color_b));
+    
+    /* ───────────────────────────────────────────────────────────────────────
+     * APP IDENTITY
+     * Set dynamically by JavaScript, but CSS fallback provided
+     * ─────────────────────────────────────────────────────────────────────── */
+    --app_name: "SAM";
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * DARK MODE (enforced)
+ * ═══════════════════════════════════════════════════════════════════════════ */
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark;
+    }
+}
+
+/* Force dark regardless of system preference */
+:root {
+    color-scheme: dark;
+}

@@ -1,0 +1,54 @@
+/* ═══════════════════════════════════════════════
+   ctOS Web — Theme Tokens
+   Mirrors common/Theme.qml & common/Units.qml
+   ═══════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+:root {
+  /* ── Primitives ── */
+  --gray-50:  #ffffff;
+  --gray-100: #CACACA;
+  --gray-200: #D9D9D9;
+  --gray-300: #c3c3c3;
+  --gray-500: #7a7a7a;
+  --gray-800: #0E0E0E;
+
+  --accent-green: #1bfd9c;
+  --accent-red:   #fc3e38;
+
+  /* ── Semantic ── */
+  --text-primary:       var(--gray-50);
+  --text-primary-dim:   var(--gray-100);
+  --text-primary-dimmer: var(--gray-300);
+  --text-secondary:     var(--gray-500);
+  --text-accent:        var(--accent-green);
+
+  --background: var(--gray-800);
+  --success:    var(--accent-green);
+  --error:      var(--accent-red);
+
+  --ctos-gray:    var(--gray-200);
+  --surface-bg:   rgba(255, 255, 255, 0.08);
+  --card-bg:      rgba(255, 255, 255, 0.12);
+
+  --region-border: #414141;
+  --region-text:   #B1B1B1;
+  --barcode-gray:  #B6B6B6;
+  --status-bar:    #626262;
+
+  /* ── Typography ── */
+  --font-family: 'JetBrains Mono', 'JetBrainsMono Nerd Font', monospace;
+
+  /* ── Units (recalculated by JS on resize) ── */
+  --vh: 1;
+  --rem-pw: 16px;   /* password field character width */
+  --rem-term: 14px; /* terminal character width */
+}
+
+/* Base font assignment */
+html {
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  background: var(--background);
+}

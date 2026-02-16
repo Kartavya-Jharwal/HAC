@@ -1,0 +1,184 @@
+/* ═══════════════════════════════════════════════
+   ctOS Web — Layout
+   Viewport grid & component positioning
+   ═══════════════════════════════════════════════ */
+
+/* Full-screen container */
+.ctos {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Background ── */
+.ctos-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url('../../greeter/resources/lock.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* ── Fade-to-black overlay (for exit) ── */
+.ctos-blackout {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  background: var(--background);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+.ctos-blackout.active {
+  opacity: 1;
+}
+
+/* ── Bar (top) ── */
+.bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 37px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  background: var(--background);
+  border: 1px solid var(--ctos-gray);
+}
+
+/* ── Time (top-left) ── */
+.time {
+  position: absolute;
+  z-index: 10;
+  top: 5%;
+  left: 5%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  opacity: 0;
+}
+
+/* ── Status (top-right) ── */
+.status {
+  position: absolute;
+  z-index: 10;
+  top: 4.6%;
+  right: 3.75%;
+  opacity: 0;
+}
+
+/* ── Splash center ── */
+.splash-container {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+}
+
+/* ── Field group (below splash) ── */
+.field-group {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  opacity: 0;
+}
+
+/* ── Typewriter header (above splash) ── */
+.typewriter-header {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  opacity: 0;
+}
+
+/* ── Confirmation text (below splash during card) ── */
+.confirmation-text {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  opacity: 0;
+  color: var(--ctos-gray);
+  font-size: 18px;
+}
+
+/* ── Disclaimer ── */
+.disclaimer {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+}
+
+/* ── Terminal (bottom-left) ── */
+.terminal {
+  position: absolute;
+  z-index: 10;
+  bottom: 4.6%;
+  left: 3.7%;
+  opacity: 0;
+}
+
+/* ── DeviceId (bottom-right) ── */
+.device-id {
+  position: absolute;
+  z-index: 10;
+  bottom: 4.6%;
+  right: 3.75%;
+  opacity: 0;
+}
+
+/* ── Identity card ── */
+.identity-card {
+  position: absolute;
+  z-index: 25;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 450px;
+  height: 220px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Toast notification ── */
+.toast {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  z-index: 200;
+  padding: 12px 24px;
+  background: rgba(14, 14, 14, 0.92);
+  border: 1px solid var(--ctos-gray);
+  color: var(--ctos-gray);
+  font-size: 13px;
+  font-family: var(--font-family);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.4s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}

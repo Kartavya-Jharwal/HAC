@@ -1,0 +1,168 @@
+/* ═══════════════════════════════════════════════
+   ctOS Web — Animations & Keyframes
+   ═══════════════════════════════════════════════ */
+
+/* ── Easing curves (QML equivalents) ── */
+/* InOutCirc  → cubic-bezier(0.785, 0.135, 0.15, 0.86)   */
+/* OutQuint   → cubic-bezier(0.22, 1, 0.36, 1)            */
+/* InExpo     → cubic-bezier(0.95, 0.05, 0.795, 0.035)    */
+/* OutExpo    → cubic-bezier(0.19, 1, 0.22, 1)             */
+/* InSine     → cubic-bezier(0.47, 0, 0.745, 0.715)       */
+/* OutCubic   → cubic-bezier(0.33, 1, 0.68, 1)            */
+/* InCubic    → cubic-bezier(0.32, 0, 0.67, 0)            */
+/* InQuart    → cubic-bezier(0.5, 0, 0.75, 0)             */
+/* InCirc     → cubic-bezier(0.6, 0.04, 0.98, 0.335)      */
+/* InBounce   → (approximated)                              */
+
+/* ═══════════════════════════════════════
+   CURSOR BLINK
+   ═══════════════════════════════════════ */
+@keyframes cursor-blink {
+  0%    { opacity: 1; }
+  45%   { opacity: 1; }
+  50%   { opacity: 0; }
+  72%   { opacity: 0; }
+  77%   { opacity: 1; }
+  100%  { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════
+   SPINNER CHASE (8-cell clockwise)
+   ═══════════════════════════════════════ */
+@keyframes spinner-chase {
+  0%, 100% { background: var(--text-secondary); }
+  12.5%    { background: var(--background); }
+}
+/* Each cell gets animation-delay offset in JS */
+
+/* ═══════════════════════════════════════
+   BREATHING (confirmation text)
+   ═══════════════════════════════════════ */
+@keyframes breathe {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+.breathing {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════
+   PROGRESS BAR — Splash grow
+   ═══════════════════════════════════════ */
+@keyframes progress-grow-phase1 {
+  from { width: 0%; }
+  to   { width: 40%; }
+}
+@keyframes progress-grow-phase2 {
+  from { width: 40%; }
+  to   { width: 100%; }
+}
+@keyframes progress-scale-y {
+  from { transform: scaleY(0.02); }
+  to   { transform: scaleY(1); }
+}
+@keyframes progress-retract {
+  from { width: 100%; }
+  to   { width: 73%; }
+}
+
+/* ═══════════════════════════════════════
+   SPLASH — slide to position
+   ═══════════════════════════════════════ */
+@keyframes splash-slide-up {
+  from { top: 50%; }
+  to   { top: 40.6%; }
+}
+
+/* ═══════════════════════════════════════
+   FADE-IN with translate
+   ═══════════════════════════════════════ */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fade-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ═══════════════════════════════════════
+   SURFACE — bars scale then expand
+   ═══════════════════════════════════════ */
+@keyframes surface-bar-scale {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+@keyframes surface-content-expand {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ═══════════════════════════════════════
+   SECONDARY PROGRESS (final exit)
+   ═══════════════════════════════════════ */
+@keyframes final-progress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* ═══════════════════════════════════════
+   ACCENT MARKS — converge
+   ═══════════════════════════════════════ */
+@keyframes accent-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ═══════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════ */
+.anim-fade-in-up {
+  animation: fade-in-up 0.3s cubic-bezier(0.95, 0.05, 0.795, 0.035) forwards;
+}
+.anim-fade-in-left {
+  animation: fade-in-left 0.3s cubic-bezier(0.95, 0.05, 0.795, 0.035) forwards;
+}
+.anim-fade-in {
+  animation: fade-in 0.3s ease forwards;
+}
+.anim-fade-out {
+  animation: fade-out 0.2s ease forwards;
+}
+
+/* Stagger delays */
+.delay-100  { animation-delay: 100ms; }
+.delay-200  { animation-delay: 200ms; }
+.delay-300  { animation-delay: 300ms; }
+.delay-400  { animation-delay: 400ms; }
+.delay-500  { animation-delay: 500ms; }
+.delay-600  { animation-delay: 600ms; }
+.delay-700  { animation-delay: 700ms; }
+.delay-800  { animation-delay: 800ms; }
+.delay-900  { animation-delay: 900ms; }
+.delay-1000 { animation-delay: 1000ms; }

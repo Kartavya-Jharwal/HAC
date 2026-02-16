@@ -1,0 +1,350 @@
+/* 
+ * ══════════════════════════════════════════════════════════════════════════
+ * BOOT SCREEN STYLES - Awwwards-level Polish
+ * ══════════════════════════════════════════════════════════════════════════
+ * Extracted and enhanced from SAM/eDEX-UI
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * BOOT SCREEN CONTAINER
+ * ═══════════════════════════════════════════════════════════════════════════ */
+section#boot_screen {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 2vh 2vw;
+    overflow: hidden;
+    z-index: 1000;
+
+    /* Typography */
+    font-family: var(--font_mono, 'Fira Mono', 'SF Mono', 'Consolas', monospace);
+    font-size: clamp(10px, 1.4vh, 16px);
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    text-align: left;
+    
+    /* Layout - align to bottom-left like a real terminal */
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    
+    /* Phosphor glow effect on boot text */
+    text-shadow: 
+        0 0 1px rgba(var(--color_r), var(--color_g), var(--color_b), 0.8),
+        0 0 3px rgba(var(--color_r), var(--color_g), var(--color_b), 0.3);
+    
+    /* GPU acceleration for smooth scrolling */
+    transform: translateZ(0);
+    will-change: contents;
+}
+
+/* Boot log content wrapper */
+section#boot_screen > .boot-content {
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 1vw;
+}
+
+/* Centered mode for title screen */
+section#boot_screen.center {
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    text-shadow: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * BOOT LOG LINE ANIMATIONS
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Blinking cursor at end of boot log */
+section#boot_screen::after {
+    content: '█';
+    display: inline-block;
+    margin-left: 0.3em;
+    animation: cursorBlink 1s step-end infinite;
+    opacity: 0.8;
+}
+
+section#boot_screen.center::after {
+    display: none;
+}
+
+@keyframes cursorBlink {
+    0%, 50% { opacity: 0.8; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Individual line animation */
+section#boot_screen .line {
+    animation: lineReveal 0.1s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes lineReveal {
+    from { 
+        opacity: 0;
+        transform: translateX(-5px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * TITLE SCREEN - Main Logo
+ * ═══════════════════════════════════════════════════════════════════════════ */
+section#boot_screen h1 {
+    font-family: var(--font_main, 'United Sans Medium', sans-serif);
+    font-size: clamp(40px, 10vh, 120px);
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-align: center;
+    text-transform: uppercase;
+    
+    /* Underline accent */
+    border-bottom: 0.5vh solid rgb(var(--color_r), var(--color_g), var(--color_b));
+    padding: 2vh 3vh 1.5vh;
+    background-color: transparent;
+    
+    /* Initial state */
+    opacity: 0;
+    
+    /* Smooth transitions */
+    transition: 
+        background-color 0.15s ease-out,
+        border 0.15s ease-out,
+        box-shadow 0.3s ease-out;
+    
+    /* Entrance animation */
+    animation: fadeInTitle 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    
+    /* GPU acceleration */
+    transform: translateZ(0);
+    will-change: opacity, transform;
+}
+
+@keyframes fadeInTitle {
+    from { 
+        opacity: 0;
+        transform: translateY(10px) translateZ(0);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0) translateZ(0);
+    }
+}
+
+/* Title with glow effect */
+section#boot_screen h1.glow-active {
+    text-shadow: 
+        0 0 5px rgba(var(--color_r), var(--color_g), var(--color_b), 0.9),
+        0 0 20px rgba(var(--color_r), var(--color_g), var(--color_b), 0.6),
+        0 0 40px rgba(var(--color_r), var(--color_g), var(--color_b), 0.3);
+    box-shadow: 
+        0 0 30px rgba(var(--color_r), var(--color_g), var(--color_b), 0.2),
+        inset 0 0 20px rgba(var(--color_r), var(--color_g), var(--color_b), 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * GLITCH EFFECT - Advanced
+ * ═══════════════════════════════════════════════════════════════════════════ */
+section#boot_screen h1.glitch {
+    border: none;
+    color: transparent;
+    position: relative;
+    animation: glitchMain 0.4s ease-in-out;
+}
+
+@keyframes glitchMain {
+    0%, 100% { transform: translateX(0) translateZ(0); }
+    10% { transform: translateX(-2px) translateZ(0); }
+    20% { transform: translateX(2px) translateZ(0); }
+    30% { transform: translateX(-1px) translateZ(0); }
+    40% { transform: translateX(1px) translateZ(0); }
+}
+
+/* Top glitch slice */
+section#boot_screen h1::before {
+    content: var(--app_name, "SAM");
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Slice positioning */
+    transform: translateY(0) translateX(-2%);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 45%, 0% 45%);
+    color: rgba(var(--color_r), var(--color_g), var(--color_b), 0.85);
+    
+    /* Animation */
+    animation-name: derezzer_top;
+    animation-duration: 60ms;
+    animation-timing-function: steps(2, end);
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+    animation-play-state: paused;
+    
+    /* Hidden by default */
+    opacity: 0;
+    pointer-events: none;
+}
+
+section#boot_screen h1.glitch::before {
+    opacity: 1;
+    animation-play-state: running;
+}
+
+@keyframes derezzer_top {
+    0% { transform: translateY(0) translateX(-1%); }
+    25% { transform: translateY(0) translateX(-3%); }
+    50% { transform: translateY(-1px) translateX(-2%); }
+    75% { transform: translateY(1px) translateX(-4%); }
+    100% { transform: translateY(0) translateX(-5%); }
+}
+
+/* Bottom glitch slice */
+section#boot_screen h1::after {
+    content: var(--app_name, "SAM");
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Slice positioning */
+    transform: translateY(0) translateX(2%);
+    clip-path: polygon(0% 45%, 100% 45%, 100% 100%, 0% 100%);
+    color: rgba(var(--color_r), var(--color_g), var(--color_b), 0.9);
+    
+    /* Animation */
+    animation-name: derezzer_bottom;
+    animation-duration: 50ms;
+    animation-timing-function: steps(3, end);
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+    animation-play-state: paused;
+    
+    /* Hidden by default */
+    opacity: 0;
+    pointer-events: none;
+}
+
+section#boot_screen h1.glitch::after {
+    opacity: 1;
+    animation-play-state: running;
+}
+
+@keyframes derezzer_bottom {
+    0% { transform: translateY(0) translateX(1%); }
+    33% { transform: translateY(1px) translateX(2%); }
+    66% { transform: translateY(-1px) translateX(4%); }
+    100% { transform: translateY(0) translateX(3%); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * SYSTEM READY STATE
+ * ═══════════════════════════════════════════════════════════════════════════ */
+section#boot_screen h1.ready {
+    animation: readyPulse 2s ease-in-out infinite;
+}
+
+@keyframes readyPulse {
+    0%, 100% {
+        box-shadow: 
+            0 0 10px rgba(var(--color_r), var(--color_g), var(--color_b), 0.2),
+            inset 0 0 10px rgba(var(--color_r), var(--color_g), var(--color_b), 0.05);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px rgba(var(--color_r), var(--color_g), var(--color_b), 0.4),
+            inset 0 0 20px rgba(var(--color_r), var(--color_g), var(--color_b), 0.1);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * FADE OUT ANIMATION
+ * ═══════════════════════════════════════════════════════════════════════════ */
+section#boot_screen.fade-out {
+    animation: bootFadeOut 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes bootFadeOut {
+    0% { 
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% { 
+        opacity: 0;
+        transform: scale(1.02);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * RESPONSIVE ADJUSTMENTS
+ * ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+    section#boot_screen {
+        font-size: clamp(8px, 2vh, 12px);
+        padding: 1.5vh 3vw;
+    }
+    
+    section#boot_screen h1 {
+        font-size: clamp(32px, 8vh, 60px);
+        letter-spacing: 0.1em;
+        padding: 1.5vh 2vh 1vh;
+    }
+}
+
+@media (max-width: 480px) {
+    section#boot_screen h1 {
+        font-size: clamp(24px, 7vh, 48px);
+    }
+}
+
+/* High DPI / Retina displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    section#boot_screen {
+        text-shadow: 
+            0 0 0.5px rgba(var(--color_r), var(--color_g), var(--color_b), 0.6),
+            0 0 2px rgba(var(--color_r), var(--color_g), var(--color_b), 0.2);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * REDUCED MOTION - Accessibility
+ * ═══════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+    section#boot_screen h1,
+    section#boot_screen h1::before,
+    section#boot_screen h1::after,
+    section#boot_screen::after {
+        animation: none !important;
+    }
+    
+    section#boot_screen h1.glitch::before,
+    section#boot_screen h1.glitch::after {
+        animation: none !important;
+        transform: none;
+        clip-path: none;
+        opacity: 0 !important;
+    }
+    
+    section#boot_screen h1.glitch {
+        color: rgb(var(--color_r), var(--color_g), var(--color_b));
+    }
+    
+    section#boot_screen h1 {
+        opacity: 1;
+    }
+}

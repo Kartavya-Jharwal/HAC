@@ -1,0 +1,205 @@
+/* 
+ * ══════════════════════════════════════════════════════════════════════════
+ * CORE STYLES - Boot Sequence Splash Screen
+ * ══════════════════════════════════════════════════════════════════════════
+ * Awwwards-level polish • CRT aesthetics • Sci-fi atmosphere
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * RESET & BASE
+ * ═══════════════════════════════════════════════════════════════════════════ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    font-family: var(--font_main), -apple-system, BlinkMacSystemFont, sans-serif;
+    color: rgb(var(--color_r), var(--color_g), var(--color_b));
+    background: var(--color_black);
+    
+    /* Grid background - matches original eDEX-UI aesthetic */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    
+    /* Smooth transitions for background changes */
+    transition: background 0.3s ease-out;
+}
+
+/* Grid pattern background */
+body:not(.solidBackground) {
+    background: 
+        linear-gradient(90deg, var(--color_light_black) 1.85vh, transparent 1%) center, 
+        linear-gradient(var(--color_light_black) 1.85vh, transparent 1%) center, 
+        var(--color_grey);
+    background-size: 2.04vh 2.04vh;
+}
+
+/* Solid background mode (during title animation) */
+body.solidBackground {
+    background: var(--color_light_black);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * CRT EFFECTS OVERLAY
+ * ═══════════════════════════════════════════════════════════════════════════ */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    
+    /* Scanlines */
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15) 0px,
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    
+    /* Subtle animation for authenticity */
+    animation: scanlines 8s linear infinite;
+}
+
+@keyframes scanlines {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100vh; }
+}
+
+/* Vignette effect */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 0%,
+        transparent 50%,
+        rgba(0, 0, 0, 0.3) 100%
+    );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * PHOSPHOR GLOW & TEXT EFFECTS
+ * ═══════════════════════════════════════════════════════════════════════════ */
+.glow {
+    text-shadow: 
+        0 0 2px rgba(var(--color_r), var(--color_g), var(--color_b), 0.8),
+        0 0 8px rgba(var(--color_r), var(--color_g), var(--color_b), 0.4),
+        0 0 16px rgba(var(--color_r), var(--color_g), var(--color_b), 0.2);
+}
+
+.glow-strong {
+    text-shadow: 
+        0 0 2px rgba(var(--color_r), var(--color_g), var(--color_b), 1),
+        0 0 10px rgba(var(--color_r), var(--color_g), var(--color_b), 0.8),
+        0 0 20px rgba(var(--color_r), var(--color_g), var(--color_b), 0.5),
+        0 0 40px rgba(var(--color_r), var(--color_g), var(--color_b), 0.3);
+}
+
+/* Subtle text flicker - disabled by default for accessibility */
+@keyframes textFlicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: 0.9; }
+    94% { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * SCROLLBAR STYLING
+ * ═══════════════════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(var(--color_r), var(--color_g), var(--color_b), 0.1);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(var(--color_r), var(--color_g), var(--color_b), 0.6);
+    border-radius: 3px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--color_r), var(--color_g), var(--color_b), 0.9);
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--color_r), var(--color_g), var(--color_b), 0.6) transparent;
+}
+
+/* Selection styling */
+::selection {
+    background: rgba(var(--color_r), var(--color_g), var(--color_b), 0.3);
+    color: white;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * ACCESSIBILITY - REDUCED MOTION
+ * ═══════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    body::before {
+        animation: none;
+        background: rgba(0, 0, 0, 0.05);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * UTILITY CLASSES
+ * ═══════════════════════════════════════════════════════════════════════════ */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.gpu-accelerate {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+}
