@@ -625,11 +625,8 @@
     }
 
     function buildQRPayload() {
-        const memberId = dom.cardId?.textContent || 'HAC-2025-0001';
-        const studentId = dom.cardStudentIdInput?.value || '';
-        const name = dom.cardNameInput?.value || 'HAC MEMBER';
-        // Plain text format: pipe-delimited for Salesforce scanner compat
-        return `HAC|${memberId}|${studentId}|${name}`;
+        // Return only the numeric student ID for Salesforce scanner
+        return dom.cardStudentIdInput?.value || '';
     }
 
     function refreshQR() {
