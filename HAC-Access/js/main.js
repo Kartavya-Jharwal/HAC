@@ -85,6 +85,7 @@
         dom.timeInfo = $('#time-info');
         dom.clock = $('#clock');
         dom.date = $('#date');
+        dom.asciiClock = $('#ascii-clock');
         dom.status = $('#status');
         dom.splashContainer = $('#splash-container');
         dom.splash = $('#splash');
@@ -119,11 +120,14 @@
         dom.cardEmailInput = $('#card-email-input');
         dom.cardClearanceInput = $('#card-clearance-input');
         dom.cardDesignationInput = $('#card-designation-input');
+        dom.cardStudentIdInput = $('#card-studentid-input');
         dom.cardNameValue = $('#card-name-value');
         dom.cardEmailValue = $('#card-email-value');
         dom.cardClearanceValue = $('#card-clearance-value');
         dom.cardDesignationValue = $('#card-designation-value');
+        dom.cardStudentIdValue = $('#card-studentid-value');
         dom.cardId = $('#card-id');
+        dom.qrCanvas = $('#qr-canvas');
         dom.cardConfirmBtn = $('#card-confirm-btn');
         dom.cardEditBtn = $('#card-edit-btn');
         dom.cardDownloadBtn = $('#card-download-btn');
@@ -138,6 +142,13 @@
         dom.panelMem = $('#panel-mem');
 
         dom.toast = $('#toast');
+
+        // Widgets
+        dom.widgetSession = $('#widget-session');
+        dom.widgetSpectrum = $('#widget-spectrum');
+        dom.widgetUptime = $('#widget-uptime');
+        dom.widgetSignals = $('#widget-signals');
+        dom.widgetBars = $('#widget-bars');
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -182,6 +193,50 @@
         if (dom.panelLatency) dom.panelLatency.textContent = (Math.floor(Math.random() * 40) + 10) + 'ms';
         if (dom.panelCpu) dom.panelCpu.textContent = (Math.floor(Math.random() * 30) + 15) + '%';
         if (dom.panelMem) dom.panelMem.textContent = (Math.floor(Math.random() * 30) + 40) + '%';
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // WIDGET UPDATES
+    // ═══════════════════════════════════════════════════════════════════════════
+    let widgetInterval = null;
+    let widgetStartTime = null;
+    let signalCount = 0;
+
+    function startWidgetUpdates() {
+        widgetStartTime = Date.now();
+        signalCount = 0;
+        updateWidgets();
+        widgetInterval = setInterval(updateWidgets, 1000);
+    }
+
+    function stopWidgetUpdates() {
+        if (widgetInterval) { clearInterval(widgetInterval); widgetInterval = null; }
+    }
+
+    function updateWidgets() {
+        // Session uptime
+        if (dom.widgetUptime && widgetStartTime) {
+            const elapsed = Math.floor((Date.now() - widgetStartTime) / 1000);
+            const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+            const ss = String(elapsed % 60).padStart(2, '0');
+            dom.widgetUptime.textContent = `${mm}:${ss}`;
+        }
+
+        // Signal count (random increment)
+        if (dom.widgetSignals) {
+            signalCount += Math.floor(Math.random() * 3);
+            dom.widgetSignals.textContent = signalCount;
+        }
+
+        // Audio spectrum bars (random animation)
+        if (dom.widgetBars) {
+            const bars = '\u2581\u2582\u2583\u2584\u2585\u2586\u2587\u2588';
+            let spectrum = '';
+            for (let i = 0; i < 14; i++) {
+                spectrum += bars[Math.floor(Math.random() * bars.length)];
+            }
+            dom.widgetBars.textContent = spectrum;
+        }
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -270,10 +325,58 @@
     // ═══════════════════════════════════════════════════════════════════════════
     function updateClock() {
         const now = new Date();
-        dom.clock.textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        const ss = String(now.getSeconds()).padStart(2, '0');
+        dom.clock.textContent = `${hh}:${mm}:${ss}`;
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         dom.date.textContent = `${days[now.getDay()]} ${String(now.getDate()).padStart(2, '0')} ${months[now.getMonth()]}`;
+        if (dom.asciiClock) dom.asciiClock.textContent = renderAsciiClock(now);
+    }
+
+    function renderAsciiClock(date) {
+        const h = date.getHours() % 12;
+        const m = date.getMinutes();
+        const s = date.getSeconds();
+        const R = 8; // radius in chars
+        const W = R * 2 + 1;
+        const H = R * 2 + 1;
+        const grid = Array.from({ length: H }, () => Array(W).fill(' '));
+
+        // Draw circle
+        for (let a = 0; a < 360; a += 6) {
+            const rad = a * Math.PI / 180;
+            const x = Math.round(R + R * Math.sin(rad) * 1.0);
+            const y = Math.round(R - R * Math.cos(rad) * 0.5);
+            if (y >= 0 && y < H && x >= 0 && x < W) {
+                // Hour markers at 30° intervals
+                grid[y][x] = (a % 30 === 0) ? '\u25CF' : '\u00B7';
+            }
+        }
+
+        // Draw hands (hour, minute, second)
+        const drawHand = (angle, len, ch) => {
+            const rad = angle * Math.PI / 180;
+            for (let i = 1; i <= len; i++) {
+                const x = Math.round(R + i * Math.sin(rad) * 1.0);
+                const y = Math.round(R - i * Math.cos(rad) * 0.5);
+                if (y >= 0 && y < H && x >= 0 && x < W) grid[y][x] = ch;
+            }
+        };
+
+        const hAngle = (h + m / 60) * 30;
+        const mAngle = (m + s / 60) * 6;
+        const sAngle = s * 6;
+
+        drawHand(hAngle, 4, '\u2588');
+        drawHand(mAngle, 6, '\u2593');
+        drawHand(sAngle, 7, '\u00B7');
+
+        // Center dot
+        grid[R][R] = '\u25C9';
+
+        return grid.map(row => row.join('')).join('\n');
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -385,11 +488,14 @@
                     profile.email = dom.cardEmailInput.value || 'member@hac.edu';
                     profile.clearance = dom.cardClearanceInput.value || 'BUILDER';
                     profile.designation = dom.cardDesignationInput.value || 'AI COLLECTIVE MEMBER';
+                    profile.studentId = dom.cardStudentIdInput?.value || '';
                     if (dom.avatarImg && dom.avatarImg.src && dom.avatarImg.classList.contains('visible')) {
                         profile.avatar = dom.avatarImg.src;
                     }
+                    profile.qrData = buildQRPayload();
                     profile.profileSetupComplete = true;
                     saveProfile(profile);
+                    refreshQR();
                     setCardMode('view');
                     showToast('◈ Profile saved');
                 }
@@ -413,7 +519,7 @@
         }
 
         // Sync input → display values on every keystroke (for live preview)
-        [dom.cardNameInput, dom.cardEmailInput, dom.cardDesignationInput].forEach(inp => {
+        [dom.cardNameInput, dom.cardEmailInput, dom.cardDesignationInput, dom.cardStudentIdInput].forEach(inp => {
             if (inp) inp.addEventListener('input', syncCardDisplayFromInputs);
         });
         if (dom.cardClearanceInput) {
@@ -465,6 +571,7 @@
         if (dom.cardEmailValue && dom.cardEmailInput) dom.cardEmailValue.textContent = dom.cardEmailInput.value || 'member@hac.edu';
         if (dom.cardClearanceValue && dom.cardClearanceInput) dom.cardClearanceValue.textContent = dom.cardClearanceInput.value || 'BUILDER';
         if (dom.cardDesignationValue && dom.cardDesignationInput) dom.cardDesignationValue.textContent = dom.cardDesignationInput.value || 'AI COLLECTIVE MEMBER';
+        if (dom.cardStudentIdValue && dom.cardStudentIdInput) dom.cardStudentIdValue.textContent = dom.cardStudentIdInput.value || '\u2014';
     }
 
     function syncCardInputsFromProfile(profile) {
@@ -473,7 +580,61 @@
         if (dom.cardEmailInput) dom.cardEmailInput.value = profile.email || 'member@hac.edu';
         if (dom.cardClearanceInput) dom.cardClearanceInput.value = profile.clearance || 'BUILDER';
         if (dom.cardDesignationInput) dom.cardDesignationInput.value = profile.designation || 'AI COLLECTIVE MEMBER';
+        if (dom.cardStudentIdInput) dom.cardStudentIdInput.value = profile.studentId || '';
         syncCardDisplayFromInputs();
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // QR CODE GENERATION (client-side, styled cyan on transparent)
+    // ═══════════════════════════════════════════════════════════════════════════
+    function generateQRCode(text, canvasEl, size) {
+        if (!canvasEl || !text || typeof qrcode === 'undefined') return;
+        size = size || canvasEl.width;
+
+        const qr = qrcode(0, 'M');
+        qr.addData(text);
+        qr.make();
+
+        const modules = qr.getModuleCount();
+        canvasEl.width = size;
+        canvasEl.height = size;
+        const ctx = canvasEl.getContext('2d');
+        ctx.clearRect(0, 0, size, size);
+
+        const cellSize = size / modules;
+        const r = CONFIG.colors.r, g = CONFIG.colors.g, b = CONFIG.colors.b;
+
+        for (let row = 0; row < modules; row++) {
+            for (let col = 0; col < modules; col++) {
+                if (qr.isDark(row, col)) {
+                    // Slight radial gradient: brighter at center, dimmer at edges
+                    const dx = (col + 0.5) / modules - 0.5;
+                    const dy = (row + 0.5) / modules - 0.5;
+                    const dist = Math.sqrt(dx * dx + dy * dy) * 2;
+                    const alpha = 1 - dist * 0.3; // 0.7–1.0 range
+                    ctx.fillStyle = `rgba(${r},${g},${b},${Math.max(0.7, alpha).toFixed(2)})`;
+                    ctx.fillRect(
+                        Math.floor(col * cellSize),
+                        Math.floor(row * cellSize),
+                        Math.ceil(cellSize),
+                        Math.ceil(cellSize)
+                    );
+                }
+            }
+        }
+    }
+
+    function buildQRPayload() {
+        const memberId = dom.cardId?.textContent || 'HAC-2025-0001';
+        const studentId = dom.cardStudentIdInput?.value || '';
+        const name = dom.cardNameInput?.value || 'HAC MEMBER';
+        // Plain text format: pipe-delimited for Salesforce scanner compat
+        return `HAC|${memberId}|${studentId}|${name}`;
+    }
+
+    function refreshQR() {
+        const payload = buildQRPayload();
+        generateQRCode(payload, dom.qrCanvas, 160); // 160px @2x for crisp render
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -547,8 +708,59 @@
         ctx.fillStyle = 'rgba(255,255,255,0.06)';
         ctx.fillRect(36, 68, w - 72, 1);
 
-        // ── Avatar area (left side — taller, more prominent)
-        const avatarX = 36, avatarY = 84, avatarW = 190, avatarH = 238;
+        // ── Left column: QR code above avatar
+        const colX = 36, colW = 190;
+
+        // QR code (rendered fresh onto export canvas)
+        const qrSize = 130;
+        const qrX = colX + Math.floor((colW - qrSize) / 2);
+        const qrY = 84;
+
+        // Draw QR container
+        ctx.fillStyle = darkPanel;
+        ctx.fillRect(qrX, qrY, qrSize, qrSize);
+        ctx.strokeStyle = 'rgba(0,212,212,0.25)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(qrX, qrY, qrSize, qrSize);
+
+        // Generate QR modules directly onto export canvas
+        if (typeof qrcode !== 'undefined') {
+            const payload = buildQRPayload();
+            const qr = qrcode(0, 'M');
+            qr.addData(payload);
+            qr.make();
+            const modules = qr.getModuleCount();
+            const pad = 6;
+            const cellSize = (qrSize - pad * 2) / modules;
+            const { r: qr_r, g: qr_g, b: qr_b } = CONFIG.colors;
+            for (let row = 0; row < modules; row++) {
+                for (let col = 0; col < modules; col++) {
+                    if (qr.isDark(row, col)) {
+                        const dx = (col + 0.5) / modules - 0.5;
+                        const dy = (row + 0.5) / modules - 0.5;
+                        const dist = Math.sqrt(dx * dx + dy * dy) * 2;
+                        const alpha = Math.max(0.7, 1 - dist * 0.3);
+                        ctx.fillStyle = `rgba(${qr_r},${qr_g},${qr_b},${alpha.toFixed(2)})`;
+                        ctx.fillRect(
+                            qrX + pad + Math.floor(col * cellSize),
+                            qrY + pad + Math.floor(row * cellSize),
+                            Math.ceil(cellSize),
+                            Math.ceil(cellSize)
+                        );
+                    }
+                }
+            }
+        }
+
+        // "SCAN ID" label
+        ctx.font = '500 8px "Bai Jamjuree", sans-serif';
+        ctx.fillStyle = textDim;
+        ctx.textAlign = 'center';
+        ctx.fillText('SCAN ID', colX + colW / 2, qrY + qrSize + 14);
+        ctx.textAlign = 'left';
+
+        // ── Avatar area (below QR)
+        const avatarX = colX, avatarY = qrY + qrSize + 26, avatarW = colW, avatarH = 186;
         // Avatar container with subtle border
         ctx.fillStyle = darkPanel;
         ctx.fillRect(avatarX, avatarY, avatarW, avatarH);
@@ -578,17 +790,18 @@
         ctx.fillText('PHOTO ID', avatarX + avatarW / 2, avatarY + avatarH + 18);
         ctx.textAlign = 'left';
 
-        // ── Field data (right side — positioned next to larger avatar)
+        // ── Field data (right side)
         const fields = [
             { label: 'NAME', value: dom.cardNameValue?.textContent || 'HAC MEMBER' },
             { label: 'EMAIL', value: dom.cardEmailValue?.textContent || 'member@hac.edu' },
             { label: 'CLEARANCE', value: dom.cardClearanceValue?.textContent || 'BUILDER' },
-            { label: 'DESIGNATION', value: dom.cardDesignationValue?.textContent || 'AI COLLECTIVE MEMBER' }
+            { label: 'DESIGNATION', value: dom.cardDesignationValue?.textContent || 'AI COLLECTIVE MEMBER' },
+            { label: 'STUDENT ID', value: dom.cardStudentIdValue?.textContent || '\u2014' }
         ];
 
         const fieldX = avatarX + avatarW + 32;
-        let fieldY = 100;
-        const fieldSpacing = 58;
+        let fieldY = 94;
+        const fieldSpacing = 50;
         fields.forEach((f, i) => {
             // Label
             ctx.font = '600 10px "Bai Jamjuree", sans-serif';
@@ -997,8 +1210,13 @@
         setTimeout(() => {
             if (dom.panelRight) { dom.panelRight.classList.add('visible'); }
         }, 500);
+        setTimeout(() => {
+            if (dom.widgetSession) dom.widgetSession.classList.add('visible');
+            if (dom.widgetSpectrum) dom.widgetSpectrum.classList.add('visible');
+        }, 700);
 
         startPanelUpdates();
+        startWidgetUpdates();
 
         // Progress bar animation
         const bar = dom.splashBar;
@@ -1021,6 +1239,19 @@
 
         dom.splashCt.style.opacity = '1';
         await animate(dom.splashCt, [{ opacity: 0 }, { opacity: 1 }], { duration: 150, fill: 'forwards' });
+
+        // Glitch the wordmark SVG briefly
+        const wordmarkEl = dom.splashCt.querySelector('.splash__ct-svg');
+        if (wordmarkEl) {
+            wordmarkEl.classList.add('svg-glitch');
+            await sleep(400);
+            wordmarkEl.classList.remove('svg-glitch');
+        }
+
+        // Brief lockup reveal (show full "HULT AI COLLECTIVE")
+        dom.splashCt.classList.add('show-lockup');
+        await sleep(1200);
+        dom.splashCt.classList.remove('show-lockup');
 
         await sleep(100);
         phaseStartup();
@@ -1167,6 +1398,7 @@
         dom.cardEmailInput.value = emailValue.trim() || profile.email || 'member@hac.edu';
         if (profile.clearance) dom.cardClearanceInput.value = profile.clearance;
         if (profile.designation) dom.cardDesignationInput.value = profile.designation;
+        if (profile.studentId && dom.cardStudentIdInput) dom.cardStudentIdInput.value = profile.studentId;
         dom.cardId.textContent = memberId;
 
         // Sync display values from inputs
@@ -1177,6 +1409,9 @@
             dom.avatarImg.src = profile.avatar;
             dom.avatarImg.classList.add('visible');
         }
+
+        // Generate QR code
+        refreshQR();
 
         // Set card mode: first time = edit, returning = view
         if (isFirstTime) {
@@ -1219,8 +1454,10 @@
         profile.email = dom.cardEmailInput.value || 'member@hac.edu';
         profile.clearance = dom.cardClearanceInput.value || 'BUILDER';
         profile.designation = dom.cardDesignationInput.value || 'AI COLLECTIVE MEMBER';
+        profile.studentId = dom.cardStudentIdInput?.value || '';
         profile.memberId = dom.cardId.textContent;
         profile.lastLogin = new Date().toISOString();
+        profile.qrData = buildQRPayload();
         profile.profileSetupComplete = true;
 
         // Save avatar if uploaded
@@ -1253,6 +1490,7 @@
         await sleep(200);
 
         stopPanelUpdates();
+        stopWidgetUpdates();
         phaseRedirect();
     }
 
@@ -1263,6 +1501,8 @@
         // Hide panels
         if (dom.panelLeft) dom.panelLeft.classList.remove('visible');
         if (dom.panelRight) dom.panelRight.classList.remove('visible');
+        if (dom.widgetSession) dom.widgetSession.classList.remove('visible');
+        if (dom.widgetSpectrum) dom.widgetSpectrum.classList.remove('visible');
 
         // Zoom out
         dom.hacAccess.classList.add('zoom-out');

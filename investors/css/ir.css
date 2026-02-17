@@ -1,0 +1,319 @@
+:root {
+    /* Colors - Bloomberg Terminal / Gentleman's Club */
+    --bg-dark:      #121212;
+    --bg-darker:    #0A0A0A;
+    --text-main:    #E0E0E0;
+    --text-muted:   #888888;
+    --accent:       #4ECDC4; /* Teal */
+    --accent-dim:   #2A6F69;
+    --border:       #333333;
+    
+    /* Typography */
+    --font-sans:    'Inter', sans-serif;
+    
+    /* Spacing */
+    --sp-sm:   1rem;
+    --sp-md:   2rem;
+    --sp-lg:   4rem;
+    
+    /* Layout */
+    --container-max:    1100px;
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--text-main);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--accent);
+}
+
+ul {
+    list-style: none;
+}
+
+/* Utilities */
+.container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--sp-sm);
+}
+
+.container-wide {
+    max-width: 1400px;
+}
+
+.container-narrow {
+    max-width: 800px;
+}
+
+.ir-section {
+    padding: var(--sp-lg) 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.ir-bg-darker {
+    background-color: var(--bg-darker);
+}
+
+/* Typography Overrides */
+h1, h2, h3 {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--sp-sm);
+}
+
+h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.1;
+}
+
+h2 {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    color: var(--accent);
+}
+
+h3 {
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+p {
+    margin-bottom: var(--sp-sm);
+    color: #CCCCCC;
+}
+
+.lead {
+    font-size: 1.25rem;
+    color: var(--text-main);
+}
+
+/* Header */
+.ir-header {
+    padding: var(--sp-md) 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(18, 18, 18, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+}
+
+.ir-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ir-logo {
+    font-weight: 600;
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+}
+
+.ir-nav a {
+    margin-left: var(--sp-md);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.ir-nav a:hover {
+    color: var(--accent);
+}
+
+/* Hero */
+.ir-hero {
+    position: relative;
+    padding: 8rem 0;
+    overflow: hidden;
+}
+
+.ir-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+}
+
+.ir-hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at top right, rgba(78, 205, 196, 0.1), transparent 40%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.ir-overline {
+    display: block;
+    font-family: monospace;
+    color: var(--accent);
+    margin-bottom: var(--sp-sm);
+}
+
+.scouts {
+    margin-top: var(--sp-md);
+    font-family: monospace;
+    color: var(--text-muted);
+    border-left: 2px solid var(--accent);
+    padding-left: var(--sp-sm);
+}
+
+/* Grid Layouts */
+.ir-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--sp-md);
+    margin-top: var(--sp-md);
+}
+
+.ir-card {
+    background: var(--bg-darker);
+    padding: var(--sp-md);
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.ir-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-dim);
+}
+
+/* Links & Actions */
+.ir-status-links {
+    margin-top: var(--sp-lg);
+    border-top: 1px solid var(--border);
+    padding-top: var(--sp-md);
+}
+
+.ir-status-links ul {
+    margin: var(--sp-sm) 0;
+}
+
+.ir-status-links li {
+    margin-bottom: 0.5rem;
+}
+
+.ir-status-links a {
+    border-bottom: 1px solid var(--accent-dim);
+}
+
+.ir-note {
+    margin-top: var(--sp-md);
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* List Items (Engage Section) */
+.ir-list-item {
+    display: flex;
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-lg);
+}
+
+.ir-number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--border);
+    line-height: 1;
+}
+
+.ir-list-content h3 {
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.ir-btn-ghost {
+    display: inline-block;
+    border: 1px solid var(--text-main);
+    padding: 0.5rem 1rem;
+    margin-top: var(--sp-sm);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ir-btn-ghost:hover {
+    background: var(--text-main);
+    color: var(--bg-dark);
+}
+
+/* Executive Session */
+.ir-card-feature {
+    border-left: 4px solid var(--accent);
+}
+
+.ir-check-list {
+    margin: var(--sp-md) 0;
+}
+
+.ir-check-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.ir-check-list li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+}
+
+.ir-btn-primary {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg-dark);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    margin-top: var(--sp-sm);
+}
+
+.ir-btn-primary:hover {
+    background: var(--white);
+}
+
+/* Footer / Manifesto */
+.ir-footer {
+    padding: var(--sp-xl) 0;
+    border-top: 1px solid var(--border);
+}
+
+.ir-manifesto {
+    max-width: 600px;
+    margin-bottom: var(--sp-lg);
+}
+
+.ir-manifesto p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+.ir-copyright {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+}

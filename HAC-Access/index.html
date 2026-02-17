@@ -84,24 +84,18 @@
     <!-- Top Bar -->
     <div class="bar" id="bar">
       <div class="bar__system-label">
-        <span class="bar__hac-text"><img src="assets/images/HAC_Wordmark.svg" alt="HAC" class="bar__hac-svg"></span>
+        <img src="assets/images/HAC_OS_logo.svg" alt="HAC OS" class="bar__os-svg">
       </div>
-      <span class="bar__os-text">OS</span>
       <div class="bar__divider"></div>
     </div>
 
     <!-- Time (top-left) -->
     <div class="time" id="time">
       <div class="time__icon-wrapper accents">
-        <div class="time__icon">
-          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2"/>
-            <text x="50" y="58" text-anchor="middle" font-size="32" fill="currentColor">H</text>
-          </svg>
-        </div>
+        <pre class="time__ascii-clock" id="ascii-clock" aria-label="Analog clock"></pre>
       </div>
       <div class="time__info" id="time-info">
-        <span class="time__clock" id="clock">--:--</span>
+        <span class="time__clock" id="clock">--:--:--</span>
         <div class="time__date-badge">
           <span class="time__date" id="date">--- -- -------</span>
         </div>
@@ -170,16 +164,48 @@
       </div>
     </div>
 
+    <!-- Widget: Session Info (bottom-left, above terminal) -->
+    <div class="widget widget--session" id="widget-session">
+      <div class="widget__header">
+        <span class="widget__title">SESSION</span>
+        <span class="widget__dot"></span>
+      </div>
+      <div class="widget__body">
+        <div class="widget__row">
+          <span class="widget__label">UPTIME</span>
+          <span class="widget__value" id="widget-uptime">00:00</span>
+        </div>
+        <div class="widget__row">
+          <span class="widget__label">SIGNALS</span>
+          <span class="widget__value" id="widget-signals">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Widget: Audio Spectrum (bottom-right, above device-id) -->
+    <div class="widget widget--spectrum" id="widget-spectrum">
+      <div class="widget__header">
+        <span class="widget__title">AUDIO</span>
+        <span class="widget__dot"></span>
+      </div>
+      <div class="widget__body">
+        <pre class="widget__bars" id="widget-bars">▁▂▃▅▇▅▃▂▁▂▃▅▃▂</pre>
+      </div>
+    </div>
+
     <!-- Typewriter header (above splash) -->
     <div class="typewriter-header" id="typewriter">
       <span class="typewriter-text" id="typewriter-text"></span>
     </div>
 
-    <!-- Splash (center progress bar + HAC/OS) -->
+    <!-- Splash (center progress bar + HAC OS) -->
     <div class="splash-container" id="splash-container">
       <div class="splash" id="splash">
         <div class="splash__bar" id="splash-bar"></div>
-        <span class="splash__ct" id="splash-ct"><img src="assets/images/HAC_Wordmark.svg" alt="HAC" class="splash__ct-svg"></span>
+        <span class="splash__ct" id="splash-ct">
+          <img src="assets/images/HAC_Wordmark.svg" alt="HAC" class="splash__ct-svg" id="splash-wordmark">
+          <img src="assets/images/HAC_Lockup.svg" alt="Hult AI Collective" class="splash__lockup-svg" id="splash-lockup">
+        </span>
         <span class="splash__os" id="splash-os">OS</span>
         <div class="splash__final-bar" id="splash-final-bar"></div>
       </div>
@@ -200,11 +226,13 @@
       </div>
 
       <!-- Password field -->
-      <div class="password-wrapper" id="password-wrapper">
+      <div class="password-field">
         <label class="field-label">ACCESS KEY</label>
-        <input class="password-hidden-input" id="password-input" type="text" autocomplete="off" spellcheck="false">
-        <div class="password-display" id="password-display">
-          <span class="password-cursor">▁</span>
+        <div class="password-wrapper" id="password-wrapper">
+          <input class="password-hidden-input" id="password-input" type="text" autocomplete="off" spellcheck="false">
+          <div class="password-display" id="password-display">
+            <span class="password-cursor">▁</span>
+          </div>
         </div>
       </div>
 
@@ -263,6 +291,10 @@
         </div>
         <div class="identity-card__body">
           <div class="identity-card__profile">
+            <div class="identity-card__qr-wrapper" id="qr-wrapper">
+              <canvas class="identity-card__qr-canvas" id="qr-canvas" width="80" height="80"></canvas>
+              <span class="identity-card__qr-label">SCAN ID</span>
+            </div>
             <div class="identity-card__avatar-wrapper">
               <img class="identity-card__avatar-img" id="avatar-img" src="" alt="Profile">
               <div class="identity-card__avatar-placeholder" id="avatar-placeholder">◉</div>
@@ -300,6 +332,11 @@
               <span class="identity-card__field-value" id="card-designation-value">AI COLLECTIVE MEMBER</span>
               <input class="identity-card__field-input" id="card-designation-input" type="text" value="AI COLLECTIVE MEMBER" spellcheck="false">
             </div>
+            <div class="identity-card__field">
+              <label class="identity-card__field-label">STUDENT ID</label>
+              <span class="identity-card__field-value" id="card-studentid-value">—</span>
+              <input class="identity-card__field-input" id="card-studentid-input" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 00123456" value="" spellcheck="false">
+            </div>
           </div>
         </div>
         <div class="identity-card__footer">
@@ -332,6 +369,7 @@
   </div>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/main.js"></script>
 </body>
