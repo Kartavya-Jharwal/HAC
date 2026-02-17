@@ -99,9 +99,13 @@ body::before {
 }
 
 .topbar__logo {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
+    line-height: 0;
+}
+.topbar__logo-svg {
+    height: 1.1rem;
+    width: auto;
+    display: block;
+    filter: brightness(0) invert(1);
 }
 
 .topbar__label {

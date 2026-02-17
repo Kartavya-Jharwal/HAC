@@ -192,16 +192,17 @@ body::after {
 }
 
 .click-to-start__logo {
-    font-family: var(--font_title, 'Bai Jamjuree'), sans-serif;
-    font-size: clamp(60px, 15vw, 150px);
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    color: rgb(var(--color_r, 0), var(--color_g, 212), var(--color_b, 212));
-    text-shadow: 
-        0 0 10px rgba(var(--color_r, 0), var(--color_g, 212), var(--color_b, 212), 0.5),
-        0 0 30px rgba(var(--color_r, 0), var(--color_g, 212), var(--color_b, 212), 0.3),
-        0 0 60px rgba(var(--color_r, 0), var(--color_g, 212), var(--color_b, 212), 0.2);
     margin-bottom: 20px;
+    line-height: 0;
+}
+.click-to-start__svg {
+    height: clamp(50px, 12vw, 120px);
+    width: auto;
+    display: block;
+    filter: brightness(0) invert(1)
+        drop-shadow(0 0 10px rgba(0, 212, 212, 0.6))
+        drop-shadow(0 0 30px rgba(0, 212, 212, 0.35))
+        drop-shadow(0 0 60px rgba(0, 212, 212, 0.2));
 }
 
 .click-to-start__text {

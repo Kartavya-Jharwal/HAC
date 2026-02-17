@@ -378,9 +378,20 @@
                 if (cardMode === 'view') {
                     setCardMode('edit');
                 } else {
-                    // Save edits and switch back to view
+                    // Save edits, persist to localStorage, switch to view
                     syncCardDisplayFromInputs();
+                    const profile = loadProfile() || {};
+                    profile.name = dom.cardNameInput.value || 'HAC MEMBER';
+                    profile.email = dom.cardEmailInput.value || 'member@hac.edu';
+                    profile.clearance = dom.cardClearanceInput.value || 'BUILDER';
+                    profile.designation = dom.cardDesignationInput.value || 'AI COLLECTIVE MEMBER';
+                    if (dom.avatarImg && dom.avatarImg.src && dom.avatarImg.classList.contains('visible')) {
+                        profile.avatar = dom.avatarImg.src;
+                    }
+                    profile.profileSetupComplete = true;
+                    saveProfile(profile);
                     setCardMode('view');
+                    showToast('◈ Profile saved');
                 }
             });
         }
@@ -501,43 +512,43 @@
 
         // ── Top accent stripe
         ctx.fillStyle = accent;
-        ctx.fillRect(0, 0, w, 6);
+        ctx.fillRect(0, 0, w, 5);
 
-        // ── Header area (top section)
-        const headerY = 30;
-        ctx.font = 'bold 48px "Bai Jamjuree", sans-serif';
+        // ── Header area (compact)
+        const headerY = 16;
+        ctx.font = 'bold 40px "Bai Jamjuree", sans-serif';
         ctx.fillStyle = accent;
-        ctx.fillText('HAC', 48, headerY + 44);
+        ctx.fillText('HAC', 36, headerY + 36);
 
-        ctx.font = '300 16px "Bai Jamjuree", sans-serif';
+        ctx.font = '300 14px "Bai Jamjuree", sans-serif';
         ctx.fillStyle = textSecondary;
-        ctx.fillText('HULT AI COLLECTIVE', 140, headerY + 30);
+        ctx.fillText('HULT AI COLLECTIVE', 120, headerY + 24);
 
-        ctx.font = '500 12px "Bai Jamjuree", sans-serif';
+        ctx.font = '500 11px "Bai Jamjuree", sans-serif';
         ctx.fillStyle = textDim;
-        ctx.fillText('MEMBER IDENTIFICATION', 140, headerY + 48);
+        ctx.fillText('MEMBER IDENTIFICATION', 120, headerY + 40);
 
         // ── Right-aligned member ID badge
         const memberId = dom.cardId?.textContent || 'HAC-2025-0001';
-        ctx.font = '500 13px "Fira Mono", "JetBrains Mono", monospace';
+        ctx.font = '500 12px "Fira Mono", "JetBrains Mono", monospace';
         ctx.fillStyle = textDim;
         ctx.textAlign = 'right';
-        ctx.fillText(memberId, w - 48, headerY + 22);
+        ctx.fillText(memberId, w - 36, headerY + 18);
 
         // ── Issue date
         const now = new Date();
         const dateStr = `${String(now.getDate()).padStart(2,'0')}.${String(now.getMonth()+1).padStart(2,'0')}.${now.getFullYear()}`;
-        ctx.font = '400 11px "Fira Mono", monospace';
+        ctx.font = '400 10px "Fira Mono", monospace';
         ctx.fillStyle = textDim;
-        ctx.fillText(`ISSUED ${dateStr}`, w - 48, headerY + 42);
+        ctx.fillText(`ISSUED ${dateStr}`, w - 36, headerY + 36);
         ctx.textAlign = 'left';
 
         // ── Separator line
         ctx.fillStyle = 'rgba(255,255,255,0.06)';
-        ctx.fillRect(48, 100, w - 96, 1);
+        ctx.fillRect(36, 68, w - 72, 1);
 
-        // ── Avatar area (left side)
-        const avatarX = 48, avatarY = 124, avatarW = 140, avatarH = 175;
+        // ── Avatar area (left side — taller, more prominent)
+        const avatarX = 36, avatarY = 84, avatarW = 190, avatarH = 238;
         // Avatar container with subtle border
         ctx.fillStyle = darkPanel;
         ctx.fillRect(avatarX, avatarY, avatarW, avatarH);
@@ -564,10 +575,10 @@
         ctx.font = '500 9px "Bai Jamjuree", sans-serif';
         ctx.fillStyle = textDim;
         ctx.textAlign = 'center';
-        ctx.fillText('PHOTO ID', avatarX + avatarW / 2, avatarY + avatarH + 22);
+        ctx.fillText('PHOTO ID', avatarX + avatarW / 2, avatarY + avatarH + 18);
         ctx.textAlign = 'left';
 
-        // ── Field data (right side)
+        // ── Field data (right side — positioned next to larger avatar)
         const fields = [
             { label: 'NAME', value: dom.cardNameValue?.textContent || 'HAC MEMBER' },
             { label: 'EMAIL', value: dom.cardEmailValue?.textContent || 'member@hac.edu' },
@@ -575,9 +586,9 @@
             { label: 'DESIGNATION', value: dom.cardDesignationValue?.textContent || 'AI COLLECTIVE MEMBER' }
         ];
 
-        const fieldX = 228;
-        let fieldY = 138;
-        const fieldSpacing = 64;
+        const fieldX = avatarX + avatarW + 32;
+        let fieldY = 100;
+        const fieldSpacing = 58;
         fields.forEach((f, i) => {
             // Label
             ctx.font = '600 10px "Bai Jamjuree", sans-serif';
@@ -591,40 +602,40 @@
             ctx.fillStyle = textPrimary;
             // Truncate if too long
             let val = f.value;
-            while (ctx.measureText(val).width > (w - fieldX - 60) && val.length > 3) {
+            while (ctx.measureText(val).width > (w - fieldX - 48) && val.length > 3) {
                 val = val.slice(0, -1);
             }
             if (val !== f.value) val += '…';
-            ctx.fillText(val, fieldX, fieldY + 24);
+            ctx.fillText(val, fieldX, fieldY + 22);
 
             // Subtle underline
             ctx.fillStyle = 'rgba(255,255,255,0.04)';
-            ctx.fillRect(fieldX, fieldY + 32, w - fieldX - 60, 1);
+            ctx.fillRect(fieldX, fieldY + 30, w - fieldX - 48, 1);
 
             fieldY += fieldSpacing;
         });
 
         // ── Bottom panel / footer
         ctx.fillStyle = 'rgba(255,255,255,0.03)';
-        ctx.fillRect(0, h - 72, w, 72);
+        ctx.fillRect(0, h - 62, w, 62);
 
         // Footer top border
         ctx.fillStyle = 'rgba(255,255,255,0.06)';
-        ctx.fillRect(0, h - 72, w, 1);
+        ctx.fillRect(0, h - 62, w, 1);
 
         // Left: barcode-style decoration
-        ctx.font = '22px monospace';
+        ctx.font = '20px monospace';
         ctx.fillStyle = 'rgba(255,255,255,0.1)';
-        ctx.fillText('▌▐▌▌▐▐▌▐▌▐▌▌▐▐▌▐▌▐▌▌▐▐▌', 48, h - 32);
+        ctx.fillText('▌▐▌▌▐▐▌▐▌▐▌▌▐▐▌▐▌▐▌▌▐▐▌', 36, h - 26);
 
         // Right: branding
         ctx.font = '600 12px "Bai Jamjuree", sans-serif';
         ctx.fillStyle = accent;
         ctx.textAlign = 'right';
-        ctx.fillText('HULT AI COLLECTIVE', w - 48, h - 44);
+        ctx.fillText('HULT AI COLLECTIVE', w - 36, h - 38);
         ctx.font = '400 10px "Fira Mono", monospace';
         ctx.fillStyle = textDim;
-        ctx.fillText('hultaicollective.com', w - 48, h - 26);
+        ctx.fillText('hultaicollective.com', w - 36, h - 22);
         ctx.textAlign = 'left';
 
         // ── Outer border
@@ -633,7 +644,7 @@
         ctx.strokeRect(1, 1, w - 2, h - 2);
 
         // ── Corner accents (top-left, top-right, bottom-left, bottom-right)
-        const cornerLen = 20;
+        const cornerLen = 18;
         ctx.strokeStyle = accent;
         ctx.lineWidth = 2;
         // TL
@@ -720,12 +731,20 @@
     function drawAvatarPlaceholder(ctx, x, y, w, h, color) {
         ctx.fillStyle = 'rgba(14,14,14,0.8)';
         ctx.fillRect(x, y, w, h);
-        ctx.font = '48px serif';
+        // Draw a person silhouette that scales with the box
+        const cx = x + w / 2;
+        const cy = y + h * 0.38;
+        const headR = Math.min(w, h) * 0.16;
         ctx.fillStyle = color;
-        ctx.globalAlpha = 0.4;
-        ctx.textAlign = 'center';
-        ctx.fillText('◉', x + w / 2, y + h / 2 + 16);
-        ctx.textAlign = 'left';
+        ctx.globalAlpha = 0.25;
+        // Head
+        ctx.beginPath();
+        ctx.arc(cx, cy, headR, 0, Math.PI * 2);
+        ctx.fill();
+        // Shoulders/body
+        ctx.beginPath();
+        ctx.ellipse(cx, cy + headR * 2.5, headR * 1.6, headR * 1.2, 0, Math.PI, 0);
+        ctx.fill();
         ctx.globalAlpha = 1;
     }
 

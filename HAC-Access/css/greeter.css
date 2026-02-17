@@ -32,11 +32,14 @@
 }
 
 .bar__hac-text {
-    font-family: var(--font_title);
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--background);
-    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    line-height: 0;
+}
+.bar__hac-svg {
+    height: 16px;
+    width: auto;
+    display: block;
 }
 
 .bar__os-text {
@@ -203,12 +206,14 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    font-family: var(--font_title);
-    font-size: 34px;
-    font-weight: 700;
-    color: var(--background);
     opacity: 0;
     z-index: 2;
+    line-height: 0;
+}
+.splash__ct-svg {
+    height: 24px;
+    width: auto;
+    display: block;
 }
 
 .splash__os {
@@ -587,10 +592,14 @@
 }
 
 .identity-card__badge {
-    font-family: var(--font_title);
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    line-height: 0;
+}
+.identity-card__badge-svg {
+    height: 20px;
+    width: auto;
+    display: block;
 }
 
 .identity-card__badge-text {
@@ -993,7 +1002,7 @@
 @media (max-width: 768px) {
     .time__clock { font-size: 48px; }
     .time__icon-wrapper { width: 60px; height: 60px; }
-    .splash__ct { font-size: 24px; }
+    .splash__ct-svg { height: 18px; }
     .splash__os { font-size: 48px; }
     .identity-card__inner { width: 340px; }
     .identity-card__body { flex-direction: column; align-items: center; }
