@@ -1112,34 +1112,60 @@
         dom.bootScreen.classList.add('center');
 
         const { r, g, b } = CONFIG.colors;
-        const title = document.createElement('h1');
-        title.textContent = CONFIG.appName;
-        dom.bootScreen.appendChild(title);
+        
+        // Create container for SVG logo (styled like h1)
+        const titleContainer = document.createElement('div');
+        titleContainer.className = 'boot-title-logo';
+        titleContainer.style.cssText = `
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 0.5vh solid rgb(${r}, ${g}, ${b});
+            padding: 2vh 3vh 1.5vh;
+            opacity: 0;
+            animation: fadeInTitle 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        `;
+        
+        // Create and append SVG image
+        const logo = document.createElement('img');
+        logo.src = 'assets/images/HAC_Wordmark.svg';
+        logo.alt = 'HAC';
+        logo.style.cssText = `
+            height: 120px;
+            width: auto;
+            display: block;
+            filter: brightness(0) invert(1);
+        `;
+        titleContainer.appendChild(logo);
+        dom.bootScreen.appendChild(titleContainer);
 
         await _rafDelay(200);
         document.body.classList.add('solidBackground');
         await _rafDelay(100);
 
-        title.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-        title.style.borderBottom = `5px solid rgb(${r}, ${g}, ${b})`;
-        title.style.color = 'var(--color_black)';
-        title.classList.add('glow-active');
+        titleContainer.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+        titleContainer.style.borderBottom = `5px solid rgb(${r}, ${g}, ${b})`;
+        logo.style.filter = 'brightness(0) invert(0)';
+        titleContainer.classList.add('glow-active');
         await _rafDelay(300);
 
-        title.style.backgroundColor = 'transparent';
-        title.style.color = '';
-        title.style.border = `5px solid rgb(${r}, ${g}, ${b})`;
-        title.classList.remove('glow-active');
+        titleContainer.style.backgroundColor = 'transparent';
+        logo.style.filter = 'brightness(0) invert(1)';
+        titleContainer.style.border = `5px solid rgb(${r}, ${g}, ${b})`;
+        titleContainer.classList.remove('glow-active');
         await _rafDelay(100);
 
-        title.style.cssText = '';
-        title.classList.add('glitch');
+        titleContainer.style.cssText = '';
+        titleContainer.classList.add('glitch');
+        titleContainer.style.border = `5px solid rgb(${r}, ${g}, ${b})`;
+        titleContainer.style.padding = '2vh 3vh 1.5vh';
+        titleContainer.style.borderBottom = `5px solid rgb(${r}, ${g}, ${b})`;
         await _rafDelay(500);
 
         document.body.classList.remove('solidBackground');
-        title.classList.remove('glitch');
-        title.style.border = `5px solid rgb(${r}, ${g}, ${b})`;
-        title.classList.add('glow-active');
+        titleContainer.classList.remove('glitch');
+        titleContainer.style.border = `5px solid rgb(${r}, ${g}, ${b})`;
+        titleContainer.classList.add('glow-active');
         await _rafDelay(1000);
 
         onBootComplete();
