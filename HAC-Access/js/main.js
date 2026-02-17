@@ -127,6 +127,7 @@
         dom.cardConfirmBtn = $('#card-confirm-btn');
         dom.cardEditBtn = $('#card-edit-btn');
         dom.cardDownloadBtn = $('#card-download-btn');
+        dom.cardShareBtn = $('#card-share-btn');
         dom.cardExportCanvas = $('#card-export-canvas');
 
         // Panels
@@ -392,6 +393,14 @@
             });
         }
 
+        // Card SHARE button
+        if (dom.cardShareBtn) {
+            dom.cardShareBtn.addEventListener('click', () => {
+                if (audioManager) audioManager.scan.play();
+                shareCardAsImage();
+            });
+        }
+
         // Sync input → display values on every keystroke (for live preview)
         [dom.cardNameInput, dom.cardEmailInput, dom.cardDesignationInput].forEach(inp => {
             if (inp) inp.addEventListener('input', syncCardDisplayFromInputs);
@@ -457,65 +466,108 @@
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // CARD EXPORT (canvas-based PNG download)
+    // CARD EXPORT (canvas-based PNG download — physical namecard proportions)
     // ═══════════════════════════════════════════════════════════════════════════
     function exportCardAsImage() {
         const canvas = dom.cardExportCanvas;
         if (!canvas) return;
 
         const DPR = 2; // High-res export
-        const W = 600 * DPR;
-        const H = 380 * DPR;
+        // Standard business card: 3.5" × 2" at 300dpi = 1050 × 600
+        const W = 1050 * DPR;
+        const H = 600 * DPR;
         canvas.width = W;
         canvas.height = H;
         const ctx = canvas.getContext('2d');
         ctx.scale(DPR, DPR);
 
-        const w = 600, h = 380;
+        const w = 1050, h = 600;
         const accent = `rgb(${CONFIG.colors.r}, ${CONFIG.colors.g}, ${CONFIG.colors.b})`;
         const bg = '#0E0E0E';
-        const textPrimary = '#E0E0E0';
-        const textSecondary = '#7A7A7A';
+        const darkPanel = '#111111';
+        const textPrimary = '#E8E8E8';
+        const textSecondary = '#888888';
+        const textDim = '#555555';
 
-        // Background
+        // ── Full background
         ctx.fillStyle = bg;
         ctx.fillRect(0, 0, w, h);
 
-        // Border
-        ctx.strokeStyle = accent;
-        ctx.lineWidth = 2;
-        ctx.strokeRect(1, 1, w - 2, h - 2);
+        // ── Subtle grid pattern
+        ctx.strokeStyle = 'rgba(255,255,255,0.02)';
+        ctx.lineWidth = 0.5;
+        for (let x = 0; x < w; x += 30) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+        for (let y = 0; y < h; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
 
-        // Header bar
+        // ── Top accent stripe
         ctx.fillStyle = accent;
-        ctx.fillRect(0, 0, w, 52);
+        ctx.fillRect(0, 0, w, 6);
 
-        // Header text
-        ctx.fillStyle = bg;
-        ctx.font = 'bold 26px "Bai Jamjuree", sans-serif';
-        ctx.fillText('HAC', 20, 36);
-        ctx.font = '600 12px "Bai Jamjuree", sans-serif';
-        ctx.fillText('MEMBER ID', 72, 34);
+        // ── Header area (top section)
+        const headerY = 30;
+        ctx.font = 'bold 48px "Bai Jamjuree", sans-serif';
+        ctx.fillStyle = accent;
+        ctx.fillText('HAC', 48, headerY + 44);
 
-        // Avatar area
-        const avatarX = 24, avatarY = 72, avatarW = 100, avatarH = 120;
-        ctx.strokeStyle = accent;
-        ctx.lineWidth = 2;
+        ctx.font = '300 16px "Bai Jamjuree", sans-serif';
+        ctx.fillStyle = textSecondary;
+        ctx.fillText('HULT AI COLLECTIVE', 140, headerY + 30);
+
+        ctx.font = '500 12px "Bai Jamjuree", sans-serif';
+        ctx.fillStyle = textDim;
+        ctx.fillText('MEMBER IDENTIFICATION', 140, headerY + 48);
+
+        // ── Right-aligned member ID badge
+        const memberId = dom.cardId?.textContent || 'HAC-2025-0001';
+        ctx.font = '500 13px "Fira Mono", "JetBrains Mono", monospace';
+        ctx.fillStyle = textDim;
+        ctx.textAlign = 'right';
+        ctx.fillText(memberId, w - 48, headerY + 22);
+
+        // ── Issue date
+        const now = new Date();
+        const dateStr = `${String(now.getDate()).padStart(2,'0')}.${String(now.getMonth()+1).padStart(2,'0')}.${now.getFullYear()}`;
+        ctx.font = '400 11px "Fira Mono", monospace';
+        ctx.fillStyle = textDim;
+        ctx.fillText(`ISSUED ${dateStr}`, w - 48, headerY + 42);
+        ctx.textAlign = 'left';
+
+        // ── Separator line
+        ctx.fillStyle = 'rgba(255,255,255,0.06)';
+        ctx.fillRect(48, 100, w - 96, 1);
+
+        // ── Avatar area (left side)
+        const avatarX = 48, avatarY = 124, avatarW = 140, avatarH = 175;
+        // Avatar container with subtle border
+        ctx.fillStyle = darkPanel;
+        ctx.fillRect(avatarX, avatarY, avatarW, avatarH);
+        ctx.strokeStyle = 'rgba(0,212,212,0.3)';
+        ctx.lineWidth = 1.5;
         ctx.strokeRect(avatarX, avatarY, avatarW, avatarH);
 
-        // Draw avatar if available
+        // Draw avatar
         if (dom.avatarImg && dom.avatarImg.classList.contains('visible') && dom.avatarImg.naturalWidth > 0) {
             try {
                 ctx.drawImage(dom.avatarImg, avatarX, avatarY, avatarW, avatarH);
             } catch (e) {
-                // Fallback: placeholder
                 drawAvatarPlaceholder(ctx, avatarX, avatarY, avatarW, avatarH, accent);
             }
         } else {
             drawAvatarPlaceholder(ctx, avatarX, avatarY, avatarW, avatarH, accent);
         }
 
-        // Field data
+        // Small accent bar under avatar
+        ctx.fillStyle = accent;
+        ctx.fillRect(avatarX, avatarY + avatarH, avatarW, 3);
+
+        // ── "PHOTO ID" label under avatar
+        ctx.font = '500 9px "Bai Jamjuree", sans-serif';
+        ctx.fillStyle = textDim;
+        ctx.textAlign = 'center';
+        ctx.fillText('PHOTO ID', avatarX + avatarW / 2, avatarY + avatarH + 22);
+        ctx.textAlign = 'left';
+
+        // ── Field data (right side)
         const fields = [
             { label: 'NAME', value: dom.cardNameValue?.textContent || 'HAC MEMBER' },
             { label: 'EMAIL', value: dom.cardEmailValue?.textContent || 'member@hac.edu' },
@@ -523,37 +575,75 @@
             { label: 'DESIGNATION', value: dom.cardDesignationValue?.textContent || 'AI COLLECTIVE MEMBER' }
         ];
 
-        const fieldX = 148;
-        let fieldY = 82;
-        fields.forEach(f => {
-            ctx.font = '600 9px "Bai Jamjuree", sans-serif';
-            ctx.fillStyle = textSecondary;
+        const fieldX = 228;
+        let fieldY = 138;
+        const fieldSpacing = 64;
+        fields.forEach((f, i) => {
+            // Label
+            ctx.font = '600 10px "Bai Jamjuree", sans-serif';
+            ctx.fillStyle = accent;
+            ctx.globalAlpha = 0.7;
             ctx.fillText(f.label, fieldX, fieldY);
-            ctx.font = '500 15px "Bai Jamjuree", sans-serif';
+            ctx.globalAlpha = 1;
+
+            // Value
+            ctx.font = '500 20px "Bai Jamjuree", sans-serif';
             ctx.fillStyle = textPrimary;
-            ctx.fillText(f.value, fieldX, fieldY + 18);
-            fieldY += 52;
+            // Truncate if too long
+            let val = f.value;
+            while (ctx.measureText(val).width > (w - fieldX - 60) && val.length > 3) {
+                val = val.slice(0, -1);
+            }
+            if (val !== f.value) val += '…';
+            ctx.fillText(val, fieldX, fieldY + 24);
+
+            // Subtle underline
+            ctx.fillStyle = 'rgba(255,255,255,0.04)';
+            ctx.fillRect(fieldX, fieldY + 32, w - fieldX - 60, 1);
+
+            fieldY += fieldSpacing;
         });
 
-        // Footer separator
+        // ── Bottom panel / footer
+        ctx.fillStyle = 'rgba(255,255,255,0.03)';
+        ctx.fillRect(0, h - 72, w, 72);
+
+        // Footer top border
+        ctx.fillStyle = 'rgba(255,255,255,0.06)';
+        ctx.fillRect(0, h - 72, w, 1);
+
+        // Left: barcode-style decoration
+        ctx.font = '22px monospace';
         ctx.fillStyle = 'rgba(255,255,255,0.1)';
-        ctx.fillRect(0, h - 52, w, 1);
+        ctx.fillText('▌▐▌▌▐▐▌▐▌▐▌▌▐▐▌▐▌▐▌▌▐▐▌', 48, h - 32);
 
-        // Footer background
-        ctx.fillStyle = 'rgba(14,14,14,0.95)';
-        ctx.fillRect(0, h - 51, w, 51);
-
-        // Member ID
-        ctx.font = '500 11px "Fira Mono", "JetBrains Mono", monospace';
-        ctx.fillStyle = textSecondary;
-        ctx.fillText(dom.cardId?.textContent || 'HAC-2025-0001', 20, h - 22);
-
-        // Hult AI Collective watermark
-        ctx.font = '600 10px "Bai Jamjuree", sans-serif';
+        // Right: branding
+        ctx.font = '600 12px "Bai Jamjuree", sans-serif';
         ctx.fillStyle = accent;
         ctx.textAlign = 'right';
-        ctx.fillText('HULT AI COLLECTIVE', w - 20, h - 22);
+        ctx.fillText('HULT AI COLLECTIVE', w - 48, h - 44);
+        ctx.font = '400 10px "Fira Mono", monospace';
+        ctx.fillStyle = textDim;
+        ctx.fillText('hultaicollective.com', w - 48, h - 26);
         ctx.textAlign = 'left';
+
+        // ── Outer border
+        ctx.strokeStyle = 'rgba(0,212,212,0.2)';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(1, 1, w - 2, h - 2);
+
+        // ── Corner accents (top-left, top-right, bottom-left, bottom-right)
+        const cornerLen = 20;
+        ctx.strokeStyle = accent;
+        ctx.lineWidth = 2;
+        // TL
+        ctx.beginPath(); ctx.moveTo(0, cornerLen); ctx.lineTo(0, 0); ctx.lineTo(cornerLen, 0); ctx.stroke();
+        // TR
+        ctx.beginPath(); ctx.moveTo(w - cornerLen, 0); ctx.lineTo(w, 0); ctx.lineTo(w, cornerLen); ctx.stroke();
+        // BL
+        ctx.beginPath(); ctx.moveTo(0, h - cornerLen); ctx.lineTo(0, h); ctx.lineTo(cornerLen, h); ctx.stroke();
+        // BR
+        ctx.beginPath(); ctx.moveTo(w - cornerLen, h); ctx.lineTo(w, h); ctx.lineTo(w, h - cornerLen); ctx.stroke();
 
         // Download
         canvas.toBlob((blob) => {
@@ -562,13 +652,69 @@
             const a = document.createElement('a');
             a.href = url;
             const name = (dom.cardNameValue?.textContent || 'HAC_MEMBER').replace(/\s+/g, '_').toUpperCase();
-            a.download = `HAC_ID_${name}.png`;
+            a.download = `HAC_NAMECARD_${name}.png`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            showToast('◈ Card exported successfully');
+            showToast('◈ Namecard exported — print at 3.5" × 2"');
         }, 'image/png');
+    }
+
+    // Share card via Web Share API / fallback
+    async function shareCardAsImage() {
+        const canvas = dom.cardExportCanvas;
+        if (!canvas || canvas.width === 0) {
+            // Generate the card first
+            exportCardAsImage();
+            await sleep(500);
+        }
+
+        const memberName = (dom.cardNameValue?.textContent || 'HAC Member').trim();
+
+        // Try Web Share API (native Android/iOS share sheet)
+        if (navigator.share && navigator.canShare) {
+            try {
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                const file = new File([blob], `HAC_NAMECARD_${memberName.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
+
+                if (navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        title: 'HAC Member Card',
+                        text: `I'm ${memberName} — member of the Hult AI Collective ◈`,
+                        files: [file]
+                    });
+                    showToast('◈ Shared successfully');
+                    return;
+                }
+            } catch (e) {
+                if (e.name === 'AbortError') return; // User cancelled
+                console.warn('Web Share file sharing failed:', e);
+            }
+        }
+
+        // Fallback: try text-only share
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'HAC Member Card',
+                    text: `I'm ${memberName} — member of the Hult AI Collective ◈\nhttps://hultaicollective.com`,
+                    url: window.location.origin
+                });
+                showToast('◈ Shared successfully');
+                return;
+            } catch (e) {
+                if (e.name === 'AbortError') return;
+            }
+        }
+
+        // Final fallback: copy link to clipboard
+        try {
+            await navigator.clipboard.writeText(`I'm ${memberName} — member of the Hult AI Collective ◈ ${window.location.origin}`);
+            showToast('◈ Link copied to clipboard');
+        } catch (e) {
+            showToast('◈ Share not supported on this browser');
+        }
     }
 
     function drawAvatarPlaceholder(ctx, x, y, w, h, color) {

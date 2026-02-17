@@ -997,17 +997,69 @@
     .splash__os { font-size: 48px; }
     .identity-card__inner { width: 340px; }
     .identity-card__body { flex-direction: column; align-items: center; }
-    .identity-card__actions { gap: 4px; }
-    .identity-card__action-btn { padding: 5px 8px; font-size: 9px; }
-    .identity-card__confirm-btn { padding: 7px 14px; font-size: 11px; }
+    .identity-card__actions { gap: 4px; flex-wrap: wrap; justify-content: center; }
+    .identity-card__action-btn { padding: 6px 10px; font-size: 9px; min-height: 36px; }
+    .identity-card__confirm-btn { padding: 8px 16px; font-size: 11px; min-height: 44px; }
     .panel { display: none; }
+    .login-btn { min-height: 44px; }
 }
 
 @media (max-width: 480px) {
     .terminal, .device-id { display: none; }
     .time { left: 3%; top: 8%; }
     .status { right: 3%; top: 8%; }
-    .identity-card__inner { width: 300px; }
-    .identity-card__footer { flex-direction: column; gap: 10px; align-items: flex-start; }
-    .identity-card__actions { width: 100%; justify-content: flex-end; }
+    .identity-card__inner { width: calc(100vw - 2rem); max-width: 320px; }
+    .identity-card__footer { flex-direction: column; gap: 10px; align-items: stretch; }
+    .identity-card__actions { width: 100%; justify-content: center; }
+    .identity-card__action-btn { flex: 1; justify-content: center; min-height: 44px; }
+    .identity-card__confirm-btn { width: 100%; text-align: center; min-height: 44px; }
+    .identity-card__field-input { font-size: 16px; /* Prevent iOS zoom on focus */ }
+    .identity-card__field-select { font-size: 16px; }
+    .field-group input { font-size: 16px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * CROSS-BROWSER FIXES
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Safari input appearance reset */
+input, select, button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+}
+
+/* Firefox scrollbar styling */
+.terminal__log {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 212, 0.3) transparent;
+}
+
+/* Webkit scrollbar (Chrome/Safari/Edge) */
+.terminal__log::-webkit-scrollbar {
+    width: 4px;
+}
+
+.terminal__log::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.terminal__log::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 212, 0.3);
+}
+
+/* Touch target sizing for interactive elements */
+@media (pointer: coarse) {
+    .identity-card__action-btn,
+    .identity-card__confirm-btn,
+    .identity-card__upload-btn,
+    .login-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    .password-wrapper {
+        min-height: 44px;
+    }
 }

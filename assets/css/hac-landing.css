@@ -217,6 +217,16 @@ ul { list-style: none; }
     transform: translateY(-1px);
 }
 
+.nav-cta--members {
+    background: transparent !important;
+    border: 2px solid var(--color-coral) !important;
+    color: var(--color-coral) !important;
+}
+.nav-cta--members:hover {
+    background: var(--color-coral) !important;
+    color: var(--color-white) !important;
+}
+
 /* =====================================================================
    BUTTONS
    ===================================================================== */
@@ -260,6 +270,20 @@ ul { list-style: none; }
     background: rgba(255,255,255,0.12);
     color: var(--color-white);
     border-color: var(--color-white);
+}
+
+.btn-members {
+    background: transparent;
+    color: #00d4d4;
+    border: 2px solid #00d4d4;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.05em;
+}
+.btn-members:hover {
+    background: #00d4d4;
+    color: #0a0e1a;
+    box-shadow: 0 8px 24px rgba(0,212,212,0.35);
+    transform: translateY(-2px);
 }
 
 .btn-outline-light {

@@ -106,6 +106,8 @@ body::after {
     position: relative;
     width: 100vw;
     height: 100vh;
+    /* iOS Safari 100vh fix */
+    height: 100dvh;
     overflow: hidden;
 }
 
