@@ -26,7 +26,7 @@
             pageUrl: '../events/opening-night.html'
         },
         {
-            id: 'fin-trading'
+            id: 'fin-trading',
             title: 'Financial Technical Analysis for Traders',
             date: '2026-03-05',
             time: null,
@@ -429,7 +429,8 @@
                     <ul>
                         <li>Classroom 1A</li>
                         <li>Hult London Campus</li>
-                    </ul>`}]},
+                    </ul>`
+            },
             'fin-trading': {
                 details: `
                     <h3>What You'll Learn:</h3>
