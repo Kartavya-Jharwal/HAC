@@ -213,7 +213,7 @@
                             <p>Architecting HAC as institutional infrastructure for the post-hype AI economy &mdash; a structured environment where business students develop verified technical competence before the market demands it at scale.</p>
                             <div class="ir-team-links">
                                 <a href="https://kartavya.tech" target="_blank">kartavya.tech &nearr;</a>
-                                <a href="https://linkedin.com" target="_blank">LinkedIn &nearr;</a>
+                                <a href=\"#\" id=\"ir-linkedin-dialog\" onclick=\"return false;\">LinkedIn &nearr;</a>
                                 <a href="mailto:kjharwal@student.hult.edu">kjharwal@student.hult.edu</a>
                             </div>
                         </div>
@@ -359,6 +359,14 @@
                 navLinks.classList.toggle('is-open');
             });
         }
+
+        // LinkedIn Coming Soon Dialog
+        function showLinkedInDialog(e) {
+            e.preventDefault();
+            alert('LinkedIn profile coming soon. Stay tuned!');
+        }
+        const irLinkedInBtn = document.getElementById('ir-linkedin-dialog');
+        if (irLinkedInBtn) irLinkedInBtn.addEventListener('click', showLinkedInDialog);
     </script>
 
 </body>
