@@ -5,251 +5,361 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- SEO -->
-    <title>HAC – Investor Relations</title>
-    <meta name="description" content="HAC is an approved student organization at Hult International Business School, London. Building the post-bubble generation of technical business operators.">
+    <title>HAC Investor Relations | Hult AI Collective</title>
+    <meta name="description" content="HAC is a structured talent accelerator producing technically proficient business operators. Members deploy multi-agent systems, RAG architectures, and production automation. Open-source, outcomes-verified, London-based.">
     <link rel="canonical" href="https://hultaicollective.com/investors">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="HAC – Investor Relations">
-    <meta property="og:description" content="The AI buildspace for business students. Shipping tools, not pitch decks.">
+    <meta property="og:title" content="HAC Investor Relations | Hult AI Collective">
+    <meta property="og:description" content="A structured talent pipeline for the post-hype AI economy.">
     <meta property="og:url" content="https://hultaicollective.com/investors">
+    <!-- OG Image logic would go here, omitting for now as no image provided -->
 
-    <!-- Fonts: Inter Only for IR Page -->
+    <!-- Fonts: Source Serif 4, Inter, JetBrains Mono (matching landing page) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&display=swap" rel="stylesheet">
+
 
     <!-- Styles -->
     <link rel="stylesheet" href="css/ir.css">
 </head>
 <body>
 
-    <!-- Navigation (Minimal) -->
-    <header class="ir-header">
-        <div class="container container-wide">
-            <a href="/" class="ir-logo">HAC // IR</a>
-            <nav class="ir-nav">
-                <a href="#building">Building</a>
-                <a href="#engage">Engage</a>
-                <a href="#who">Who We Are</a>
-                <a href="#progress">Progress Log</a>
-            </nav>
+    <!-- Navigation -->
+    <nav class="ir-nav">
+        <div class="ir-nav-container">
+            <div class="ir-nav-left">
+                <a href="../index.html" class="ir-nav-logo">HAC</a>
+            </div>
+            <div class="ir-nav-links" id="ir-nav-links">
+                <a href="../index.html#build">Build</a>
+                <a href="../index.html#how">How It Works</a>
+                <a href="./" class="active">For Investors</a>
+                <a href="../index.html#join" class="ir-nav-cta">Join &rarr;</a>
+            </div>
+            <button class="ir-nav-toggle" id="ir-nav-toggle" aria-label="Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
         </div>
-    </header>
+    </nav>
 
     <main>
-        <!-- Hero Section -->
-        <section class="ir-hero">
-            <div class="container">
-                <div class="ir-hero-content">
-                    <span class="ir-overline">Investor Relations</span>
-                    <h1>HAC is building the post-bubble generation.</h1>
-                    <p class="lead">Business students who ship AI tools, not just pitch decks.</p>
-                    <p class="scouts">Scouts welcome. Curiosity required.</p>
+        <!-- 01 · Hero -->
+        <section class="ir-section ir-hero">
+            <div class="ir-container">
+                <span class="ir-eyebrow">For Investors & Institutional Partners</span>
+                <h1 class="ir-hero-title">Hult AI Collective</h1>
+                <h2 class="ir-hero-subtitle">Building the operator class<br>for the post-hype AI economy.</h2>
+                
+                <p class="ir-hero-body">
+                    A structured talent accelerator producing business graduates<br>
+                    who ship production AI systems before they graduate &mdash;<br>
+                    not decks about why someone else should.
+                </p>
+
+                <div class="ir-hero-actions">
+                    <a href="#building" class="ir-link-arrow">Review Active Initiatives &darr;</a>
+                    <a href="https://calendly.com/" target="_blank" rel="noopener" class="ir-btn ir-btn-ghost">Request Access &rarr;</a>
                 </div>
             </div>
-            <div class="ir-hero-overlay"></div>
+            <div class="ir-hero-gradient"></div>
         </section>
 
-        <!-- What We're Building -->
-        <section id="building" class="ir-section">
-            <div class="container">
-                <div class="ir-intro">
-                    <h2>What We're Building</h2>
-                    <p>HAC operates as a hybrid incubator-studio for non-traditional technical talent.</p>
+        <!-- 02 · The Thesis -->
+        <section class="ir-section ir-bg-light">
+            <div class="ir-container ir-container-narrow">
+                <span class="ir-eyebrow ir-text-ink">Investment Thesis</span>
+                
+                <div class="ir-thesis-content">
+                    <p>Every technology cycle follows the same arc: speculative capital inflates valuations, consolidation follows, and the individuals who built durable competencies during the expansion phase disproportionately capture value on the other side.</p>
+
+                    <p>The AI market is approaching its inflection point. When it arrives, organisations won't need more strategists theorising about transformation &mdash; they will need operators who can <span class="ir-highlight">implement</span> it.</p>
+                    
+                    <p>The gap is structural. Computer science graduates build infrastructure. Traditional business graduates lack technical fluency. Neither profile meets the emerging demand for professionals who can architect an agentic workflow on Monday and present its commercial implications to a board on Wednesday.</p>
+                    
+                    <p>HAC exists to close that gap.</p>
+
+                    <p>We are producing a new archetype &mdash; the <strong>technical business operator</strong> &mdash; through applied, portfolio-verified training in multi-agent systems, retrieval-augmented generation, and production automation. Every member graduates with deployed code, not coursework.</p>
+                </div>
+
+                <blockquote class="ir-pullquote">
+                    "Capital follows execution speed, not theoretical sophistication. We produce the fastest implementers in the building."
+                </blockquote>
+            </div>
+        </section>
+
+        <!-- 03 · What's Being Built -->
+        <section id="building" class="ir-section ir-bg-dark">
+            <div class="ir-container">
+                <div class="ir-section-header">
+                    <span class="ir-eyebrow">Active Initiatives</span>
+                    <h2>What's Being Built</h2>
+                    <p class="ir-section-sub">Live projects. Open repositories. Verifiable output.</p>
                 </div>
 
                 <div class="ir-grid-3">
+                    <!-- Card 01 -->
                     <div class="ir-card">
-                        <h3>Talent Pipeline</h3>
-                        <p>Business students learning to ship multi-agent systems, automation workflows, and RAG applications. Portfolio-ready work in 8 weeks.</p>
+                        <div class="ir-card-header">
+                            <span class="ir-card-badge">Spring 2026</span>
+                            <span class="ir-card-number">01</span>
+                        </div>
+                        <h3>Applied Talent Pipeline</h3>
+                        <p>An 8-week accelerator where business students build production-grade competency in multi-agent orchestration, automation architecture, and RAG deployment. Every graduate exits with deployed code &mdash; publicly auditable, not self-reported.</p>
                     </div>
+
+                    <!-- Card 02 -->
                     <div class="ir-card">
+                        <div class="ir-card-header">
+                            <span class="ir-card-badge">In Progress</span>
+                            <span class="ir-card-number">02</span>
+                        </div>
                         <h3>Project Studio</h3>
-                        <p>Members building real tools—CRM automations for consultancies, research agents for VCs, compliance bots for legal teams. Not hypotheticals.</p>
+                        <p>Members build tools that solve real operational problems &mdash; research agents, automated report generators, compliance assistants &mdash; each scoped against live business requirements, not classroom hypotheticals.</p>
                     </div>
+
+                    <!-- Card 03 -->
                     <div class="ir-card">
-                        <h3>Ecosystem Hub</h3>
-                        <p>Cross-university buildspace. Hult students + UCL/Imperial/LSE non-CS participants. Open co-working evenings. Informal but serious.</p>
+                        <div class="ir-card-header">
+                            <span class="ir-card-badge">Bi-weekly</span>
+                            <span class="ir-card-number">03</span>
+                        </div>
+                        <h3>Cross-Disciplinary Hub</h3>
+                        <p>Open-format co-working sessions pulling Hult students and non-CS operators across London into the same room. The intersection of business judgement and technical execution &mdash; engineered, not accidental.</p>
                     </div>
                 </div>
 
-                <div class="ir-status-links">
-                    <span>We publish progress transparently:</span>
-                    <ul>
-                        <li><a href="#">Monthly demo videos</a> (shipped projects, not slides)</li>
-                        <li><a href="#">GitHub repositories</a> (open-source where possible)</li>
-                        <li><a href="#">Talent profiles</a> (members open to opportunities)</li>
-                    </ul>
-                    <p class="ir-note">Think YC office hours meets a gentleman's club. Drop by, see what's being built, steal our best people.</p>
+                <div class="ir-section-footer-links">
+                    <a href="https://github.com/Kartavya-Jharwal" target="_blank" class="ir-link-arrow">View HAC GitHub &rarr;</a>
+                    <span class="ir-link-arrow ir-link--soon">Demo Day Recordings &mdash; Coming Soon</span>
                 </div>
             </div>
         </section>
 
-        <!-- How to Engage -->
-        <section id="engage" class="ir-section ir-bg-darker">
-            <div class="container">
-                <h2>How to Engage</h2>
-                
-                <div class="ir-list">
-                    <div class="ir-list-item">
-                        <span class="ir-number">01</span>
-                        <div class="ir-list-content">
-                            <h3>Scout Talent</h3>
-                            <p>HAC members are learning to be technical co-founders, DevRel engineers, and AI implementation PMs—not just "the business guy."</p>
-                            <a href="#" class="ir-link-action">[View Member Profiles]</a>
+        <!-- 04 · How to Engage -->
+        <section class="ir-section ir-bg-light">
+            <div class="ir-container">
+                <div class="ir-section-header">
+                    <span class="ir-eyebrow ir-text-ink">Engagement Pathways</span>
+                    <h2 class="ir-text-ink">How to Get Involved</h2>
+                    <p class="ir-section-sub ir-text-slate">Four structured pathways. Each designed for meaningful participation.</p>
+                </div>
+
+                <div class="ir-engagement-list">
+                    <!-- 01 -->
+                    <div class="ir-engage-item">
+                        <span class="ir-engage-number">01</span>
+                        <div class="ir-engage-content">
+                            <h3>Access the Talent Pipeline</h3>
+                            <p>HAC members are training as technical co-founders, developer relations engineers, and AI implementation leads &mdash; a profile distinct from both traditional MBAs and computer science graduates.</p>
+                            <p>Every participating member maintains a public GitHub profile and documented project portfolio. Demonstrated output replaces conventional credentialing. You don't take our word for it &mdash; you read their commit history.</p>
+                            <span class="ir-link-arrow ir-link--soon">Member Portfolios &mdash; Coming Soon</span>
                         </div>
                     </div>
 
-                    <div class="ir-list-item">
-                        <span class="ir-number">02</span>
-                        <div class="ir-list-content">
-                            <h3>Attend Demo Sessions</h3>
-                            <p>Monthly open builds. See what's being shipped. No pitch decks, just working prototypes.</p>
-                            <p class="ir-detail">Next session: March 12, 18:00 at Hult London campus.</p>
-                            <a href="#" class="ir-btn-ghost">RSVP: Limited Seats</a>
+                    <!-- 02 -->
+                    <div class="ir-engage-item">
+                        <span class="ir-engage-number">02</span>
+                        <div class="ir-engage-content">
+                            <h3>Observe a Build Session</h3>
+                            <p>Monthly structured workshops. Two hours. Each member delivers a functional prototype by session close.</p>
+                            <p>These are engineering sessions, not pitch rehearsals. Output is evaluated on whether it runs in production, not on how it is presented. Investors and operators are invited to observe firsthand &mdash; no polished demo, just live builds.</p>
+                            <p class="ir-meta">Next session: March 15 · Hult London Campus</p>
+                            <span class="ir-btn ir-btn-ghost-dark ir-link--soon">Reserve a Seat &mdash; Coming Soon</span>
                         </div>
                     </div>
 
-                    <div class="ir-list-item">
-                        <span class="ir-number">03</span>
-                        <div class="ir-list-content">
-                            <h3>Drop-In Co-Working</h3>
-                            <p>Bi-weekly evenings. Coffee + ambient music. Watch students debug agents, scrape APIs, break things. No formal agenda. Just show up.</p>
-                            <a href="#" class="ir-link-action">[See Calendar]</a>
+                    <!-- 03 -->
+                    <div class="ir-engage-item">
+                        <span class="ir-engage-number">03</span>
+                        <div class="ir-engage-content">
+                            <h3>Attend Open Co-Working</h3>
+                            <p>Bi-weekly evening sessions. Unstructured, high-density working environments where members debug agentic systems, integrate APIs, and iterate on production deployments.</p>
+                            <p>No formal agenda. The value proposition is proximity to builders actively solving implementation problems in real time. People who attend once tend to come back every week.</p>
+                            <span class="ir-link-arrow ir-link--soon">Schedule &mdash; Coming Soon</span>
                         </div>
                     </div>
 
-                    <div class="ir-list-item">
-                        <span class="ir-number">04</span>
-                        <div class="ir-list-content">
+                    <!-- 04 -->
+                    <div class="ir-engage-item">
+                        <span class="ir-engage-number">04</span>
+                        <div class="ir-engage-content">
                             <h3>Sponsor Infrastructure</h3>
-                            <p>HAC operates on frugal AI principles. But API credits, cloud compute, or event sponsorships accelerate what we build.</p>
-                            <a href="#" class="ir-link-small">Become a Sponsor</a>
+                            <p>HAC operates with minimal overhead &mdash; no dedicated compute clusters, no enterprise licensing. API credits, cloud infrastructure, or event underwriting directly accelerate member output.</p>
+                            <p>Sponsors receive priority access to member talent profiles and session recordings one week ahead of public availability.</p>
+                            <a href="mailto:kjharwal@student.hult.edu" class="ir-link-arrow">Contact Kartavya Jharwal &rarr;</a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Executive Session -->
-        <section class="ir-section">
-            <div class="container">
-                <div class="ir-card ir-card-feature">
-                    <h3>Learn by Building</h3>
-                    <p class="lead">You fund AI companies. Do you <em>understand</em> agentic workflows?</p>
-                    <p>HAC runs <strong>executive build sessions</strong> for investors and operators who want to go beyond the hype:</p>
-                    <ul class="ir-check-list">
-                        <li>Build a multi-agent research system in 2 hours</li>
-                        <li>Understand RAG pipelines (not just the buzzword)</li>
-                        <li>Ship a working prototype you can demo to your portfolio</li>
-                    </ul>
-                    <p class="ir-small">No CS degree required. Laptop + curiosity sufficient.</p>
-                    <a href="#" class="ir-btn-primary">[Request Executive Session]</a>
+        <!-- 05 · Who We Are -->
+        <section class="ir-section ir-bg-dark-secondary">
+            <div class="ir-container">
+                <div class="ir-section-header">
+                    <span class="ir-eyebrow">Leadership</span>
+                    <h2>Who's Building This</h2>
                 </div>
-            </div>
-        </section>
 
-        <!-- Partnerships -->
-        <section class="ir-section ir-bg-darker">
-            <div class="container container-narrow">
-                <div class="ir-split">
-                    <div class="ir-split-col">
-                        <h3>Inter-University Partnerships</h3>
-                        <p>HAC is a Hult-based initiative, but we're building for the broader London ecosystem.</p>
-                        <p>If you're running a technical club at UCL, Imperial, LSE, or beyond—and want to collaborate, let's talk.</p>
-                        <a href="#" class="ir-link-action">[Start a Conversation]</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Who We Are -->
-        <section id="who" class="ir-section">
-            <div class="container">
-                <h2>Who We Are</h2>
                 <div class="ir-team-grid">
-                    <div class="ir-team-member member-kartavya">
-                        <div class="ir-avatar"></div>
-                        <h3>Kartavya Jharwal</h3>
-                        <span class="ir-role">Founder, President</span>
-                        <p>Technical vision + culture architect. Building HAC as a post-bubble talent pipeline.</p>
-                        <div class="ir-socials">
-                            <a href="https://kartavya.tech">kartavya.tech</a>
-                            <a href="#">LinkedIn</a>
+                    <!-- Kartavya -->
+                    <div class="ir-team-main">
+                        <div class="ir-team-info">
+                            <h3>Kartavya Jharwal</h3>
+                            <span class="ir-role">Founder · President</span>
+                            <p>Architecting HAC as institutional infrastructure for the post-hype AI economy &mdash; a structured environment where business students develop verified technical competence before the market demands it at scale.</p>
+                            <div class="ir-team-links">
+                                <a href="https://kartavya.tech" target="_blank">kartavya.tech &nearr;</a>
+                                <a href="https://linkedin.com" target="_blank">LinkedIn &nearr;</a>
+                                <a href="mailto:kjharwal@student.hult.edu">kjharwal@student.hult.edu</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="ir-team-member member-soi">
-                        <div class="ir-avatar"></div>
-                        <h3>Professor Soi</h3>
-                        <span class="ir-role">Faculty Advisor</span>
-                        <p>Strategic advisor. Guides exploration beyond RAG/agents/diffusion into what comes next.</p>
-                        <div class="ir-socials">
-                            <a href="#">Hult Faculty Profile</a>
+
+                    <!-- Professor Soi -->
+                    <div class="ir-team-advisor">
+                        <div class="ir-team-info">
+                            <h3>Professor Nikhil Soi</h3>
+                            <span class="ir-role">Faculty Advisor</span>
+                            <p>Provides strategic oversight and institutional sponsorship. Directs HAC's pedagogical framework toward durable competencies that extend beyond current-cycle AI tooling.</p>
+                            <a href="#" target="_blank" class="ir-link-arrow ir-link--soon">Hult Faculty Profile &mdash; Coming Soon</a>
                         </div>
-                    </div>
-                    <div class="ir-team-member member-board">
-                        <h3>HAC Board — Trial Model</h3>
-                        <p>No interviews. Earn your board seat by shipping tasks for 2 weeks.</p>
-                        <ul class="ir-board-list">
-                            <li><a href="#">Contributor A</a></li>
-                            <li><a href="#">Contributor B</a></li>
-                            <li><a href="#">Contributor C</a></li>
-                        </ul>
                     </div>
                 </div>
-                <p class="ir-legal">HAC is an approved student organization at Hult International Business School, London.</p>
+
+                <!-- Board -->
+                <div class="ir-board-list">
+                    <div class="ir-board-member">
+                        <div class="ir-avatar-placeholder">●</div>
+                        <span>Board Seat · Trial Phase</span>
+                    </div>
+                    <div class="ir-board-member">
+                        <div class="ir-avatar-placeholder">●</div>
+                        <span>Board Seat · Trial Phase</span>
+                    </div>
+                    <div class="ir-board-member">
+                        <div class="ir-avatar-placeholder">●</div>
+                        <span>Board Seat · Trial Phase</span>
+                    </div>
+                </div>
+
+                <div class="ir-approved-badge">
+                   <!-- Placeholder for Hult Logo -->
+                   <small>Approved Student Organization <br> Hult International Business School, London</small>
+                </div>
             </div>
         </section>
 
-        <!-- Progress Log -->
-        <section id="progress" class="ir-section ir-bg-darker">
-            <div class="container">
-                <h2>Progress Log</h2>
+        <!-- 06 · Progress Log -->
+        <section class="ir-section ir-bg-light">
+            <div class="ir-container">
+                <div class="ir-section-header">
+                    <span class="ir-eyebrow ir-text-ink">Operational Transparency</span>
+                    <h2 class="ir-text-ink">Verified Output</h2>
+                    <p class="ir-section-sub ir-text-slate">Updated after every session. All output is publicly auditable.</p>
+                </div>
+
                 <div class="ir-log">
-                    <div class="ir-log-entry">
-                        <span class="ir-log-date">February 2026</span>
-                        <ul class="ir-log-list">
-                            <li>
-                                <strong>Session 1: Multi-agent research system</strong> (3 working prototypes)
-                                <span class="ir-log-meta"><a href="#">GitHub</a> &bull; <a href="#">Demo Video</a></span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="ir-log-entry future">
-                        <span class="ir-log-date">March 2026</span>
-                        <ul class="ir-log-list">
-                            <li>
-                                <strong>Session 2: RAG pipeline for Hult coursework Q&A</strong>
-                                <span class="ir-log-meta"><a href="#">GitHub</a> &bull; <a href="#">Demo Video</a></span>
-                            </li>
-                        </ul>
-                    </div>
+                    <!-- Log Entry -->
+                    <article class="ir-log-entry">
+                        <div class="ir-log-header">
+                            <span class="ir-log-date">February 2026 · Session 01</span>
+                        </div>
+                        <div class="ir-log-content">
+                            <div class="ir-log-row">
+                                <span class="ir-log-label">Deliverable:</span>
+                                <span class="ir-log-desc">Multi-agent research system &mdash; 3 functional prototypes deployed in session</span>
+                            </div>
+                            <div class="ir-log-row">
+                                <span class="ir-log-label">Repository:</span>
+                                <span class="ir-link-log ir-link--soon">hultaicollective/session-01-agents &mdash; publishing soon</span>
+                            </div>
+                            <div class="ir-log-row">
+                                <span class="ir-log-label">Recording:</span>
+                                <span class="ir-link-log ir-link--soon">Session recording &mdash; available March 1</span>
+                            </div>
+                            <div class="ir-log-row">
+                                <span class="ir-log-label">Participants:</span>
+                                <span class="ir-link-log">3 members</span>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <!-- March 2026 Placeholder -->
+                    <article class="ir-log-entry ir-log-future">
+                        <div class="ir-log-header">
+                            <span class="ir-log-date">March 2026 · Session 02</span>
+                        </div>
+                        <div class="ir-log-content">
+                            <p class="ir-log-desc">[Pending session completion]</p>
+                        </div>
+                    </article>
                 </div>
-                <a href="#" class="ir-link-action">[View Full Archive]</a>
+
+                <div class="ir-log-footer">
+                    <span class="ir-link-arrow ir-link--soon">Full Archive &mdash; Coming Soon</span>
+                </div>
             </div>
         </section>
 
-        <!-- Manifesto / Footer -->
-        <footer class="ir-footer">
-            <div class="container">
-                <div class="ir-manifesto">
-                    <h3>Why This Matters</h3>
-                    <p>The AI bubble will deflate. The hype will fade.</p>
-                    <p>What remains: businesses that need AI implementation, not AI promises.</p>
-                    <p>HAC members are learning to be the operators who ship those tools.</p>
-                    <p>Not your CS grads (they build infrastructure). Not your traditional PMs (they can't code).</p>
-                    <p>The new archetype: <strong>technical business operators</strong> who understand both the workflow and the stack.</p>
-                    <p>That's what we're building here.</p>
-                </div>
-                <div class="ir-copyright">
-                    &copy; 2026 Hult AI Collective. <a href="/">Back to Student Site</a>
+        <!-- Final CTA -->
+        <section class="ir-section ir-cta-final">
+            <div class="ir-container">
+                <div class="ir-final-content">
+                    <h2>The work is public.<br>The door is open.</h2>
+                    <p>Every repository is live. Every session is recorded.<br>
+                    Every outcome is verifiable. We have nothing to hide.</p>
+                    <p>If you are sourcing the operators<br>
+                    who will lead AI implementation in 2028 &mdash;<br>
+                    they are being forged here. Right now.</p>
+                    
+                    <div class="ir-final-actions">
+                        <a href="https://calendly.com/" target="_blank" rel="noopener" class="ir-btn ir-btn-coral">Request Access &rarr;</a>
+                        <a href="https://github.com/Kartavya-Jharwal" target="_blank" class="ir-btn ir-btn-ghost">View GitHub &nearr;</a>
+                    </div>
+                    
+                    <div class="ir-contact-card">
+                        <p>Direct enquiries: <strong>Kartavya Jharwal</strong></p>
+                        <p>
+                            <a href="mailto:kjharwal@student.hult.edu">kjharwal@student.hult.edu</a> · 
+                            <a href="https://kartavya.tech" target="_blank">kartavya.tech</a>
+                        </p>
+                    </div>
                 </div>
             </div>
-        </footer>
+        </section>
 
     </main>
+
+    <footer class="ir-footer">
+        <div class="ir-container">
+            <div class="ir-footer-nav">
+                <a href="./" class="active">For Investors</a>
+                <span class="ir-dot">·</span>
+                <a href="https://github.com/Kartavya-Jharwal" target="_blank" rel="noopener">GitHub</a>
+                <span class="ir-dot">·</span>
+                <a href="https://kartavya.tech" target="_blank">kartavya.tech</a>
+                <span class="ir-dot">·</span>
+                <a href="mailto:kjharwal@student.hult.edu">kjharwal@student.hult.edu</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile nav toggle
+        const toggle = document.getElementById('ir-nav-toggle');
+        const navLinks = document.getElementById('ir-nav-links');
+        if (toggle && navLinks) {
+            toggle.addEventListener('click', () => {
+                const open = toggle.getAttribute('aria-expanded') === 'true';
+                toggle.setAttribute('aria-expanded', !open);
+                navLinks.classList.toggle('is-open');
+            });
+        }
+    </script>
 
 </body>
 </html>

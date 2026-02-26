@@ -1,0 +1,148 @@
+/* =====================================================================
+   HAC Hero – Splash → Cycle → Pan → Landing
+   ===================================================================== */
+
+/* ---------- Splash overlay (fixed, covers viewport) ---------- */
+section.hero {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--cream, #F5F5F0);
+    overflow: hidden;
+    /* JS will release to relative once animation completes */
+}
+
+/* Once splash is done, hero returns to normal flow */
+section.hero.is--landed {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding-top: 120px;
+    padding-bottom: 80px;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    overflow: visible;
+}
+
+/* Collapse the scale container so it doesn't eat layout space */
+section.hero.is--landed .hac-scale-container {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* ---------- Scale container (holds HAC text group) ---------- */
+.hac-scale-container {
+    width: 80vw;
+    max-width: 1400px;
+    pointer-events: none;
+    will-change: transform;
+    transform-origin: center center;
+    /* Ensure dead-center on splash */
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* ---------- HAC text group ---------- */
+.hac-text-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: clamp(6rem, 22vw, 18rem);
+    font-weight: 400;
+    line-height: 0.85;
+    color: var(--ink, #1A1A1A);
+    letter-spacing: -0.04em;
+    user-select: none;
+    gap: 0.02em;
+}
+
+.hac-char {
+    display: block;
+    position: relative;
+    overflow: hidden;          /* Clip the inner text for slide-up reveal */
+}
+
+.hac-char-inner {
+    display: block;
+    will-change: transform;    /* Inner span that slides up */
+}
+
+/* ---------- Image box  –  Big circular blob ---------- */
+.hac-image-box {
+    width: 0;
+    height: 0.75em;            /* Proportional to font-size */
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    border-radius: 50%;        /* Circular blob */
+    flex-shrink: 0;
+    will-change: width;
+}
+
+.hac-image-wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+}
+
+.hac-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    will-change: opacity;
+}
+
+/* ---------- Hero content (title + CTAs) ---------- */
+.hero-content {
+    max-width: 860px;
+    text-align: center;
+    visibility: hidden;        /* JS uses autoAlpha to control */
+    width: 100%;
+    padding: 0 var(--sp-md, 24px);
+    position: relative;
+    z-index: 2;
+}
+
+/* ---------- Background pattern (already styled in hac-landing via .grid-bg) ---------- */
+
+/* ---------- Responsive ---------- */
+@media screen and (max-width: 991px) {
+    .hac-text-group {
+        font-size: clamp(4rem, 18vw, 12rem);
+    }
+    .hac-scale-container {
+        width: 85vw;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .hac-text-group {
+        font-size: clamp(3rem, 22vw, 7rem);
+    }
+    .hac-scale-container {
+        width: 90vw;
+    }
+
+    section.hero.is--landed {
+        padding-top: 100px;
+        padding-bottom: 60px;
+        min-height: auto;
+    }
+}

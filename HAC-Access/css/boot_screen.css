@@ -41,7 +41,7 @@ section#boot_screen {
     
     /* GPU acceleration for smooth scrolling */
     transform: translateZ(0);
-    will-change: contents;
+    will-change: transform, opacity;
     
     /* Background during boot */
     background: var(--color_light_black, #05080d);

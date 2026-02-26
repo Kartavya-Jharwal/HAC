@@ -21,8 +21,8 @@ html, body {
 }
 
 body {
-    user-select: none !important;
-    -webkit-user-select: none !important;
+    user-select: none;
+    -webkit-user-select: none;
     font-family: var(--font_main);
     color: rgb(var(--color_r), var(--color_g), var(--color_b));
     background: var(--color_black);
@@ -126,7 +126,7 @@ body::after {
 .hac-blackout {
     position: absolute;
     inset: 0;
-    z-index: 100;
+    z-index: 150;
     background: var(--background);
     opacity: 0;
     pointer-events: none;

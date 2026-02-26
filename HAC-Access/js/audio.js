@@ -15,6 +15,9 @@ class AudioManager {
         // Audio element cache
         this._cache = new Map();
         
+        // Sound object cache (avoid re-creating per access)
+        this._sounds = {};
+        
         // Track if user has interacted (needed for autoplay policies)
         this._userInteracted = false;
         this._pendingPlays = [];
@@ -64,9 +67,10 @@ class AudioManager {
                         let audio = self._cache.get(filename);
                         
                         if (audio) {
-                            // Clone for overlapping sounds
+                            // Clone for overlapping sounds, remove after playback
                             const clone = audio.cloneNode();
                             clone.volume = self.volume;
+                            clone.addEventListener('ended', () => { clone.remove(); }, { once: true });
                             return clone.play().catch(() => {});
                         }
                         
@@ -132,20 +136,20 @@ class AudioManager {
         this._cache.clear();
     }
 
-    // Sound getters - lazy loading
-    get stdout() { return this._createSound('stdout.wav'); }
-    get stdin() { return this._createSound('stdin.wav'); }
-    get granted() { return this._createSound('granted.wav'); }
-    get denied() { return this._createSound('denied.wav'); }
-    get theme() { return this._createSound('theme.wav'); }
-    get expand() { return this._createSound('expand.wav'); }
-    get folder() { return this._createSound('folder.wav'); }
-    get info() { return this._createSound('info.wav'); }
-    get error() { return this._createSound('error.wav'); }
-    get keyboard() { return this._createSound('keyboard.wav'); }
-    get alarm() { return this._createSound('alarm.wav'); }
-    get scan() { return this._createSound('scan.wav'); }
-    get panels() { return this._createSound('panels.wav'); }
+    // Sound getters - lazy loaded & cached
+    get stdout()   { return this._sounds.stdout   || (this._sounds.stdout   = this._createSound('stdout.wav')); }
+    get stdin()    { return this._sounds.stdin    || (this._sounds.stdin    = this._createSound('stdin.wav')); }
+    get granted()  { return this._sounds.granted  || (this._sounds.granted  = this._createSound('granted.wav')); }
+    get denied()   { return this._sounds.denied   || (this._sounds.denied   = this._createSound('denied.wav')); }
+    get theme()    { return this._sounds.theme    || (this._sounds.theme    = this._createSound('theme.wav')); }
+    get expand()   { return this._sounds.expand   || (this._sounds.expand   = this._createSound('expand.wav')); }
+    get folder()   { return this._sounds.folder   || (this._sounds.folder   = this._createSound('folder.wav')); }
+    get info()     { return this._sounds.info     || (this._sounds.info     = this._createSound('info.wav')); }
+    get error()    { return this._sounds.error    || (this._sounds.error    = this._createSound('error.wav')); }
+    get keyboard() { return this._sounds.keyboard || (this._sounds.keyboard = this._createSound('keyboard.wav')); }
+    get alarm()    { return this._sounds.alarm    || (this._sounds.alarm    = this._createSound('alarm.wav')); }
+    get scan()     { return this._sounds.scan     || (this._sounds.scan     = this._createSound('scan.wav')); }
+    get panels()   { return this._sounds.panels   || (this._sounds.panels   = this._createSound('panels.wav')); }
 }
 
 // Export for use

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>HAC – Hult AI Collective</title>
-    <meta name="description" content="The AI buildspace at Hult London. Ship multi-agent systems, RAG pipelines, and agentic workflows. No CS degree required. Portfolio-ready output, every session.">
+    <meta name="description" content="The AI buildspace at Hult London. Ship multi-agent systems, RAG pipelines, and agentic workflows. No CS degree required.">
     <link rel="canonical" href="https://hultaicollective.com/">
 
     <!-- Open Graph -->
@@ -25,14 +25,12 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23E54B2A'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='14' font-weight='bold' fill='white' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E">
 
-    <!-- Fonts (preconnect + preload critical) -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="assets/css/hac-landing.css">
-    <link rel="stylesheet" href="assets/css/hac-hero.css">
 
     <script type="application/ld+json">
     {
@@ -54,9 +52,6 @@
 
     <!-- Liquid Cursor -->
     <div class="cursor" aria-hidden="true"></div>
-
-    <!-- Film Grain Overlay -->
-    <div class="grain" aria-hidden="true"></div>
 
     <!-- Dashed Grid Background -->
     <div class="grid-bg" aria-hidden="true"></div>
@@ -88,28 +83,12 @@
 
         <!-- ============ HERO ============ -->
         <section class="hero">
-            <div class="hac-scale-container">
-                <div class="hac-text-group">
-                    <span class="hac-char"><span class="hac-char-inner">H</span></span>
-                    <div class="hac-image-box">
-                        <div class="hac-image-wrapper">
-                            <img class="hac-img" src="https://cdn.prod.website-files.com/6915bbf51d482439010ee790/6915bc3ac9fe346a924724bc_minimalist-architecture-2.avif" alt="Minimalist architectural interior" role="presentation">
-                            <img class="hac-img" src="https://cdn.prod.website-files.com/6915bbf51d482439010ee790/6915bc3ac9fe346a924724cf_minimalist-architecture-4.avif" alt="Minimalist architectural detail" role="presentation">
-                            <img class="hac-img" src="https://cdn.prod.website-files.com/6915bbf51d482439010ee790/6915bc3ac9fe346a924724c5_minimalist-architecture-3.avif" alt="Modern architectural space" role="presentation">
-                            <img class="hac-img" src="https://cdn.prod.website-files.com/6915bbf51d482439010ee790/6915bc3ac9fe346a924724b0_minimalist-architecture-1.avif" alt="Contemporary architecture" role="presentation">
-                        </div>
-                    </div>
-                    <span class="hac-char"><span class="hac-char-inner">A</span></span>
-                    <span class="hac-char"><span class="hac-char-inner">C</span></span>
-                </div>
-            </div>
-
             <div class="hero-content">
                 <img src="assets/images/HAC_Lockup.svg" alt="Hult AI Collective" class="hero-lockup">
-                <h1 class="hero-title">Where business students<br><em>become builders.</em></h1>
+                <h1 class="hero-title">Where business students<br><em>learn to ship.</em></h1>
                 <div class="hero-ctas">
-                    <a href="#join" class="btn btn-primary btn-magnetic">Join the Collective</a>
-                    <a href="HAC-Access/" class="btn btn-primary btn-access btn-magnetic">HAC-Access &rarr;</a>
+                    <a href="#join" class="btn btn-primary">Join the Collective</a>
+                    <a href="HAC-Access/" class="btn btn-primary btn-access">HAC-Access &rarr;</a>
                     <a href="#laws" class="btn btn-text">Read the Laws &darr;</a>
                 </div>
             </div>
@@ -118,35 +97,35 @@
         <!-- ============ QUOTE ============ -->
         <section class="section section--quote">
             <div class="container container--narrow">
-                <blockquote class="hero-quote" data-reveal>
-                    <p>"Think Gryffindor common room meets Y Combinator office hours — where the whiteboard is a terminal and the homework runs in production."</p>
+                <blockquote class="hero-quote">
+                    <p>"Think Gryffindor common room meets Y Combinator office hours."</p>
                 </blockquote>
-                <p class="hero-desc" data-reveal>HAC is where business students build real AI systems — multi-agent pipelines, retrieval-augmented apps, and production automations — alongside peers who refuse to wait for permission to start.</p>
+                <p class="hero-desc">HAC is a technical buildspace where you ship multi-agent systems, RAG pipelines, and automation workflows — no CS degree, no lectures, no fluff.</p>
             </div>
         </section>
 
         <!-- ============ THREE LAWS ============ -->
         <section class="section section--laws" id="laws">
             <div class="container container--narrow">
-                <p class="section-eyebrow" data-reveal>The Three Laws</p>
-                <h2 class="section-title" data-reveal>Three laws govern this house.</h2>
-                <p class="laws-intro" data-reveal>You'll hear them at every session. They're non-negotiable.</p>
+                <p class="section-eyebrow">The Three Laws</p>
+                <h2 class="section-title">Three laws govern this house.</h2>
+                <p class="laws-intro">You'll hear them at every session.</p>
                 <ol class="laws">
-                    <li class="law" data-reveal>
+                    <li class="law">
                         <span class="law-number">I</span>
                         <div class="law-body">
                             <h3>First Law</h3>
                             <p>A member may not defer judgment to a machine, or through laziness, allow their decision-making to atrophy.</p>
                         </div>
                     </li>
-                    <li class="law" data-reveal>
+                    <li class="law">
                         <span class="law-number">II</span>
                         <div class="law-body">
                             <h3>Second Law</h3>
                             <p>A member may employ AI as a tool — except where such use would violate the First Law.</p>
                         </div>
                     </li>
-                    <li class="law" data-reveal>
+                    <li class="law">
                         <span class="law-number">III</span>
                         <div class="law-body">
                             <h3>Third Law</h3>
@@ -160,60 +139,60 @@
         <!-- ============ WHAT YOU BUILD ============ -->
         <section class="section section--cream" id="build">
             <div class="container">
-                <p class="section-eyebrow" data-reveal>Ship Real Systems, Not Slide Decks</p>
-                <h2 class="section-title" data-reveal>What you'll build</h2>
+                <p class="section-eyebrow">Practical Tools, Not Theory</p>
+                <h2 class="section-title">What you'll build</h2>
                 <div class="build-grid">
-                    <div class="build-item" data-reveal>
+                    <div class="build-item">
                         <span class="build-number">01</span>
                         <h3>Multi-Agent Systems</h3>
-                        <p>Orchestrate AI teams that research, write, code-review, and coordinate autonomously — no prompt babysitting.</p>
+                        <p>Build AI teams that research, write, and coordinate without you micromanaging every prompt.</p>
                     </div>
-                    <div class="build-item" data-reveal>
+                    <div class="build-item">
                         <span class="build-number">02</span>
                         <h3>Automation Workflows</h3>
-                        <p>Compress 3-hour manual tasks into 10-minute pipelines. Data ingestion, report generation, web scraping — automated end-to-end.</p>
+                        <p>Turn 3-hour manual tasks into 10-minute scripts. Import data, generate reports, scrape insights.</p>
                     </div>
-                    <div class="build-item" data-reveal>
+                    <div class="build-item">
                         <span class="build-number">03</span>
                         <h3>RAG Applications</h3>
-                        <p>Build AI that actually knows your business context — grounded in your company docs, research papers, and proprietary datasets.</p>
+                        <p>Create AI that knows your business context — course materials, company docs, proprietary research.</p>
                     </div>
                 </div>
-                <p class="build-footer" data-reveal>Portfolio-ready projects. Deployed by session end, not at semester's close.</p>
+                <p class="build-footer">Portfolio-ready projects. Ship in weeks, not months.</p>
             </div>
         </section>
 
         <!-- ============ HOW IT WORKS ============ -->
         <section class="section" id="how">
             <div class="container container--narrow">
-                <h2 class="section-title" data-reveal>How it works</h2>
+                <h2 class="section-title">How it works</h2>
                 <ol class="steps">
-                    <li class="step" data-reveal>
+                    <li class="step">
                         <div class="step-marker">1</div>
                         <div class="step-body">
                             <h3>Monthly Workshops</h3>
-                            <p>2-hour deep-dive build sessions. You walk in with a blank repo and walk out with a working prototype. Every time.</p>
+                            <p>2-hour hands-on build sessions. You ship a working prototype before you leave.</p>
                         </div>
                     </li>
-                    <li class="step" data-reveal>
+                    <li class="step">
                         <div class="step-marker">2</div>
                         <div class="step-body">
                             <h3>Co-Working Evenings</h3>
-                            <p>Bi-weekly drop-ins for builders who don't need structure — just proximity to other people pushing code. Bring your laptop, stay all night.</p>
+                            <p>Bi-weekly drop-in. Work on your project, debug with peers. Bring your laptop, stay as long as you want.</p>
                         </div>
                     </li>
-                    <li class="step" data-reveal>
+                    <li class="step">
                         <div class="step-marker">3</div>
                         <div class="step-body">
                             <h3>Common Room Culture</h3>
-                            <p>Music. Espresso. A space optimised for deep focus and reckless experimentation. HAC is the room you go to when you want to build something real.</p>
+                            <p>Music. Snacks. Space designed for focus and experimentation. HAC is where you go to build.</p>
                         </div>
                     </li>
-                    <li class="step" data-reveal>
+                    <li class="step">
                         <div class="step-marker">4</div>
                         <div class="step-body">
                             <h3>Trial Board Model</h3>
-                            <p>Start as a trial contributor. Ship tasks for 2 weeks. Earn your board seat through execution, not politics.</p>
+                            <p>Join as a trial contributor. Ship tasks for 2 weeks. Earn your board role through execution.</p>
                         </div>
                     </li>
                 </ol>
@@ -223,23 +202,23 @@
         <!-- ============ WHO ============ -->
         <section class="section section--cream" id="who">
             <div class="container container--narrow">
-                <h2 class="section-title" data-reveal>Who this is for</h2>
+                <h2 class="section-title">Who this is for</h2>
                 <div class="who-content">
-                    <div class="who-col" data-reveal>
+                    <div class="who-col">
                         <p class="who-label who-label--yes">You'll thrive here if…</p>
                         <ul class="who-list">
-                            <li>You want to automate workflows, not just theorise about AI strategy</li>
-                            <li>You learn by building (and you're not afraid of breaking things in the process)</li>
-                            <li>You need portfolio-grade deployed projects for internships, co-founding, or jobs</li>
-                            <li>You're drawn to devrel, AI implementation, technical PM, or operator roles</li>
+                            <li>You want to automate workflows, not just understand AI theory</li>
+                            <li>You're comfortable learning by building (and breaking things)</li>
+                            <li>You need portfolio-ready work for internships, startups, or jobs</li>
+                            <li>You're exploring devrel, AI implementation, or builder roles</li>
                         </ul>
                     </div>
-                    <div class="who-col" data-reveal>
+                    <div class="who-col">
                         <p class="who-label who-label--no">Probably not for you if…</p>
                         <ul class="who-list who-list--muted">
-                            <li>You want passive learning — lectures, panels, and pitch decks</li>
-                            <li>You're collecting club logos for your CV without shipping anything</li>
-                            <li>You expect hand-holding through every line of code</li>
+                            <li>You want passive learning (lectures, panels, decks)</li>
+                            <li>You're collecting club badges for your CV</li>
+                            <li>You need hand-holding through every line of code</li>
                         </ul>
                     </div>
                 </div>
@@ -254,8 +233,8 @@
         <!-- Join Band -->
         <div class="footer-join">
             <div class="container container--narrow">
-                <h2 class="footer-join__title" data-reveal>Join the Collective</h2>
-                <p class="footer-join__lead" data-reveal>Spring 2026 is live. Board applications are currently closed — but the door is open. Connect with us below and start building.</p>
+                <h2 class="footer-join__title">Join the Collective</h2>
+                <p class="footer-join__lead">Board applications are currently closed. Connect with us below.</p>
                 <div class="footer-join__ctas">
                     <a href="https://chat.whatsapp.com/your-invite-link" class="btn btn-primary btn-large js-whatsapp" target="_blank" rel="noopener">
                         <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -339,9 +318,6 @@
 
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-    <script src="assets/js/hac-hero.js"></script>
     <script src="assets/js/hac-landing.js"></script>
 </body>
 </html>

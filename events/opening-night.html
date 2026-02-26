@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0E0E0E">
+    <title>HAC Launch Event — Opening Night | HAC</title>
+    <meta name="description" content="HAC Launch Event — Hult AI Collective's first ever event. Meet the board, learn our mission, and join the AI + Excalidraw workshop.">
+    <meta property="og:title" content="HAC Launch Event — Opening Night">
+    <meta property="og:description" content="Hult AI Collective's first event. Board intro, mission, Excalidraw workshop. Feb 26, 2026.">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Fira+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/event-page.css">
+    <style>
+        /* Countdown Banner */
+        .countdown-banner {
+            background: linear-gradient(135deg, rgba(0, 212, 212, 0.15) 0%, rgba(0, 212, 212, 0.05) 100%);
+            border: 1px solid rgba(0, 212, 212, 0.3);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            border-radius: 2px;
+        }
+        .countdown-banner__label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: rgb(0, 212, 212);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .countdown-banner__time {
+            font-family: 'Fira Mono', monospace;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 700;
+            color: #E8E8E8;
+            letter-spacing: 0.05em;
+        }
+        .countdown-banner__time span {
+            color: rgb(0, 212, 212);
+        }
+        .countdown-banner--live {
+            background: linear-gradient(135deg, rgba(0, 212, 212, 0.25) 0%, rgba(0, 180, 180, 0.1) 100%);
+            animation: pulse-border 2s ease-in-out infinite;
+        }
+        .countdown-banner--past {
+            opacity: 0.6;
+        }
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(0, 212, 212, 0.3); }
+            50% { border-color: rgba(0, 212, 212, 0.7); }
+        }
+
+        /* Workshop Highlight */
+        .workshop-highlight {
+            background: rgba(0, 212, 212, 0.06);
+            border-left: 3px solid rgb(0, 212, 212);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 0 2px 2px 0;
+        }
+        .workshop-highlight h3 {
+            color: rgb(0, 212, 212);
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.04em;
+        }
+        .workshop-highlight p {
+            color: #D0D0D0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 0.5rem;
+        }
+        .workshop-highlight em {
+            color: rgb(0, 212, 212);
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        /* Resources Grid */
+        .resources-download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .resource-card {
+            display: flex;
+            flex-direction: column;
+            padding: 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 2px;
+            transition: all 200ms ease;
+            text-decoration: none;
+            color: inherit;
+        }
+        .resource-card:hover {
+            border-color: rgba(0, 212, 212, 0.4);
+            background: rgba(0, 212, 212, 0.05);
+            transform: translateY(-2px);
+        }
+        .resource-card__icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .resource-card__title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #E8E8E8;
+            margin-bottom: 0.4rem;
+        }
+        .resource-card__desc {
+            font-size: 0.8rem;
+            color: #888;
+            line-height: 1.5;
+            flex: 1;
+        }
+        .resource-card__badge {
+            display: inline-block;
+            margin-top: 0.75rem;
+            padding: 4px 10px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 2px;
+            width: fit-content;
+        }
+        .resource-card__badge--download {
+            background: rgba(0, 212, 212, 0.15);
+            color: rgb(0, 212, 212);
+            border: 1px solid rgba(0, 212, 212, 0.3);
+        }
+        .resource-card__badge--link {
+            background: rgba(255, 255, 255, 0.08);
+            color: #aaa;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .resource-card__badge--soon {
+            background: rgba(255, 255, 255, 0.05);
+            color: #666;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        @media (max-width: 480px) {
+            .resources-download-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="event-header">
+        <a href="../HAC-Access/dashboard.html" class="event-back">← Back to Dashboard</a>
+        <h1 class="event-page-title">HAC Launch Event — Opening Night</h1>
+        <p class="event-page-subtitle">Feb 26, 2026 • 6:00 PM • Classroom 1A, Hult London</p>
+    </header>
+
+    <main class="event-main">
+        <!-- Live Countdown -->
+        <div class="countdown-banner" id="countdown-banner">
+            <div class="countdown-banner__label">Event Countdown</div>
+            <div class="countdown-banner__time" id="countdown-timer">Loading...</div>
+        </div>
+
+        <!-- Intro -->
+        <section class="event-section">
+            <h2>Hi everyone</h2>
+            <p>Hult AI Collective is hosting its first ever event and we would love to see you there.</p>
+            <p>We will introduce the board, share our mission, and explain what HAC will focus on this year.</p>
+            <p>You will also get a preview of future events and how you can be involved through collaborations and projects.</p>
+            <p><strong>This is the beginning of something new. Come and be part of it.</strong></p>
+        </section>
+
+        <!-- What to Expect -->
+        <section class="event-section">
+            <h2>What to Expect</h2>
+            <ul class="event-list">
+                <li>Introduction of the HAC board and our mission</li>
+                <li>What HAC will focus on this year</li>
+                <li>Preview of future events and the workshop calendar</li>
+                <li>How you can be involved — collaborations and projects</li>
+                <li>Hands-on AI + Excalidraw workshop</li>
+                <li>Networking and community building</li>
+            </ul>
+        </section>
+
+        <!-- Excalidraw Workshop -->
+        <section class="event-section">
+            <h2>🎨 AI + Excalidraw Workshop</h2>
+            <div class="workshop-highlight">
+                <h3>Hands-on Session: Build AI-Powered Diagrams Using Mermaid & Excalidraw</h3>
+                <p><em>AI + Excalidraw is the highest-leverage skill you can learn this semester.</em></p>
+                <p>Learn to create stunning AI-powered diagrams, flowcharts, and system architectures using Mermaid syntax and Excalidraw. This workshop will give you practical skills you can use immediately in your projects, presentations, and documentation.</p>
+            </div>
+            <ul class="event-list">
+                <li>Create AI-powered diagrams with Excalidraw</li>
+                <li>Use Mermaid syntax for rapid diagram generation</li>
+                <li>Integrate AI tools into your visual workflow</li>
+                <li>Build reusable diagram templates</li>
+                <li>Export and share professional diagrams instantly</li>
+            </ul>
+        </section>
+
+        <!-- Event Details -->
+        <section class="event-section">
+            <h2>Event Details</h2>
+            <div class="event-details-grid">
+                <div class="event-detail-item">
+                    <span class="event-detail-label">📍 Location</span>
+                    <p>Classroom 1A, Hult London Campus</p>
+                </div>
+                <div class="event-detail-item">
+                    <span class="event-detail-label">⏰ Date & Time</span>
+                    <p>Thursday, February 26, 2026<br>6:00 PM – 8:00 PM</p>
+                </div>
+                <div class="event-detail-item">
+                    <span class="event-detail-label">👥 Who Should Attend</span>
+                    <p>All Hult students and community members welcome</p>
+                </div>
+                <div class="event-detail-item">
+                    <span class="event-detail-label">🎯 Format</span>
+                    <p>Board intro + Mission briefing + Live workshop</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources & Downloads -->
+        <section class="event-section">
+            <h2>Resources & Downloads</h2>
+            <p>Slides, tools, and resources from tonight's event. Download everything you need to get started.</p>
+            <div class="resources-download-grid">
+                <a href="#" class="resource-card" id="res-slides">
+                    <div class="resource-card__icon">📊</div>
+                    <div class="resource-card__title">Event Slides</div>
+                    <div class="resource-card__desc">HAC Launch Event presentation deck — mission, roadmap, and workshop overview.</div>
+                    <span class="resource-card__badge resource-card__badge--soon">Available After Event</span>
+                </a>
+                <a href="https://excalidraw.com" target="_blank" class="resource-card">
+                    <div class="resource-card__icon">🎨</div>
+                    <div class="resource-card__title">Excalidraw</div>
+                    <div class="resource-card__desc">Free, open-source virtual whiteboard for sketching diagrams with a hand-drawn feel.</div>
+                    <span class="resource-card__badge resource-card__badge--link">Open Tool →</span>
+                </a>
+                <a href="https://mermaid.js.org" target="_blank" class="resource-card">
+                    <div class="resource-card__icon">🧜</div>
+                    <div class="resource-card__title">Mermaid.js Docs</div>
+                    <div class="resource-card__desc">Official documentation for Mermaid diagramming syntax — flowcharts, sequences, and more.</div>
+                    <span class="resource-card__badge resource-card__badge--link">Open Docs →</span>
+                </a>
+                <a href="https://mermaid.live" target="_blank" class="resource-card">
+                    <div class="resource-card__icon">⚡</div>
+                    <div class="resource-card__title">Mermaid Live Editor</div>
+                    <div class="resource-card__desc">Real-time browser-based Mermaid diagram editor. Write syntax, see diagrams instantly.</div>
+                    <span class="resource-card__badge resource-card__badge--link">Open Editor →</span>
+                </a>
+                <a href="#" class="resource-card" id="res-templates">
+                    <div class="resource-card__icon">📁</div>
+                    <div class="resource-card__title">Workshop Templates</div>
+                    <div class="resource-card__desc">Starter templates used in the Excalidraw workshop. Reuse and remix.</div>
+                    <span class="resource-card__badge resource-card__badge--soon">Available After Event</span>
+                </a>
+                <a href="#" class="resource-card" id="res-cheatsheet">
+                    <div class="resource-card__icon">📝</div>
+                    <div class="resource-card__title">Mermaid Cheat Sheet</div>
+                    <div class="resource-card__desc">Quick reference for all Mermaid diagram types and syntax.</div>
+                    <span class="resource-card__badge resource-card__badge--soon">Available After Event</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="event-cta">
+            <a href="../HAC-Access/dashboard.html" class="event-btn event-btn-primary">← Back to Dashboard</a>
+            <a href="../index.html" class="event-btn event-btn-secondary">HAC Homepage</a>
+        </section>
+    </main>
+
+    <footer class="event-footer">
+        <p>HAC Member Portal • <a href="mailto:kjharwal@student.hult.edu">Contact</a></p>
+    </footer>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════════
+        // LIVE COUNTDOWN
+        // ═══════════════════════════════════════════════════════════════════
+        (function () {
+            const EVENT_DATE = new Date('2026-02-26T18:00:00');
+            const EVENT_END  = new Date('2026-02-26T20:00:00');
+            const banner = document.getElementById('countdown-banner');
+            const timer  = document.getElementById('countdown-timer');
+
+            function pad(n) { return String(n).padStart(2, '0'); }
+
+            function updateCountdown() {
+                const now = new Date();
+                const diff = EVENT_DATE - now;
+                const diffEnd = EVENT_END - now;
+
+                if (diff <= 0 && diffEnd > 0) {
+                    // Event is LIVE
+                    banner.classList.add('countdown-banner--live');
+                    banner.classList.remove('countdown-banner--past');
+                    const mins = Math.floor(diffEnd / 60000);
+                    const secs = Math.floor((diffEnd % 60000) / 1000);
+                    timer.innerHTML = `<span>◈ HAPPENING NOW</span> — ${mins}m ${pad(secs)}s remaining`;
+                    document.querySelector('.countdown-banner__label').textContent = '🔴 LIVE NOW';
+                } else if (diffEnd <= 0) {
+                    // Event is over
+                    banner.classList.add('countdown-banner--past');
+                    banner.classList.remove('countdown-banner--live');
+                    timer.innerHTML = 'Event has ended — Thanks for attending!';
+                    document.querySelector('.countdown-banner__label').textContent = 'EVENT COMPLETE';
+                    return; // Stop updating
+                } else {
+                    // Countdown to event
+                    banner.classList.remove('countdown-banner--live', 'countdown-banner--past');
+                    const days  = Math.floor(diff / 86400000);
+                    const hours = Math.floor((diff % 86400000) / 3600000);
+                    const mins  = Math.floor((diff % 3600000) / 60000);
+                    const secs  = Math.floor((diff % 60000) / 1000);
+
+                    if (days > 0) {
+                        timer.innerHTML = `<span>${days}</span>d <span>${pad(hours)}</span>h <span>${pad(mins)}</span>m <span>${pad(secs)}</span>s`;
+                    } else {
+                        timer.innerHTML = `<span>${pad(hours)}</span>h <span>${pad(mins)}</span>m <span>${pad(secs)}</span>s`;
+                    }
+                }
+            }
+
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        })();
+    </script>
+</body>
+</html>

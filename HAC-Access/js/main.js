@@ -447,9 +447,11 @@
             }
         });
 
-        // Global Enter for identity card confirmation
+        // Global Enter for identity card confirmation (only when not typing in an input)
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && currentState === State.IDENTITY) {
+                const tag = e.target.tagName;
+                if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
                 handleCardConfirm();
             }
         });
@@ -530,6 +532,20 @@
     function handleAvatarUpload(e) {
         const file = e.target.files[0];
         if (!file) return;
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file (JPEG, PNG, etc.).');
+            return;
+        }
+
+        // Validate file size (max 500KB to avoid localStorage overflow)
+        const MAX_SIZE = 500 * 1024;
+        if (file.size > MAX_SIZE) {
+            alert('Image too large. Please use an image under 500 KB.');
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = (event) => {
             const dataUrl = event.target.result;
@@ -1014,11 +1030,11 @@
         dom.spinnerCells.forEach((c) => c.classList.remove('lit'));
         dom.spinnerCells[SPINNER_ORDER[spinnerIndex % SPINNER_ORDER.length]].classList.add('lit');
         spinnerIndex++;
-        spinnerRAF = requestAnimationFrame(() => setTimeout(spinnerTick, 80));
+        spinnerRAF = setTimeout(spinnerTick, 80);
     }
 
     function stopSpinner() {
-        if (spinnerRAF) cancelAnimationFrame(spinnerRAF);
+        if (spinnerRAF) clearTimeout(spinnerRAF);
         dom.spinner.classList.remove('active');
         dom.spinnerCells.forEach(c => c.classList.remove('lit'));
     }
@@ -1062,11 +1078,14 @@
 
         // Timing
         switch (true) {
-            case lineIndex === 2:
+            case lineIndex === 2: {
                 const kernelLine = `${CONFIG.appName} Kernel version ${CONFIG.version} boot at ${Date().toString()}; root:xnu-1699.22.73~1/RELEASE_X86_64`;
                 dom.bootScreen.appendChild(document.createTextNode(kernelLine));
                 dom.bootScreen.appendChild(document.createElement('br'));
                 scrollToBottom(dom.bootScreen);
+                setTimeout(displayBootLine, 500);
+                break;
+            }
             case lineIndex === 4:
                 setTimeout(displayBootLine, 500);
                 break;
