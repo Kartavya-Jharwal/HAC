@@ -18,7 +18,7 @@
             title: 'HAC Launch Event — Opening Night',
             date: '2026-02-26',
             time: '18:00',
-            desc: 'Hult AI Collective is hosting its first ever event. We will introduce the board, share our mission, and explain what HAC will focus on this year.',
+            desc: 'Hult AI Collective is hosting its first ever event. We will introduce the board, share our mission, run live demos (Mentimeter, Mermaid), and drop into a hands-on AI + Excalidraw workshop.',
             location: 'Classroom 1A, Hult London',
             type: 'LAUNCH EVENT',
             status: 'upcoming',
@@ -26,19 +26,7 @@
             pageUrl: '../events/opening-night.html'
         },
         {
-            id: 'excalidraw-workshop',
-            title: 'AI + Excalidraw Workshop',
-            date: '2026-02-26',
-            time: '18:00',
-            desc: 'Hands-on session: Build AI-powered diagrams using Mermaid & Excalidraw. The highest-leverage skill you can learn this semester.',
-            location: 'Classroom 1A, Hult London',
-            type: 'WORKSHOP',
-            status: 'upcoming',
-            registered: false,
-            pageUrl: '../events/opening-night.html'
-        },
-        {
-            id: 'fin-trading',
+            id: 'fin-trading'
             title: 'Financial Technical Analysis for Traders',
             date: '2026-03-05',
             time: null,
@@ -420,42 +408,28 @@
             'opening-night': {
                 details: `
                     <h3>HAC Launch Event</h3>
-                    <p>Hult AI Collective is hosting its first ever event and we would love to see you there.</p>
+                    <p>Hult AI Collective is hosting its first ever event and we would love to see you there. Everything happens in real time tonight — refer to this page during the workshop.</p>
                     <h3>What to Expect:</h3>
                     <ul>
-                        <li>We will introduce the board and share our mission</li>
+                        <li>Introduction to the HAC board and our mission</li>
                         <li>Explain what HAC will focus on this year</li>
-                        <li>Preview of future events and how you can be involved</li>
-                        <li>Collaborations and project opportunities</li>
+                        <li>Preview of future events and the workshop calendar</li>
+                        <li>Live demos using Mentimeter and Mermaid</li>
+                        <li>Hands-on AI + Excalidraw workshop</li>
+                        <li>Networking and community building</li>
                     </ul>
-                    <h3>🎨 AI + Excalidraw Workshop</h3>
-                    <p>Hands-on session: Build AI-powered diagrams using Mermaid & Excalidraw.</p>
-                    <p><em>AI + Excalidraw is the highest-leverage skill you can learn this semester.</em></p>
+                    <h3>Demonstrations:</h3>
+                    <ul>
+                        <li><a href="https://www.mentimeter.com" target="_blank">Mentimeter live poll</a> — interact during the session</li>
+                        <li><a href="https://mermaid.live" target="_blank">Mermaid Live Editor</a> — create diagrams on the fly</li>
+                        <li><a href="https://excalidraw.com" target="_blank">Excalidraw</a> — draw together in the workshop</li>
+                    </ul>
                     <h3>This is the beginning of something new. Come and be part of it.</h3>
                     <h3>Location:</h3>
                     <ul>
                         <li>Classroom 1A</li>
                         <li>Hult London Campus</li>
-                    </ul>`
-            },
-            'excalidraw-workshop': {
-                details: `
-                    <h3>AI + Excalidraw Workshop</h3>
-                    <p>Hands-on session: Build AI-powered diagrams using Mermaid & Excalidraw.</p>
-                    <h3>What You'll Learn:</h3>
-                    <ul>
-                        <li>Create AI-powered diagrams with Excalidraw</li>
-                        <li>Use Mermaid syntax for rapid diagram generation</li>
-                        <li>Integrate AI tools into your visual workflow</li>
-                        <li>Build reusable diagram templates</li>
-                    </ul>
-                    <p><strong>AI + Excalidraw is the highest-leverage skill you can learn this semester.</strong></p>
-                    <h3>Location:</h3>
-                    <ul>
-                        <li>Classroom 1A</li>
-                        <li>Hult London Campus</li>
-                    </ul>`
-            },
+                    </ul>`}]},
             'fin-trading': {
                 details: `
                     <h3>What You'll Learn:</h3>

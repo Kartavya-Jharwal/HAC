@@ -198,7 +198,7 @@
             <div class="workshop-highlight">
                 <h3>Hands-on Session: Build AI-Powered Diagrams Using Mermaid & Excalidraw</h3>
                 <p><em>AI + Excalidraw is the highest-leverage skill you can learn this semester.</em></p>
-                <p>Learn to create stunning AI-powered diagrams, flowcharts, and system architectures using Mermaid syntax and Excalidraw. This workshop will give you practical skills you can use immediately in your projects, presentations, and documentation.</p>
+                <p>Learn to create stunning AI-powered diagrams, flowcharts, and system architectures using Mermaid syntax and Excalidraw. This workshop gives you practical skills you can use immediately in your projects, presentations, and documentation.</p>
             </div>
             <ul class="event-list">
                 <li>Create AI-powered diagrams with Excalidraw</li>
@@ -207,6 +207,33 @@
                 <li>Build reusable diagram templates</li>
                 <li>Export and share professional diagrams instantly</li>
             </ul>
+
+            <!-- Live Prompt Helper -->
+            <div class="event-section">
+                <h3>Prompt Generator</h3>
+                <p>Use this simple code block to copy the workshop prompt and generate a unique ID for your diagrams.</p>
+                <pre><code id="prompt-block">function makeId(length) {
+  let result = "";
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
+}
+
+const thisCodeID = makeId(10);
+
+// Simple prompt (copy & paste):
+// "Convert this [document/assignment brief/class notes]
+// into Mermaid flowchart code showing the key steps,
+// decisions, and connections between concepts.
+// Make it clear and simple for a presentation."
+</code></pre>
+                <p>The prompt above is the <strong>simple</strong> version; an advanced prompt will be shared during the session.</p>
+            </div>
         </section>
 
         <!-- Event Details -->
