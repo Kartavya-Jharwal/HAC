@@ -27,7 +27,7 @@
         },
         {
             id: 'fin-trading',
-            title: 'Financial Technical Analysis for Traders',
+            title: 'Finance Conference',
             date: '2026-03-05',
             time: null,
             desc: 'Master chart patterns, indicators, and AI-powered trading analysis. Build your own technical analysis dashboards.',
@@ -39,22 +39,22 @@
         },
         {
             id: 'event-3',
-            title: 'Workshop 3 – Late March',
-            date: '2026-03-24',
+            title: 'Custom Domain Website',
+            date: '2026-03-31',
             time: null,
-            desc: 'Coming soon. Details to be announced.',
+            desc: 'Learn how to register, configure, and host your own custom domain website.',
             location: 'Hult London',
             type: 'WORKSHOP',
             status: 'upcoming',
             registered: false,
-            pageUrl: '../events/workshop-3.html'
+            pageUrl: '../events/own-your-brand.html'
         },
         {
             id: 'event-4',
-            title: 'Workshop 4 – Early April',
-            date: '2026-04-07',
+            title: 'HFL Capstone Hackathon',
+            date: '2026-04-17',
             time: null,
-            desc: 'Coming soon. Details to be announced.',
+            desc: 'Join us for the two-day Capstone Hackathon event on April 17th-18th.',
             location: 'Hult London',
             type: 'WORKSHOP',
             status: 'upcoming',

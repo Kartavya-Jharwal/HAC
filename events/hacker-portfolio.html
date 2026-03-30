@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>Hacker Portfolio | Hult House of Marketing</title>
+
+    <!-- Google Fonts for Bai Jamjuree -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* Modern Font Face Declarations */
+        @font-face {
+            font-family: 'Aileron';
+            src: url('../assets/fonts/aileron_0102/Aileron-Regular.otf') format('opentype');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'Aileron';
+            src: url('../assets/fonts/aileron_0102/Aileron-Light.otf') format('opentype');
+            font-weight: 300;
+        }
+        @font-face {
+            font-family: 'Aileron';
+            src: url('../assets/fonts/aileron_0102/Aileron-SemiBold.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Junicode';
+            src: url('../assets/fonts/Junicode_2.222/OTF/Junicode-Regular.otf') format('opentype');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'Junicode';
+            src: url('../assets/fonts/Junicode_2.222/OTF/Junicode-Italic.otf') format('opentype');
+            font-weight: 400;
+            font-style: italic;
+        }
+        @font-face {
+            font-family: 'Poppins';
+            src: url('../assets/fonts/poppins and FA/Poppins-Regular.ttf') format('truetype');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'FontAwesome';
+            src: url('../assets/fonts/poppins and FA/fa-solid-900.woff2') format('woff2');
+            font-weight: 900;
+        }
+
+        :root {
+            --bg-base: #0a0a0a;
+            --bg-elevated: #111111;
+            
+            --text-primary: #FFFFFF;
+            --text-secondary: #E0E0E0; 
+            --text-accent: #00FF66; /* Bright Forest Green */
+            
+            --border-subtle: rgba(255, 255, 255, 0.15);
+            --border-hover: rgba(0, 255, 102, 0.4);
+            
+            --font-heading: 'Junicode', serif;
+            --font-body: 'Aileron', sans-serif;
+            --font-mono: 'Poppins', monospace;
+            --font-wordmark: 'Bai Jamjuree', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            cursor: none;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.75; 
+            letter-spacing: 0.015em;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            width: 0%; height: 4px;
+            background: var(--text-accent);
+            z-index: 9999;
+            box-shadow: 0 0 10px rgba(0,255,102,0.5);
+        }
+
+        .wordmark {
+            font-family: var(--font-wordmark);
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        ::selection { background: var(--text-accent); color: var(--bg-base); }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            font-weight: 400;
+            color: var(--text-primary);
+        }
+
+        h2 { font-size: 42px; margin-bottom: 24px; letter-spacing: 0.02em; line-height: 1.2; }
+        h3 { font-size: 28px; margin-bottom: 12px; }
+
+        p, li { 
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            font-weight: 300;
+            font-size: 1.05rem;
+            opacity: 0.9; 
+            max-width: 65ch;
+        }
+
+        strong { 
+            color: var(--text-primary); 
+            font-weight: 600; 
+            opacity: 1; 
+        }
+
+        /* --- Solid Cursor --- */
+        .cursor {
+            position: fixed;
+            top: 0; left: 0;
+            width: 12px; height: 12px;
+            background: var(--text-accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s, border 0.3s;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: exclusion;
+        }
+        .cursor.hover-active {
+            width: 48px; height: 48px;
+            background: rgba(0, 255, 102, 0.15);
+            border: 1px solid var(--text-accent);
+            mix-blend-mode: normal;
+        }
+
+        /* --- Layout Architecture --- */
+        .layout-shell {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Section 1: Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: 380px;
+            height: 100vh;
+            padding: 56px 48px;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-elevated);
+            border-right: 1px solid var(--border-subtle);
+            z-index: 50;
+            transition: transform 0.5s cubic-bezier(0.8, 0, 0.1, 1);
+            overflow: hidden;
+        }
+
+        /* Layered Noise in Sidebar */
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            inset: -50%; width: 200%; height: 200%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='heavyNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23heavyNoise)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 0;
+            mix-blend-mode: screen;
+            animation: staticGrain 2.5s steps(4) infinite;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        /* Sidebar Toggle Overlay Button */
+        .sidebar-toggle-btn {
+            position: fixed;
+            top: 48px;
+            left: 364px; /* Slightly inside to stick out */
+            width: 32px;
+            height: 32px;
+            background: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50%;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 60;
+            transition: all 0.5s cubic-bezier(0.8, 0, 0.1, 1);
+            font-family: var(--font-mono);
+        }
+        .sidebar.collapsed ~ .sidebar-toggle-btn { 
+            left: 24px; 
+            transform: rotate(180deg);
+        }
+        .sidebar-toggle-btn:hover { 
+            border-color: var(--text-accent); 
+            color: var(--text-accent); 
+            transform: scale(1.15); 
+            box-shadow: 0 0 16px rgba(0,255,102,0.2); 
+        }
+        .sidebar.collapsed ~ .sidebar-toggle-btn:hover {
+            transform: rotate(180deg) scale(1.15);
+        }
+
+        .sidebar > div {
+            position: relative;
+            z-index: 10;
+        }
+
+        .brand-header {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 40px;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+        
+        .brand-header img {
+            width: 140px;
+            filter: brightness(0) invert(1); 
+            transition: filter 0.4s ease;
+        }
+        .brand-header:hover img {
+            filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(0,255,102,0.6));
+        }
+
+        .brand-titles { line-height: 1.4; }
+        .collaboration-text { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-family: var(--font-mono); letter-spacing: 0.1em; opacity: 0.7; }
+        .brand-titles .marketing { font-size: 18px; color: var(--text-accent); font-style: italic; font-family: var(--font-heading); margin-top: 4px; }
+
+        .hero-title {
+            font-size: 54px;
+            line-height: 0.95;
+            margin: 0 0 16px 0;
+        }
+        .hero-title em { 
+            font-style: italic; 
+            color: var(--text-accent); 
+            padding-left: 16px;
+            text-shadow: 0 0 32px rgba(0, 255, 102, 0.2);
+            display: inline-block;
+        }
+
+        .sidebar-text { font-size: 14px; margin-bottom: 24px; white-space: normal; }
+
+        /* Progress Pipeline in Main View */
+        .pipeline-container {
+            margin: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            background: var(--bg-elevated);
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+            overflow-x: auto;
+            position: relative;
+        }
+        .pipeline-container::-webkit-scrollbar { height: 4px; }
+        .pipeline-container::-webkit-scrollbar-thumb { background: var(--text-secondary); border-radius: 4px; }
+        .checklist-item {
+            display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--text-secondary);
+            cursor: pointer; transition: color 0.3s; white-space: nowrap; flex-shrink: 0;
+        }
+        .checklist-line {
+            flex-grow: 1; height: 1px; background: var(--border-subtle); margin: 0 24px; min-width: 24px; transform: translateY(-10px);
+        }
+        .checklist-item:hover { color: var(--text-primary); }
+        .check-circle {
+            width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--text-secondary);
+            display: flex; align-items: center; justify-content: center; font-size: 10px;
+            transition: all 0.3s;
+        }
+        .checklist-item.completed .check-circle {
+            background: var(--text-accent); border-color: var(--text-accent); color: var(--bg-base);
+        }
+        .checklist-item.completed { color: var(--text-accent); }
+
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 12px; padding: 14px 24px;
+            background: var(--text-primary); color: var(--bg-base); font-weight: 600;
+            font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; text-decoration: none;
+            border-radius: 4px; font-family: var(--font-mono);
+            position: relative; overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: center;
+            width: fit-content;
+            margin-top: 16px;
+        }
+        .btn-primary::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            width: 150%; height: 150%; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+            transform: translate(-50%, -50%) scale(0); opacity: 0; transition: transform 0.6s, opacity 0.6s;
+        }
+        .btn-primary:hover { 
+            background: var(--text-accent); 
+            color: var(--bg-base);
+            box-shadow: 0 12px 32px rgba(0, 255, 102, 0.3);
+        }
+        .btn-primary:hover::after {
+            transform: translate(-50%, -50%) scale(1); opacity: 1;
+        }
+
+        .btn-complete {
+            background: transparent; border: 1px solid var(--text-accent); color: var(--text-accent);
+            padding: 8px 16px; font-size: 11px; border-radius: 4px; font-family: var(--font-mono);
+            text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: all 0.3s;
+            margin-top: 16px;
+        }
+        .btn-complete:hover {
+            background: var(--text-accent); color: var(--bg-base); box-shadow: 0 0 16px rgba(0,255,102,0.4);
+        }
+        .btn-complete.done {
+            background: var(--text-accent); color: var(--bg-base); border-color: var(--text-accent); opacity: 0.5; pointer-events: none;
+        }
+
+        /* Section 2: Main Content */
+        .content-area {
+            flex-grow: 1;
+            margin-left: 380px; 
+            padding: 48px 8vw 120px 8vw; 
+            background: var(--bg-base); 
+            position: relative;
+            min-height: 100vh;
+            transition: margin-left 0.5s cubic-bezier(0.8, 0, 0.1, 1);
+        }
+        
+        .layout-shell.sidebar-closed .content-area {
+            margin-left: 0;
+        }
+
+        /* Particle Layer */
+        .particle-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .particle {
+            position: absolute; width: 4px; height: 4px;
+            background: var(--text-accent); border-radius: 50%; opacity: 0;
+            box-shadow: 0 0 12px 2px var(--text-accent);
+        }
+
+        /* Even more layered noise/effects for main bg */
+        .content-area::before {
+            content: ''; position: fixed; inset: -50%; width: 200%; height: 200%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='ambientNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ambientNoise)'/%3E%3C/svg%3E");
+            opacity: 0.04; pointer-events: none; z-index: 1; mix-blend-mode: overlay;
+            animation: staticGrain 4s steps(6) infinite reverse;
+        }
+        .content-area::after {
+            content: ''; position: fixed; inset: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(10,10,10,0.8) 100%);
+            pointer-events: none; z-index: 2;
+        }
+
+        .content-wrapper {
+            max-width: 780px; 
+            margin: 0 auto;
+            position: relative;
+            z-index: 10; 
+        }
+
+        /* Top Header & Margins */
+        .global-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 24px;
+            margin-bottom: 80px;
+        }
+
+        .breadcrumbs { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; }
+        .breadcrumbs span:last-child { color: var(--text-accent); text-shadow: 0 0 8px rgba(0,255,102,0.4); }
+
+        .btn-ghost {
+            color: var(--text-secondary); font-size: 12px; font-weight: 500; font-family: var(--font-mono);
+            text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none;
+            transition: color 0.3s ease, transform 0.3s ease;
+            position: relative;
+        }
+        .btn-ghost::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 1px;
+            background: var(--text-accent); transform: scaleX(0); transform-origin: right; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-ghost:hover { color: var(--text-accent); transform: translateX(-4px); }
+        .btn-ghost:hover::after { transform: scaleX(1); transform-origin: left; }
+
+        .global-footer {
+            margin-top: 120px;
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 48px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+        }
+
+        /* Structure Blocks */
+        .section-block { margin-bottom: 96px;scroll-margin-top: 40px; }
+
+        .section-label {
+            display: block; font-size: 13px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.12em; color: var(--text-accent); margin-bottom: 24px; font-family: var(--font-mono);
+        }
+        .section-block:hover .section-label { text-shadow: 0 0 16px rgba(0,255,102,0.3); }
+
+        .intro-highlight {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Tutorials / UI Fixes */
+        .step-block { margin-bottom: 64px; scroll-margin-top: 60px; }
+        .step-heading { 
+            display: flex; align-items: center; gap: 16px; margin-bottom: 16px; 
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .step-block:hover .step-heading { transform: translateX(8px); }
+
+        .step-num {
+            background: var(--text-accent); color: var(--bg-base);
+            width: 28px; height: 28px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-weight: 700; font-family: var(--font-mono); font-size: 14px;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+        }
+        .step-block:hover .step-num {
+            transform: scale(1.2) rotate(-10deg);
+            box-shadow: 0 0 16px rgba(0, 255, 102, 0.5);
+        }
+
+        .step-image {
+            width: 100%;
+            border-radius: 8px; /* Custom Border Radius */
+            border: 1px solid var(--border-subtle);
+            margin: 24px 0;
+            display: block;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            opacity: 0; transform: translateY(15px);
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+            position: relative;
+        }
+        .step-image.reveal-img { opacity: 1; transform: translateY(0); }
+        .step-image.reveal-img:hover {
+            transform: translateY(-6px) scale(1.015);
+            box-shadow: 0 24px 60px rgba(0, 255, 102, 0.12);
+            border-color: var(--text-accent);
+            z-index: 10;
+        }
+
+        .img-sm { max-width: 380px; }
+        .img-md { max-width: 520px; }
+        .img-xs { max-width: 280px; }
+
+        ul.clean-list { list-style: none; padding-left: 0; overflow: hidden; }
+        ul.clean-list li { 
+            position: relative; padding-left: 28px; margin-bottom: 16px; 
+            opacity: 0; transform: translateX(-20px); /* Pre-GSAP initial state */
+        }
+        ul.clean-list li::before { 
+            content: "\f054"; /* FontAwesome Angle Right */
+            font-family: 'FontAwesome';
+            position: absolute; left: 0; color: var(--text-accent); font-size: 12px; top: 6px; 
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s;
+        }
+        ul.clean-list li:hover::before {
+            transform: translateX(4px);
+            color: var(--text-primary);
+            text-shadow: 0 0 12px rgba(0,255,102,0.8);
+        }
+
+        .callout-box {
+            background: rgba(0, 255, 102, 0.03);
+            border-left: 3px solid var(--text-accent);
+            padding: 24px; margin-top: 24px; border-radius: 0 8px 8px 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .callout-box:hover {
+            background: rgba(0, 255, 102, 0.08);
+            transform: translateX(6px);
+            border-left-width: 6px;
+            box-shadow: 0 12px 32px rgba(0,255,102,0.05);
+        }
+        .callout-box p:last-child { margin-bottom: 0; }
+
+        /* Prompt Area - Using Poppins for code */
+        .prompt-cartridge {
+            background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+            border-radius: 8px; overflow: hidden; margin: 32px 0; box-shadow: inset 0 0 40px rgba(0,255,102,0.02);
+            position: relative;
+            transition: box-shadow 0.4s ease, transform 0.4s ease;
+        }
+        .prompt-cartridge:hover {
+            box-shadow: 0 12px 40px rgba(0,255,102,0.06), inset 0 0 60px rgba(0,255,102,0.05);
+            transform: translateY(-2px);
+            border-color: rgba(0,255,102,0.3);
+        }
+        .prompt-cartridge::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,255,102,0.08), transparent);
+            transform: skewX(-20deg); animation: promptShine 6s infinite linear; pointer-events: none;
+        }
+        @keyframes promptShine {
+            0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; }
+        }
+
+        .prompt-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 20px; background: rgba(0, 0, 0, 0.8); border-bottom: 1px solid var(--border-subtle);
+        }
+        .prompt-title { font-family: var(--font-mono); font-size: 12px; color: var(--text-accent); }
+        .copy-btn {
+            background: transparent; border: 1px solid var(--border-subtle);
+            color: var(--text-primary); padding: 6px 14px; font-size: 12px; border-radius: 4px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-family: var(--font-mono); font-weight: 600; cursor: none;
+            position: relative; z-index: 5;
+        }
+        .copy-btn:hover { 
+            background: var(--text-accent); color: var(--bg-base); border-color: var(--text-accent); 
+            box-shadow: 0 0 16px rgba(0,255,102,0.4);
+        }
+        .prompt-cartridge pre {
+            padding: 32px 24px; font-family: var(--font-mono); font-size: 13px; line-height: 1.8;
+            color: #E0E0E0; overflow-x: auto; white-space: pre-wrap; font-weight: 400;
+        }
+
+        /* Dictionary */
+        .lexicon-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 32px; }
+        .lexicon-item { 
+            background: var(--bg-elevated); padding: 24px; border-radius: 8px; border: 1px solid var(--border-subtle); 
+            position: relative; overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0; transform: translateY(20px); /* Pre-GSAP */
+        }
+        .lexicon-item::before {
+            content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%;
+            background: var(--text-accent); opacity: 0; transition: opacity 0.3s, width 0.3s;
+        }
+        .lexicon-item:hover {
+            transform: translateX(8px) translateY(-2px) !important; /* Override GSAP post-load state */
+            background: rgba(255,255,255,0.02);
+            border-color: rgba(0,255,102,0.3);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.5);
+        }
+        .lexicon-item:hover::before { opacity: 1; width: 6px; box-shadow: 0 0 12px var(--text-accent); }
+        .lexicon-item dt { font-weight: 600; color: var(--text-accent); margin-bottom: 6px; font-family: var(--font-mono); font-size: 15px; }
+        .lexicon-item dd { font-size: 15px; color: var(--text-secondary); margin: 0; opacity: 0.9; }
+
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .content-area { margin-left: 0; padding: 48px 32px; }
+            .sidebar-toggle-btn { left: 24px; transform: rotate(180deg); }
+            .sidebar.active { transform: translateX(0); }
+            .sidebar.active ~ .sidebar-toggle-btn { left: 364px; transform: rotate(0); }
+            .img-sm, .img-md, .img-xs { max-width: 100%; }
+        }
+
+        @keyframes staticGrain {
+            0%, 100% { transform: translate(0, 0); }
+            20% { transform: translate(-2%, -3%); }
+            40% { transform: translate(2%, -4%); }
+            60% { transform: translate(3%, 3%); }
+            80% { transform: translate(-1%, 4%); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="cursor"></div>
+
+    <div class="layout-shell" id="layoutShell">
+
+        <!-- Collapsible Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div>
+                <div class="brand-header">
+                    <img src="../assets/images/HAC_Lockup.svg" alt="Hult AI Collective">
+                    <div class="collaboration-text">IN COLLABORATION WITH</div>
+                    <div class="brand-titles">
+                        <div class="marketing">Hult House of Marketing</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h1 class="hero-title">Own<br><em>Your</em> Brand</h1>
+                </div>
+
+                <div>
+                    <p class="sidebar-text">Your digital identity is your strongest asset. We believe AI accelerates creation, but human taste defines it.<br><br>Broadcast your story. Show your work. Don't let a generic link dilute your unique voice. Stake your claim on the web with an address that is entirely your own.</p>
+                </div>
+
+                </div>
+        </aside>
+        <button id="toggleSidebar" class="sidebar-toggle-btn" aria-label="Toggle Menu">&lt;</button>
+
+        <!-- Main Workspace -->
+        <main class="content-area" id="mainContent">
+            <div class="particle-container" id="particles"></div>
+            
+            <div class="content-wrapper">
+                
+                <header class="global-header reveal">
+                    <div class="breadcrumbs">
+                        <span>Event Guides</span> / <span>Marketing Track</span>
+                    </div>
+                    <a href="../HAC-Access/dashboard.html" class="btn-ghost" style="font-family: var(--font-mono);">RETURN HOME</a>
+                </header>
+
+                <section class="section-block reveal">
+                    <span class="section-label">00 / The "Why"</span>
+                    <h2>What is wrong with <code>yourname.my.canva.site</code>?</h2>
+                    <p class="intro-highlight">A templated URL whispers "student project". A dedicated top-level domain screams "industry-ready professional".</p>
+                    <p>When recruiters and clients sift through hundreds of links every day, the details matter. Having a clean <code>.com</code>, <code>.me</code>, or <code>.tech</code> domain communicates intentionality, permanence, and a serious approach to your personal brand equity.</p>
+                    
+                    <div class="callout-box">
+                        <p><strong>Note: Custom domains are a premium capability.</strong><br>
+                        Connecting a custom URL directly to your layout is strictly a <strong>Code Pro</strong> feature. If you have Code Education access through your university, you are already upgraded.</p>
+                        <p style="margin-top: 12px; font-size: 0.85em; opacity: 0.8; font-family: var(--font-mono); border-top: 1px solid var(--border-subtle); padding-top: 12px;">
+                            <i class="fa fa-code"></i> Prefer cold code? <a href="hacker-portfolio.html" style="color: var(--text-accent); text-decoration: none; border-bottom: 1px solid var(--text-accent); transition: opacity 0.3s; padding-bottom: 2px;">Read the Developer Guide instead &rarr;</a>
+                        </p>
+                    </div>
+                </section>
+
+                <section class="section-block reveal" id="guide-start">
+                    <span class="section-label">01 / Development Setup</span>
+                    <h2>Bootstrapping Your Repo</h2>
+                    <p>Ready to go live? Let's map your shiny new domain to your existing Code layout. This is a rapid 4-10 minute setup meant to instantly elevate your positioning.</p>
+
+                    <!-- Progress Pipeline -->
+                    <div class="pipeline-container">
+                        <div class="checklist-item" data-target="step1" id="nav-step1">
+                            <div class="check-circle"><i class="fa fa-check" style="opacity:0"></i></div>
+                            <span>1. Codes</span>
+                        </div>
+                        <div class="checklist-line"></div>
+                        <div class="checklist-item" data-target="step2" id="nav-step2">
+                            <div class="check-circle"><i class="fa fa-check" style="opacity:0"></i></div>
+                            <span>2. Route</span>
+                        </div>
+                        <div class="checklist-line"></div>
+                        <div class="checklist-item" data-target="step3" id="nav-step3">
+                            <div class="check-circle"><i class="fa fa-check" style="opacity:0"></i></div>
+                            <span>3. Address</span>
+                        </div>
+                        <div class="checklist-line"></div>
+                        <div class="checklist-item" data-target="step4" id="nav-step4">
+                            <div class="check-circle"><i class="fa fa-check" style="opacity:0"></i></div>
+                            <span>4. DNS</span>
+                        </div>
+                        <div class="checklist-line"></div>
+                        <div class="checklist-item" data-target="step5" id="nav-step5">
+                            <div class="check-circle"><i class="fa fa-check" style="opacity:0"></i></div>
+                            <span>5. Connect</span>
+                        </div>
+                        <div class="checklist-line"></div>
+                        <div class="checklist-item" data-target="verify-setup" id="nav-step6">
+                            <div class="check-circle"><i class="fa fa-check" style="opacity:0"></i></div>
+                            <span>6. Verify</span>
+                        </div>
+                    </div>
+
+                    <div class="step-block" id="step1" style="margin-top: 64px;">
+                        <div class="step-heading">
+                            <div class="step-num">1</div>
+                            <h3>Prep Your Codes</h3>
+                        </div>
+                        <p>Before ever leaving Code, make sure your site is properly dressed for the spotlight. Click <strong>Publish Website</strong> and enable the following settings:</p>
+                        <ul class="clean-list">
+                            <li>Set a polished <strong>Site Title</strong> and a custom <strong>Favicon</strong>.</li>
+                            <li>Toggle on <strong>Search Engine Visibility</strong> so recruiters can actually Google you.</li>
+                            <li>Enable the <strong>Navigation Menu</strong>, <strong>Resize on Mobile</strong>, and <strong>Social Media Link Preview</strong> capabilities.</li>
+                        </ul>
+                        <img src="images/Own-your-brand-imgs/image001.png" loading="lazy" alt="Code publishing settings" class="step-image img-md" onerror="this.style.display='none'">
+                        <button class="btn-complete" data-step="nav-step1">Mark Complete</button>
+                    </div>
+
+                    <div class="step-block" id="step2">
+                        <div class="step-heading">
+                            <div class="step-num">2</div>
+                            <h3>Route Your Domain</h3>
+                        </div>
+                        <p>Once you proceed through publishing, select <strong>Use my existing domain</strong>. Code will check the market for the domain you want:</p>
+                        <ul class="clean-list">
+                            <li>If it's strictly on the market, Code will try to direct you to their own domain store.</li>
+                            <li>Alternatively, you can buy on private third-party domain servers (we recommend <strong>Namecheap</strong>, <strong>Name.com</strong>, or <strong>GoDaddy</strong>).</li>
+                        </ul>
+                        <img src="images/Own-your-brand-imgs/image003.png" loading="lazy" alt="Domain existing check" class="step-image img-md" onerror="this.style.display='none'">
+                        <button class="btn-complete" data-step="nav-step2">Mark Complete</button>
+                    </div>
+
+                    <div class="step-block" id="step3">
+                        <div class="step-heading">
+                            <div class="step-num">3</div>
+                            <h3>Acquire Your Free Address (Education Route)</h3>
+                        </div>
+                        <p>If you're a student, you can skip the purchase completely. We utilize the <strong>GitHub Education</strong> platform as an essential frugal resource.</p>
+                        <ul class="clean-list">
+                            <li>Head over to the GitHub Education portal and get set up using your Student ID and `.edu` email.</li>
+                            <li>Once accepted, locate the Namecheap or Name.com offer to claim your first year completely free.</li>
+                        </ul>
+                        <div class="callout-box">
+                            <p><em>Note: GitHub is inherently a technical platform usually for developers. We use it purely for the massive free domain discount it offers to students. There are multiple other platforms you can explore for domains at your disposal, but this is the best financial hack.</em></p>
+                        </div>
+                        <button class="btn-complete" data-step="nav-step3">Mark Complete</button>
+                    </div>
+
+                    <div class="step-block" id="step4">
+                        <div class="step-heading">
+                            <div class="step-num">4</div>
+                            <h3>Connect the Dots (DNS Records)</h3>
+                        </div>
+                        <p>This is where we introduce your new address to your Code design. Keep Code open, then log into your domain server (like Namecheap) and navigate to the <strong>Advanced DNS</strong> settings.</p>
+                        <ul class="clean-list">
+                            <li>First, add an <strong>A Record</strong> block using the specific Values Code generated.</li>
+                            <img src="images/Own-your-brand-imgs/image005.png" loading="lazy" alt="Adding A Record" class="step-image img-md" onerror="this.style.display='none'">
+                            
+                            <li>Next, copy the <strong>TXT Record</strong> code from Code and add it to verify your ownership.</li>
+                            <img src="images/Own-your-brand-imgs/image007.png" loading="lazy" alt="Adding TXT Record" class="step-image img-md" onerror="this.style.display='none'">
+                            
+                            <li>Ensure everything is saved. Your completed DNS records page will eventually confirm all elements match.</li>
+                            <img src="images/Own-your-brand-imgs/image011.png" loading="lazy" alt="Completed DNS Settings" class="step-image img-sm" onerror="this.style.display='none'">
+                        </ul>
+                        <button class="btn-complete" data-step="nav-step4">Mark Complete</button>
+                    </div>
+
+                    <div class="step-block" id="step5">
+                        <div class="step-heading">
+                            <div class="step-num">5</div>
+                            <h3>Final Code Management</h3>
+                        </div>
+                        <p>Return to Code. It will ask if you want to explicitly use this newly mapped domain for this project. Confirm your choice.</p>
+                        
+                        <div class="callout-box" style="margin-top: 32px;">
+                            <p><strong>Post-Setup Codes:</strong> You can manage your routing over time in your settings.</p>
+                            <ul class="clean-list" style="margin-top: 16px;">
+                                <li><strong>Domains Hub:</strong> Under your Settings > Domains tab, you can view your real estate portfolio. <br><img src="images/Own-your-brand-imgs/image015.png" loading="lazy" class="step-image img-sm" onerror="this.style.display='none'"></li>
+                                <li><strong>Third-Party Overviews:</strong> Outlines domains managed natively vs external hubs. <br><img src="images/Own-your-brand-imgs/image017.png" loading="lazy" class="step-image img-sm" onerror="this.style.display='none'"></li>
+                                <li><strong>Individual Domain Detail:</strong> Click into any active domain to see its record verification, active status, as well as add URL redirects. <br><img src="images/Own-your-brand-imgs/image019.png" loading="lazy" class="step-image img-sm" onerror="this.style.display='none'"></li>
+                            </ul>
+                        </div>
+                        <button class="btn-complete" data-step="nav-step5">Mark Complete</button>
+                    </div>
+
+                </section>
+
+                <section class="section-block reveal" id="verify-setup">
+                    <span class="section-label">02 / Go Live</span>
+                    <h2>Verify Your Setup Works</h2>
+                    <p>DNS Propagation can take anywhere from 15 minutes to 48 hours. Here's how to check if your new storefront is open globally:</p>
+                    <ul class="clean-list">
+                        <li><strong>Ping DNSChecker.org:</strong> Enter your custom domain and select 'A Record'. If you see green ticks worldwide matching the Code IP, you're live.</li>
+                        <li><strong>Test on Mobile:</strong> Disconnect from WiFi. Does your website load properly on a cellular data network?</li>
+                        <li><strong>Check the Lock:</strong> Ensure the HTTPS lock icon appears next to your URL. Code provisions an SSL certificate automatically, but it can take an hour to issue.</li>
+                    </ul>
+                    <button class="btn-complete" data-step="nav-step6">All Verified & Done!</button>
+                </section>
+
+                <section class="section-block reveal" id="year-two">
+                    <span class="section-label">03 / Future Proof</span>
+                    <h2>What to Do in Year 2</h2>
+                    <p>If you used the GitHub Education deal, congratulations—your first year is entirely free. However, domains renew annually.</p>
+                    <div class="callout-box">
+                        <p><strong>The Renewal Reality:</strong> <br>Usually, a standard `.com` or `.me` costs roughly $10-15/year upon renewal. Keep an eye on your registrar emails to ensure your card is linked to avoid your domain expiring and being bought by a broker. If you want to migrate, you can unlock and transfer your domain to a cheaper registrar right before renewal!</p>
+                    </div>
+                </section>
+
+                <section class="section-block reveal" id="showcase">
+                    <span class="section-label">04 / The Directory</span>
+                    <h2>Portfolio Showcase</h2>
+                    <p>Finished creating your digital masterpiece? Join the collective directory so everyone can support your brand.</p>
+                    <ul class="clean-list">
+                        <li><strong>Drop it in the Chat:</strong> Share your URL in the HAC WhatsApp groups to get direct community feedback so you can iterate.</li>
+                        <li><strong>Tag Us:</strong> Post your launch on LinkedIn and tag both the <strong>Hult AI Collective</strong> and the <strong>Hult House of Marketing</strong>. We actively reshare stunning portfolios from our students to boost your visibility.</li>
+                    </ul>
+                </section>
+
+                <section class="section-block reveal">
+                    <span class="section-label">05 / The AI Lifeline</span>
+                    <h2>Stuck in the Settings? Use an AI Prompt.</h2>
+                    <p>If you're staring at your Namecheap dashboard completely lost, don't panic. Copy the master depth-prompt below, swap out the bracketed details, and drop it into ChatGPT. It provides the exact contextual depth AI needs to guide a non-technical marketer cleanly.</p>
+
+                    <div class="prompt-cartridge">
+                        <div class="prompt-header">
+                            <span class="prompt-title">DNS_Support_Template.txt</span>
+                            <button class="copy-btn" id="copyBtn">COPY PROMPT</button>
+                        </div>
+                        <pre id="promptText">I am a marketing student setting up my professional portfolio. I need to link my Code website layout to a custom domain I just claimed. I am a brand creative, not a developer-so please completely skip dense IT jargon and focus purely on highly actionable, plain-English instructions.
+
+--- My Current Context ---
+- Custom Domain Claimed: [YOUR DOMAIN HERE, e.g., janedoe.me]
+- Domain Registrar Hookup: [Namecheap / Name.com / GoDaddy]
+- Current Status: I am looking at the Code "Use my existing domain" screen, and Code has handed me two things: an "A Record" and a "TXT Record".
+
+--- My Specific Blocker ---
+- [Describe your issue here: e.g., "I just logged into Namecheap and I cannot find where to paste these TXT rules." OR "Code says connected but my domain shows a 'Not Secure' error right now."]
+
+Please outline step-by-step exactly which buttons I need to click in my registrar's visual dashboard to solve this. Tell me exactly what values go into the 'Host', 'Type', and 'Value' inputs based on standard Code deployment.</pre>
+                    </div>
+                </section>
+
+                <section class="section-block">
+                    <span class="section-label reveal">06 / The Lexicon</span>
+                    <h2 class="reveal">Agency Recruiter's Guide to Web Jargon</h2>
+                    <p class="reveal">Translations for the technical terms you'll inevitably encounter during this operation.</p>
+                    
+                    <div class="lexicon-grid">
+                        <div class="lexicon-item">
+                            <dt>DNS (Domain Name System)</dt>
+                            <dd>The internet's contact book. It simply matches human-friendly URLs to physical server addresses.</dd>
+                        </div>
+                        <div class="lexicon-item">
+                            <dt>A Record (Address)</dt>
+                            <dd>The specific line of code that commands your domain to point straight to Code's servers.</dd>
+                        </div>
+                        <div class="lexicon-item">
+                            <dt>TXT Record</dt>
+                            <dd>A hidden notepad rule. Code uses this to securely verify that you actually own the domain you claim.</dd>
+                        </div>
+                        <div class="lexicon-item">
+                            <dt>Propagation</dt>
+                            <dd>The global waiting period. The time it takes for servers worldwide to finish synchronizing their address books with your new URL.</dd>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-block reveal" style="margin-top: 100px;">
+                    <span class="section-label" style="color: var(--text-secondary);">07 / Dev Add-On</span>
+                    <h2>The Technical Approach</h2>
+                    <p>This is purely an optional <strong>add-on meant for technical students</strong>. We will distribute a separate Hacker Web Guide covering how to host a completely free microsite natively on a GitHub Repository using GitHub Pages without using graphical builders. Focus on owning your brand today through Code-but keep an eye out for the technical guide later if code-hosting piques your interest. We will do external marketing for it separately.</p>
+                </section>
+
+                <footer class="global-footer reveal">
+                    <p style="text-transform: uppercase; font-weight: 600;">Hacker Portfolio. Stay Frugal.</p>
+                    <p style="opacity: 0.5; margin-top: 12px;"><span class="wordmark">HULT AI COLLECTIVE</span> x Hult House of Marketing &copy; 2026</p>
+                </footer>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Initialization -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // 1. Sidebar Toggle Logic
+            const sidebarBtn = document.getElementById('toggleSidebar');
+            const sidebar = document.getElementById('sidebar');
+            const layoutShell = document.getElementById('layoutShell');
+            
+            sidebarBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                layoutShell.classList.toggle('sidebar-closed');
+            });
+
+            // Mobile toggle by default logic
+            if (window.innerWidth <= 1024) {
+                sidebar.classList.add('collapsed');
+                layoutShell.classList.add('sidebar-closed');
+            }
+
+            // Scroll Progress Indicator
+            const scrollProgress = document.getElementById('scrollProgress');
+            window.addEventListener('scroll', () => {
+                const scrollPct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+                scrollProgress.style.width = scrollPct + '%';
+            });
+
+            // Gamified Completion Logic & State Management
+            const loadState = () => {
+                document.querySelectorAll('.btn-complete').forEach(btn => {
+                    const stepId = btn.getAttribute('data-step');
+                    if(localStorage.getItem('hac_completed_' + stepId) === 'true') {
+                        markCompleted(btn, stepId, false);
+                    }
+                });
+            };
+
+            const markCompleted = (btn, stepId, showConfetti = true) => {
+                btn.classList.add('done');
+                btn.innerHTML = 'COMPLETED <i class="fa fa-check"></i>';
+                
+                const navItem = document.getElementById(stepId);
+                if(navItem) {
+                    navItem.classList.add('completed');
+                    const icon = navItem.querySelector('.fa-check');
+                    if(icon) icon.style.opacity = '1';
+                }
+
+                if(showConfetti) {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#00FF66', '#ffffff']
+                    });
+                }
+            };
+
+            document.querySelectorAll('.btn-complete').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const stepId = e.target.getAttribute('data-step');
+                    localStorage.setItem('hac_completed_' + stepId, 'true');
+                    markCompleted(e.target, stepId, true);
+                });
+            });
+
+            // Quick TOC Navigation from Checklist
+            document.querySelectorAll('.checklist-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetId = item.getAttribute('data-target');
+                    const targetEl = document.getElementById(targetId);
+                    if(targetEl) {
+                        targetEl.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            loadState();
+
+            // 2. Initial Page Load Animations (Sidebar)
+            gsap.from('.brand-header', { opacity: 0, y: 30, duration: 1.2, delay: 0.1, ease: 'power3.out' });
+            gsap.from('.hero-title', { opacity: 0, x: -20, duration: 1.2, delay: 0.3, ease: 'power3.out' });
+            gsap.from('.sidebar-text, .btn-primary, .progress-checklist', { opacity: 0, y: 20, duration: 1, delay: 0.5, ease: 'power3.out', stagger: 0.15 });
+
+            // Make the 'Your' in the title subtly float
+            gsap.to('.hero-title em', {
+                y: -6,
+                duration: 2.5,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut'
+            });
+
+            // 3. Magnetic Button Micro-animations
+            const magneticElements = document.querySelectorAll('.btn-primary, .copy-btn, .sidebar-toggle-btn');
+            
+            magneticElements.forEach(el => {
+                el.addEventListener('mousemove', (e) => {
+                    const rect = el.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const x = (e.clientX - centerX) * 0.25;
+                    const y = (e.clientY - centerY) * 0.25;
+                    
+                    gsap.to(el, { x, y, duration: 0.4, ease: 'power2.out' });
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    gsap.to(el, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.3)' });
+                });
+            });
+
+            // 4. Prompt Copier Logic
+            const copyBtn = document.getElementById('copyBtn');
+            const promptText = document.getElementById('promptText');
+            
+            if(copyBtn && promptText) {
+                copyBtn.addEventListener('click', () => {
+                    // Quick scale sequence on click
+                    gsap.fromTo(copyBtn, { scale: 0.9 }, { scale: 1, duration: 0.3, ease: 'back.out(1.7, 0.3)' });
+
+                    navigator.clipboard.writeText(promptText.innerText).then(() => {
+                        const originalText = copyBtn.innerText;
+                        copyBtn.innerText = "√ SECURELY COPIED";
+                        copyBtn.style.background = "var(--text-accent)";
+                        copyBtn.style.color = "var(--bg-base)";
+                        
+                        setTimeout(() => {
+                            copyBtn.innerText = originalText;
+                            copyBtn.style.background = "transparent";
+                            copyBtn.style.color = "var(--text-primary)";
+                        }, 2500);
+                    });
+                });
+            }
+
+            // 5. Solid Custom Cursor Interactivity
+            const cursor = document.querySelector('.cursor');
+            const interactables = document.querySelectorAll('a, button, .lexicon-item, .callout-box, .step-image, .prompt-cartridge, .checklist-item');
+            
+            // Render cursor at center exactly (css translate handles offset)
+            document.addEventListener('mousemove', e => {
+                gsap.to(cursor, { 
+                    left: e.clientX, 
+                    top: e.clientY, 
+                    duration: 0.15, 
+                    ease: "power2.out" 
+                });
+            });
+
+            interactables.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover-active'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover-active'));
+            });
+
+            // 6. ScrollTrigger Section Reveals
+            gsap.utils.toArray('.reveal').forEach(element => {
+                gsap.fromTo(element, 
+                    { y: 40, opacity: 0 },
+                    {
+                        y: 0, opacity: 1,
+                        duration: 1.2,
+                        ease: "power3.out",
+                        scrollTrigger: { trigger: element, start: "top 88%", toggleActions: "play none none reverse" }
+                    }
+                );
+            });
+
+            // 7. Staggered List Reveals nested inside instructions
+            gsap.utils.toArray('.step-block, #verify-setup, #showcase').forEach(block => {
+                const listItems = block.querySelectorAll('ul.clean-list li');
+                if (listItems.length > 0) {
+                    gsap.to(listItems, {
+                        opacity: 1,
+                        x: 0,
+                        duration: 0.8,
+                        stagger: 0.15,
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: block,
+                            start: "top 85%",
+                            toggleActions: "play none none reverse"
+                        }
+                    });
+                }
+            });
+
+            // 8. Dynamic Image Scaling Triggers
+            const lazyImages = document.querySelectorAll('.step-image');
+            lazyImages.forEach(img => {
+                ScrollTrigger.create({
+                    trigger: img,
+                    start: "top 90%",
+                    onEnter: () => img.classList.add('reveal-img'),
+                });
+            });
+
+            // 9. Lexicon Grid Cascading Entrance
+            const lexiconItems = document.querySelectorAll('.lexicon-item');
+            if(lexiconItems.length > 0) {
+                gsap.to(lexiconItems, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: '.lexicon-grid',
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+            }
+
+            // 10. Layered Ambient Particles
+            const container = document.getElementById('particles');
+            const particleCount = 40; 
+            for(let i = 0; i < particleCount; i++) {
+                let div = document.createElement('div');
+                div.className = 'particle';
+                container.appendChild(div);
+                
+                gsap.set(div, {
+                    x: "random(0, " + window.innerWidth + ")",
+                    y: "random(0, " + window.innerHeight + ")",
+                    scale: "random(0.5, 2.5)"
+                });
+
+                gsap.to(div, {
+                    y: "-=200",
+                    x: "random(-50, 50)",
+                    opacity: "random(0.1, 0.5)",
+                    duration: "random(4, 12)",
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+            }
+        });
+    </script>
+</body>
+</html>

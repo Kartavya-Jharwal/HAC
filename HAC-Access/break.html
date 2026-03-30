@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0E0E0E">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>HAC // SYSTEM STANDBY</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Fira+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <style>
+        .standby-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 60vh;
+            text-align: center;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(14, 14, 14, 0.8);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .standby-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff3366, transparent);
+            animation: scanline 2s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .standby-title {
+            font-family: 'Fira Mono', monospace;
+            color: #ff3366;
+            font-size: 2rem;
+            letter-spacing: 0.2em;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+            animation: glitch-anim 3s infinite;
+        }
+
+        .standby-message {
+            font-family: 'Bai Jamjuree', sans-serif;
+            color: #E0E0E0;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            font-family: 'Fira Mono', monospace;
+            font-size: 0.9rem;
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-btn:hover {
+            border-color: #ff3366;
+            color: #ff3366;
+            text-shadow: 0 0 8px rgba(255, 51, 102, 0.6);
+            background: rgba(255, 51, 102, 0.1);
+        }
+
+        .social-btn::before {
+            content: '>';
+            margin-right: 0.5rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <a href="../index.html" class="topbar__brand">
+            <span class="topbar__logo"><img src="assets/images/HAC_Wordmark.svg" alt="HAC" class="topbar__logo-svg"></span>
+            <span class="topbar__label">MEMBER PORTAL</span>
+        </a>
+        <nav class="topbar__nav">
+            <a href="../index.html" class="topbar__link">◈ HAC HOMEPAGE</a>
+        </nav>
+    </header>
+
+    <main class="dashboard">
+        <div class="welcome">
+            <div>
+                <h1 class="welcome__greeting">SYSTEM STATUS: <span style="color: #ff3366;">STANDBY</span></h1>
+                <p class="welcome__subtitle">HAC-OS v2.0.0 // HIBERNATION MODE ENGAGED</p>
+            </div>
+            <div class="welcome__status">
+                <div class="welcome__status-dot" style="background-color: #ff3366; box-shadow: 0 0 8px #ff3366;"></div>
+                SYSTEM OFFLINE
+            </div>
+        </div>
+
+        <section class="standby-container">
+            <h2 class="standby-title">SYSTEM STANDBY</h2>
+            <p class="standby-message">
+                The project is officially on break and will reopen in September for the next academic year. All core functionality has been suspended for the summer cycle.
+                <br><br>
+                Meanwhile, follow us on our designated communication channels for transmission updates.
+            </p>
+            
+            <div class="social-links">
+                <a href="https://www.instagram.com/hult.ai.collective/" target="_blank" rel="noopener noreferrer" class="social-btn">INSTAGRAM</a>
+                <a href="https://www.linkedin.com/company/hult-ai-collective/" target="_blank" rel="noopener noreferrer" class="social-btn">LINKEDIN</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
