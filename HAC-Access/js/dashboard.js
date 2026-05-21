@@ -21,43 +21,57 @@
             desc: 'Hult AI Collective is hosting its first ever event. We will introduce the board, share our mission, run live demos (Mentimeter, Mermaid), and drop into a hands-on AI + Excalidraw workshop.',
             location: 'Classroom 1A, Hult London',
             type: 'LAUNCH EVENT',
-            status: 'upcoming',
+            status: 'completed',
             registered: false,
             pageUrl: '../events/opening-night.html'
         },
         {
-            id: 'fin-trading',
+            id: 'finance-conference',
             title: 'Finance Conference',
-            date: '2026-03-05',
+            date: '2026-03-28',
             time: null,
             desc: 'Master chart patterns, indicators, and AI-powered trading analysis. Build your own technical analysis dashboards.',
             location: 'Hult London Campus',
-            type: 'WORKSHOP',
-            status: 'upcoming',
+            type: 'FINANCE',
+            status: 'completed',
             registered: false,
             pageUrl: '../events/financial-trading.html'
         },
         {
-            id: 'event-3',
-            title: 'Custom Domain Website',
+            id: 'marketing-infra',
+            title: 'Marketing Infrastructure Workshop',
             date: '2026-03-31',
             time: null,
-            desc: 'Learn how to register, configure, and host your own custom domain website.',
+            desc: 'Learn how to register, configure, and ship your own custom domain portfolio.',
             location: 'Hult London',
-            type: 'WORKSHOP',
-            status: 'upcoming',
+            type: 'MARKETING',
+            status: 'completed',
             registered: false,
             pageUrl: '../events/own-your-brand.html'
         },
         {
-            id: 'event-4',
+            id: 'trading-lab',
+            title: 'Trading Lab',
+            date: '2026-04-10',
+            dateLabel: 'NEXT SEMESTER (TBA)',
+            time: null,
+            desc: 'Live trading systems, signal design, and backtesting workflows. Session delayed to next semester.',
+            location: 'Hult London',
+            type: 'TRADING',
+            status: 'delayed',
+            registered: false,
+            pageUrl: '../events/trading-lab.html'
+        },
+        {
+            id: 'capstone-hackathon',
             title: 'HFL Capstone Hackathon',
             date: '2026-04-17',
+            dateLabel: 'NEXT SEMESTER (TBA)',
             time: null,
-            desc: 'Join us for the two-day Capstone Hackathon event on April 17th-18th.',
+            desc: 'The capstone hackathon returns next semester with expanded challenges and team formats.',
             location: 'Hult London',
-            type: 'WORKSHOP',
-            status: 'upcoming',
+            type: 'HACKATHON',
+            status: 'delayed',
             registered: false,
             pageUrl: '../events/workshop-4.html'
         }
@@ -74,6 +88,37 @@
         const diffTime = eventDate - today;
         return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     }
+
+    const EVENT_STATUS = {
+        completed: {
+            stage: 'past',
+            tagLabel: 'COMPLETED',
+            tagClass: 'past',
+            ctaLabel: 'EVENT DONE',
+            ctaArrow: '✓',
+            spotsLabel: 'ARCHIVED'
+        },
+        delayed: {
+            stage: 'upcoming',
+            tagLabel: 'DELAYED',
+            tagClass: 'delayed',
+            ctaLabel: 'DELAYED TO NEXT SEMESTER',
+            ctaArrow: '↗',
+            spotsLabel: 'PAUSED',
+            countdownLabel: 'NEXT SEMESTER',
+            countdownClass: 'delayed'
+        },
+        cancelled: {
+            stage: 'upcoming',
+            tagLabel: 'CANCELLED',
+            tagClass: 'cancelled',
+            ctaLabel: 'CANCELLED',
+            ctaArrow: '×',
+            spotsLabel: 'CLOSED',
+            countdownLabel: 'CANCELLED',
+            countdownClass: 'cancelled'
+        }
+    };
 
     function getEventStatus(dateStr) {
         const days = getDaysUntil(dateStr);
@@ -102,17 +147,52 @@
         return getDaysUntil(dateStr) < 0;
     }
 
+    function getEventStage(event) {
+        const statusConfig = EVENT_STATUS[event.status];
+        if (statusConfig) return statusConfig.stage;
+        return isPastEvent(event.date) ? 'past' : 'upcoming';
+    }
+
+    function getEventDisplay(event) {
+        const statusConfig = EVENT_STATUS[event.status];
+        if (statusConfig) return statusConfig;
+
+        const isPast = getEventStage(event) === 'past';
+        if (isPast) {
+            return {
+                stage: 'past',
+                tagLabel: 'PAST',
+                tagClass: 'past',
+                ctaLabel: 'EVENT PAST',
+                ctaArrow: '✓',
+                spotsLabel: 'ARCHIVED'
+            };
+        }
+
+        const countdownStatus = getEventStatus(event.date);
+        return {
+            stage: 'upcoming',
+            tagLabel: 'UPCOMING',
+            tagClass: 'upcoming',
+            ctaLabel: event.registered ? 'REGISTERED' : 'REGISTER',
+            ctaArrow: '→',
+            spotsLabel: event.registered ? 'REGISTERED' : 'OPEN',
+            countdownLabel: countdownStatus.label,
+            countdownClass: countdownStatus.class
+        };
+    }
+
     function renderEventCard(event) {
-        const isPast = isPastEvent(event.date);
-        const status = getEventStatus(event.date);
-        const displayDate = formatDate(event.date);
+        const display = getEventDisplay(event);
+        const isPast = getEventStage(event) === 'past';
+        const displayDate = event.dateLabel || formatDate(event.date);
         const displayTime = formatTime(event.time);
         const timeStr = displayTime ? `${displayDate} • ${displayTime}` : displayDate;
 
         let html = `
             <button class="event-card" data-event-id="${event.id}">
-                <div class="event-card__tag event-card__tag--${isPast ? 'past' : 'upcoming'}">
-                    ◈ ${isPast ? 'PAST' : 'UPCOMING'} — ${event.type}
+                <div class="event-card__tag event-card__tag--${display.tagClass}">
+                    ◈ ${display.tagLabel} — ${event.type}
                 </div>
                 <h2 class="event-card__title">${event.title}</h2>
                 <p class="event-card__desc">${event.desc}</p>
@@ -120,11 +200,10 @@
                     <span class="event-card__detail-icon">◷</span> ${timeStr}
                 </div>`;
         
-        if (!isPast) {
-            const countdownStatus = status;
+        if (!isPast && display.countdownLabel) {
             html += `
-                <div class="event-card__countdown event-card__countdown--${countdownStatus.class}">
-                    ${countdownStatus.label}
+                <div class="event-card__countdown event-card__countdown--${display.countdownClass}">
+                    ${display.countdownLabel}
                 </div>`;
         }
 
@@ -139,9 +218,9 @@
                 </div>
                 <div class="event-card__footer">
                     <span class="event-card__cta">
-                        ${isPast ? 'EVENT PAST' : 'REGISTER'} <span class="event-card__cta-arrow">${isPast ? '✓' : '→'}</span>
+                        ${display.ctaLabel} <span class="event-card__cta-arrow">${display.ctaArrow}</span>
                     </span>
-                    <span class="event-card__spots">${event.registered ? 'REGISTERED' : 'OPEN'}</span>
+                    <span class="event-card__spots">${display.spotsLabel}</span>
                 </div>
             </button>`;
 
@@ -149,8 +228,8 @@
     }
 
     function renderEvents() {
-        const upcoming = EVENTS.filter(e => !isPastEvent(e.date));
-        const past = EVENTS.filter(e => isPastEvent(e.date));
+        const upcoming = EVENTS.filter(e => getEventStage(e) === 'upcoming');
+        const past = EVENTS.filter(e => getEventStage(e) === 'past');
 
         // Render upcoming
         const upcomingContainer = document.getElementById('upcoming-events-container');
@@ -400,7 +479,7 @@
     function showEventDialog(event) {
         if (!event) return;
 
-        const displayDate = formatDate(event.date);
+        const displayDate = event.dateLabel || formatDate(event.date);
         const displayTime = formatTime(event.time);
         const dateInfo = displayTime ? `${displayDate} at ${displayTime}` : displayDate;
 
@@ -431,7 +510,7 @@
                         <li>Hult London Campus</li>
                     </ul>`
             },
-            'fin-trading': {
+            'finance-conference': {
                 details: `
                     <h3>What You'll Learn:</h3>
                     <ul>
@@ -446,33 +525,58 @@
                     <h3>Location:</h3>
                     <p>Hult London Campus</p>`
             },
-            'event-3': {
+            'marketing-infra': {
                 details: `
-                    <p>Details coming soon. Check back for updates!</p>
+                    <p>Portfolio infrastructure, custom domains, and brand systems for member projects.</p>
                     <h3>Location:</h3>
                     <p>Hult London</p>`
             },
-            'event-4': {
+            'trading-lab': {
                 details: `
-                    <p>Details coming soon. Check back for updates!</p>
+                    <p>Status: <strong>Delayed to next semester.</strong></p>
+                    <p>This session will return with an updated trading curriculum and AI signal workflows.</p>
+                    <h3>Location:</h3>
+                    <p>Hult London</p>`
+            },
+            'capstone-hackathon': {
+                details: `
+                    <p>Status: <strong>Delayed to next semester.</strong></p>
+                    <p>The capstone hackathon returns with expanded challenges and updated team formats.</p>
                     <h3>Location:</h3>
                     <p>Hult London</p>`
             }
         };
 
         const detail = eventDetails[event.id] || { details: '<p>Details coming soon.</p>' };
+        const statusNote = event.status === 'delayed'
+            ? 'Delayed to next semester'
+            : event.status === 'cancelled'
+                ? 'Cancelled for this semester'
+                : event.status === 'completed'
+                    ? 'Completed • Archive available'
+                    : null;
+
         const message = `
             <div class="event-detail">
                 <p>${event.desc}</p>
+                ${statusNote ? `<p><strong>Status:</strong> ${statusNote}</p>` : ''}
                 <p><strong>📅 ${dateInfo}</strong></p>
                 <p><strong>📍 ${event.location}</strong></p>
                 ${detail.details}
             </div>
         `;
 
+        const primaryLabel = event.status === 'delayed'
+            ? 'VIEW STATUS'
+            : event.status === 'cancelled'
+                ? 'VIEW NOTICE'
+                : event.status === 'completed'
+                    ? 'VIEW ARCHIVE'
+                    : 'LEARN MORE';
+
         showDialog(`${event.title.toUpperCase()}`, message, [
             {
-                text: 'LEARN MORE',
+                text: primaryLabel,
                 type: 'primary',
                 action: () => {
                     if (event.pageUrl) {

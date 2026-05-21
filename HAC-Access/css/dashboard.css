@@ -499,6 +499,18 @@ body::before {
     background: rgba(200, 200, 200, 0.05);
 }
 
+.event-card__tag--delayed {
+    border-color: rgba(255, 152, 0, 0.3);
+    color: #ff9800;
+    background: rgba(255, 152, 0, 0.08);
+}
+
+.event-card__tag--cancelled {
+    border-color: rgba(255, 60, 60, 0.3);
+    color: #ff3c3c;
+    background: rgba(255, 60, 60, 0.08);
+}
+
 .event-card__tag--live {
     border-color: rgba(252, 62, 56, 0.3);
     color: #fc3e38;
@@ -619,6 +631,18 @@ body::before {
     color: #00bcd4;
     background: rgba(0, 188, 212, 0.1);
     border-color: rgba(0, 188, 212, 0.3);
+}
+
+.event-card__countdown--delayed {
+    color: #ff9800;
+    background: rgba(255, 152, 0, 0.1);
+    border-color: rgba(255, 152, 0, 0.3);
+}
+
+.event-card__countdown--cancelled {
+    color: #ff3c3c;
+    background: rgba(255, 60, 60, 0.1);
+    border-color: rgba(255, 60, 60, 0.3);
 }
 
 .event-card__time {
