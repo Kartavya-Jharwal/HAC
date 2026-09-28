@@ -135,7 +135,7 @@
     // Layered above hero; does not replace hac-hero splash
     // ============================
     (function initSurviveModal() {
-        var END = new Date('2026-10-01T14:30:00+01:00').getTime();
+        var END = new Date('2026-10-02T14:30:00+01:00').getTime();
         var STORAGE_KEY = 'hac_survive_modal_dismissed';
         var root = document.getElementById('conditional-open-modal');
         if (!root) return;
@@ -154,12 +154,13 @@
         }
 
         function formatRemaining(ms) {
-            if (ms <= 0) return '00:00:00';
+            if (ms <= 0) return '0d 00:00:00';
             var totalSec = Math.floor(ms / 1000);
-            var h = Math.floor(totalSec / 3600);
+            var d = Math.floor(totalSec / 86400);
+            var h = Math.floor((totalSec % 86400) / 3600);
             var m = Math.floor((totalSec % 3600) / 60);
             var s = totalSec % 60;
-            return pad(h) + ':' + pad(m) + ':' + pad(s);
+            return d + 'd ' + pad(h) + ':' + pad(m) + ':' + pad(s);
         }
 
         function updateCountdown() {
