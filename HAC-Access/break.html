@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="dark">
     <meta name="theme-color" content="#0E0E0E">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>HAC // SYSTEM STANDBY</title>
+    <title>HAC // CONDITIONAL OPEN</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +41,7 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: linear-gradient(90deg, transparent, #ff3366, transparent);
+            background: linear-gradient(90deg, transparent, #E54B2A, transparent);
             animation: scanline 2s linear infinite;
         }
 
@@ -52,28 +52,42 @@
 
         .standby-title {
             font-family: 'Fira Mono', monospace;
-            color: #ff3366;
-            font-size: 2rem;
-            letter-spacing: 0.2em;
+            color: #E54B2A;
+            font-size: 1.5rem;
+            letter-spacing: 0.15em;
             margin-bottom: 1.5rem;
             text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
-            animation: glitch-anim 3s infinite;
+            text-shadow: 0 0 10px rgba(229, 75, 42, 0.45);
         }
 
         .standby-message {
             font-family: 'Bai Jamjuree', sans-serif;
             color: #E0E0E0;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             line-height: 1.6;
-            max-width: 600px;
+            max-width: 640px;
+            margin-bottom: 1.5rem;
+        }
+
+        .standby-gate {
+            font-family: 'Fira Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            color: rgba(255, 255, 255, 0.55);
             margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .standby-gate strong {
+            color: #fff;
+            font-weight: 500;
         }
 
         .social-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .social-btn {
@@ -84,19 +98,28 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: #ffffff;
             font-family: 'Fira Mono', monospace;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-decoration: none;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.08em;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
         .social-btn:hover {
-            border-color: #ff3366;
-            color: #ff3366;
-            text-shadow: 0 0 8px rgba(255, 51, 102, 0.6);
-            background: rgba(255, 51, 102, 0.1);
+            border-color: #E54B2A;
+            color: #E54B2A;
+            text-shadow: 0 0 8px rgba(229, 75, 42, 0.5);
+            background: rgba(229, 75, 42, 0.1);
+        }
+
+        .social-btn--primary {
+            border-color: #E54B2A;
+            color: #E54B2A;
+        }
+
+        .social-btn--primary:hover {
+            background: rgba(229, 75, 42, 0.18);
         }
 
         .social-btn::before {
@@ -120,24 +143,29 @@
     <main class="dashboard">
         <div class="welcome">
             <div>
-                <h1 class="welcome__greeting">SYSTEM STATUS: <span style="color: #ff3366;">STANDBY</span></h1>
-                <p class="welcome__subtitle">HAC-OS v2.0.0 // HIBERNATION MODE ENGAGED</p>
+                <h1 class="welcome__greeting">SYSTEM STATUS: <span style="color: #E54B2A;">CONDITIONAL OPEN</span></h1>
+                <p class="welcome__subtitle">HAC-OS v2.0.0 // AY26-27 · SP26 ARCHIVED</p>
             </div>
             <div class="welcome__status">
-                <div class="welcome__status-dot" style="background-color: #ff3366; box-shadow: 0 0 8px #ff3366;"></div>
-                SYSTEM OFFLINE
+                <div class="welcome__status-dot" style="background-color: #E54B2A; box-shadow: 0 0 8px #E54B2A;"></div>
+                AWAITING THRESHOLD
             </div>
         </div>
 
         <section class="standby-container">
-            <h2 class="standby-title">SYSTEM STANDBY</h2>
+            <h2 class="standby-title">We Need Your Help to Survive</h2>
             <p class="standby-message">
-                The project is officially on break and will reopen in September for the next academic year. All core functionality has been suspended for the summer cycle.
-                <br><br>
-                Meanwhile, follow us on our designated communication channels for transmission updates.
+                Summer hibernation is over. AY26-27 does not fully reopen until the Conditional Open gate is met.
+                SP26 events and resources are archived below the threshold.
+            </p>
+            <p class="standby-gate">
+                GATE: <strong>5 board members</strong> seated<br>
+                GATE: <strong>10 signed interested members</strong>
             </p>
             
             <div class="social-links">
+                <a href="https://chat.whatsapp.com/GDVHCuN7IlXLbunB1vmm2u" target="_blank" rel="noopener noreferrer" class="social-btn social-btn--primary">WHATSAPP</a>
+                <a href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=wKMl1dipKE2eWUA1j3dPCV13jzTbKiNEvgjxnC4yqNRUOUtESE1JT0JTQThFM0YzUUJJR1Y3Q0FWRi4u" target="_blank" rel="noopener noreferrer" class="social-btn social-btn--primary">JOIN THE BOARD</a>
                 <a href="https://www.instagram.com/hult.ai.collective/" target="_blank" rel="noopener noreferrer" class="social-btn">INSTAGRAM</a>
                 <a href="https://www.linkedin.com/company/hult-ai-collective/" target="_blank" rel="noopener noreferrer" class="social-btn">LINKEDIN</a>
             </div>

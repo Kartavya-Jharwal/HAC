@@ -1,5 +1,5 @@
 /**
- * HAC Landing – JS
+ * HAC Landing - JS
  * Smooth scroll · Floating nav · Mobile menu · Scroll-driven polish
  */
 (function () {
@@ -42,7 +42,7 @@
     });
 
     // ============================
-    // Nav – Scroll-aware hide/show (rAF throttled)
+    // Nav - Scroll-aware hide/show (rAF throttled)
     // ============================
     if (nav) {
         var lastScroll = 0;
@@ -129,6 +129,115 @@
             });
         }
     });
+
+    // ============================
+    // AY26-27 Survival Modal
+    // Layered above hero; does not replace hac-hero splash
+    // ============================
+    (function initSurviveModal() {
+        var END = new Date('2026-10-01T14:30:00+01:00').getTime();
+        var STORAGE_KEY = 'hac_survive_modal_dismissed';
+        var root = document.getElementById('conditional-open-modal');
+        if (!root) return;
+
+        if (Date.now() >= END || sessionStorage.getItem(STORAGE_KEY) === '1') {
+            root.hidden = true;
+            return;
+        }
+
+        var countdownEl = root.querySelector('[data-survive-countdown]');
+        var tickId = null;
+        var opened = false;
+
+        function pad(n) {
+            return n < 10 ? '0' + n : String(n);
+        }
+
+        function formatRemaining(ms) {
+            if (ms <= 0) return '00:00:00';
+            var totalSec = Math.floor(ms / 1000);
+            var h = Math.floor(totalSec / 3600);
+            var m = Math.floor((totalSec % 3600) / 60);
+            var s = totalSec % 60;
+            return pad(h) + ':' + pad(m) + ':' + pad(s);
+        }
+
+        function updateCountdown() {
+            var remaining = END - Date.now();
+            if (countdownEl) countdownEl.textContent = formatRemaining(remaining);
+            if (remaining <= 0) {
+                closeModal(false);
+            }
+        }
+
+        function openModal() {
+            if (opened) return;
+            if (Date.now() >= END || sessionStorage.getItem(STORAGE_KEY) === '1') return;
+            opened = true;
+            root.hidden = false;
+            root.setAttribute('aria-hidden', 'false');
+            requestAnimationFrame(function () {
+                root.classList.add('is-open');
+            });
+            document.body.classList.add('survive-modal-open');
+            updateCountdown();
+            tickId = setInterval(updateCountdown, 1000);
+            var firstBtn = root.querySelector('.survive-modal__ctas a, .survive-modal__dismiss');
+            if (firstBtn) firstBtn.focus();
+        }
+
+        function closeModal(persist) {
+            if (persist) sessionStorage.setItem(STORAGE_KEY, '1');
+            root.classList.remove('is-open');
+            root.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('survive-modal-open');
+            if (tickId) {
+                clearInterval(tickId);
+                tickId = null;
+            }
+            setTimeout(function () {
+                root.hidden = true;
+            }, 350);
+        }
+
+        root.querySelectorAll('[data-survive-dismiss]').forEach(function (el) {
+            el.addEventListener('click', function () {
+                closeModal(true);
+            });
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && root.classList.contains('is-open')) {
+                closeModal(true);
+            }
+        });
+
+        // Wait for existing hero splash to land before showing modal
+        var hero = document.querySelector('.hero');
+        var FALLBACK_MS = 5600;
+
+        function scheduleOpen() {
+            openModal();
+        }
+
+        if (hero && hero.classList.contains('is--landed')) {
+            setTimeout(scheduleOpen, 400);
+        } else if (hero) {
+            var observer = new MutationObserver(function () {
+                if (hero.classList.contains('is--landed')) {
+                    observer.disconnect();
+                    setTimeout(scheduleOpen, 500);
+                }
+            });
+            observer.observe(hero, { attributes: true, attributeFilter: ['class'] });
+            setTimeout(function () {
+                observer.disconnect();
+                scheduleOpen();
+            }, FALLBACK_MS);
+        } else {
+            setTimeout(scheduleOpen, 600);
+        }
+    })();
 
     // ============================
     // Console

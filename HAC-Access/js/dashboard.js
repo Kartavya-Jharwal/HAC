@@ -10,18 +10,18 @@
     const STORAGE_KEY = 'hac_profile';
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // EVENT DATA (SP26)
+    // EVENT DATA (SP26 · ARCHIVED FOR AY26-27)
     // ═══════════════════════════════════════════════════════════════════════════
     const EVENTS = [
         {
             id: 'opening-night',
-            title: 'HAC Launch Event — Opening Night',
+            title: 'HAC Launch Event - Opening Night',
             date: '2026-02-26',
             time: '18:00',
             desc: 'Hult AI Collective is hosting its first ever event. We will introduce the board, share our mission, run live demos (Mentimeter, Mermaid), and drop into a hands-on AI + Excalidraw workshop.',
             location: 'Classroom 1A, Hult London',
             type: 'LAUNCH EVENT',
-            status: 'upcoming',
+            status: 'past',
             registered: false,
             pageUrl: '../events/opening-night.html'
         },
@@ -33,7 +33,7 @@
             desc: 'Master chart patterns, indicators, and AI-powered trading analysis. Build your own technical analysis dashboards.',
             location: 'Hult London Campus',
             type: 'WORKSHOP',
-            status: 'upcoming',
+            status: 'past',
             registered: false,
             pageUrl: '../events/financial-trading.html'
         },
@@ -45,7 +45,7 @@
             desc: 'Learn how to register, configure, and host your own custom domain website.',
             location: 'Hult London',
             type: 'WORKSHOP',
-            status: 'upcoming',
+            status: 'past',
             registered: false,
             pageUrl: '../events/own-your-brand.html'
         },
@@ -57,7 +57,7 @@
             desc: 'Join us for the two-day Capstone Hackathon event on April 17th-18th.',
             location: 'Hult London',
             type: 'WORKSHOP',
-            status: 'upcoming',
+            status: 'past',
             registered: false,
             pageUrl: '../events/workshop-4.html'
         }
@@ -112,7 +112,7 @@
         let html = `
             <button class="event-card" data-event-id="${event.id}">
                 <div class="event-card__tag event-card__tag--${isPast ? 'past' : 'upcoming'}">
-                    ◈ ${isPast ? 'PAST' : 'UPCOMING'} — ${event.type}
+                    ◈ ${isPast ? 'PAST' : 'UPCOMING'} - ${event.type}
                 </div>
                 <h2 class="event-card__title">${event.title}</h2>
                 <p class="event-card__desc">${event.desc}</p>
@@ -156,7 +156,17 @@
         const upcomingContainer = document.getElementById('upcoming-events-container');
         const upcomingCount = document.getElementById('upcoming-event-count');
         if (upcomingContainer) {
-            upcomingContainer.innerHTML = upcoming.map(e => renderEventCard(e)).join('');
+            if (upcoming.length === 0) {
+                upcomingContainer.innerHTML = `
+                    <div class="resource-box" style="grid-column: 1 / -1; border-color: rgba(229, 75, 42, 0.35);">
+                        <div class="resource-box__icon" style="color: #E54B2A;">◈</div>
+                        <div class="resource-box__title">Conditional Open · No New Events Yet</div>
+                        <div class="resource-box__desc">AY26-27 sessions unlock once we seat 5 board members and 10 signed interested members. SP26 is archived below.</div>
+                        <a href="break.html" class="resource-box__link" style="color: #E54B2A;">View Gate Status</a>
+                    </div>`;
+            } else {
+                upcomingContainer.innerHTML = upcoming.map(e => renderEventCard(e)).join('');
+            }
             if (upcomingCount) upcomingCount.textContent = `${upcoming.length} EVENT${upcoming.length !== 1 ? 'S' : ''}`;
         }
 
@@ -212,7 +222,7 @@
         if (memberDesignation) memberDesignation.textContent = profile.designation || 'AI COLLECTIVE MEMBER';
 
         const memberStudentId = document.getElementById('member-studentid');
-        if (memberStudentId) memberStudentId.textContent = profile.studentId || '—';
+        if (memberStudentId) memberStudentId.textContent = profile.studentId || '-';
 
         // Avatar
         if (profile.avatar) {
@@ -292,11 +302,11 @@
                 <div class="data-info">
                     <p><strong>Current Data:</strong></p>
                     <ul>
-                        <li>Name: ${profile?.name || '—'}</li>
-                        <li>Email: ${profile?.email || '—'}</li>
-                        <li>Clearance: ${profile?.clearance || '—'}</li>
-                        <li>Designation: ${profile?.designation || '—'}</li>
-                        <li>Student ID: ${profile?.studentId || '—'}</li>
+                        <li>Name: ${profile?.name || '-'}</li>
+                        <li>Email: ${profile?.email || '-'}</li>
+                        <li>Clearance: ${profile?.clearance || '-'}</li>
+                        <li>Designation: ${profile?.designation || '-'}</li>
+                        <li>Student ID: ${profile?.studentId || '-'}</li>
                     </ul>
                 </div>
                 <p>Changes will be <strong>saved to your session</strong> when you edit through the Access Portal.</p>
@@ -408,7 +418,7 @@
             'opening-night': {
                 details: `
                     <h3>HAC Launch Event</h3>
-                    <p>Hult AI Collective is hosting its first ever event and we would love to see you there. Everything happens in real time tonight — refer to this page during the workshop.</p>
+                    <p>Hult AI Collective is hosting its first ever event and we would love to see you there. Everything happens in real time tonight - refer to this page during the workshop.</p>
                     <h3>What to Expect:</h3>
                     <ul>
                         <li>Introduction to the HAC board and our mission</li>
@@ -420,9 +430,9 @@
                     </ul>
                     <h3>Demonstrations:</h3>
                     <ul>
-                        <li><a href="https://www.mentimeter.com" target="_blank">Mentimeter live poll</a> — interact during the session</li>
-                        <li><a href="https://mermaid.live" target="_blank">Mermaid Live Editor</a> — create diagrams on the fly</li>
-                        <li><a href="https://excalidraw.com" target="_blank">Excalidraw</a> — draw together in the workshop</li>
+                        <li><a href="https://www.mentimeter.com" target="_blank">Mentimeter live poll</a> - interact during the session</li>
+                        <li><a href="https://mermaid.live" target="_blank">Mermaid Live Editor</a> - create diagrams on the fly</li>
+                        <li><a href="https://excalidraw.com" target="_blank">Excalidraw</a> - draw together in the workshop</li>
                     </ul>
                     <h3>This is the beginning of something new. Come and be part of it.</h3>
                     <h3>Location:</h3>
@@ -625,7 +635,7 @@
                 { label: 'EMAIL', value: profile.email || 'member@hac.edu' },
                 { label: 'CLEARANCE', value: profile.clearance || 'BUILDER' },
                 { label: 'DESIGNATION', value: profile.designation || 'AI COLLECTIVE MEMBER' },
-                { label: 'STUDENT ID', value: profile.studentId || '—' }
+                { label: 'STUDENT ID', value: profile.studentId || '-' }
             ];
 
             const fieldX = avatarX + avatarW + 32;

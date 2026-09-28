@@ -1,5 +1,5 @@
 /* =====================================================================
-   HAC Landing – Editorial + Curated
+   HAC Landing - Editorial + Curated
    Floating nav · Dashed grid bg · Liquid cursor · Three Laws
    ===================================================================== */
 
@@ -99,7 +99,7 @@ ul, ol { list-style: none; }
 .skip-link:focus { left: var(--sp-sm); }
 
 /* =====================================================================
-   CUSTOM CURSOR  –  Liquid gradient fill · WebGL canvas · No invert
+   CUSTOM CURSOR  -  Liquid gradient fill · WebGL canvas · No invert
    ===================================================================== */
 .cursor {
     position: fixed;
@@ -202,7 +202,7 @@ ul, ol { list-style: none; }
 }
 
 /* =====================================================================
-   FILM GRAIN  –  Subtle texture overlay for depth
+   FILM GRAIN  -  Subtle texture overlay for depth
    ===================================================================== */
 .grain {
     position: fixed;
@@ -218,7 +218,7 @@ ul, ol { list-style: none; }
 }
 
 /* =====================================================================
-   SCROLL REVEAL  –  Base state (JS animates these in)
+   SCROLL REVEAL  -  Base state (JS animates these in)
    ===================================================================== */
 [data-reveal] {
     opacity: 0;
@@ -313,7 +313,7 @@ ul, ol { list-style: none; }
     box-shadow: 0 4px 12px rgba(26, 26, 26, 0.2);
 }
 
-/* HAC-Access hero button – equal weight, distinct identity */
+/* HAC-Access hero button - equal weight, distinct identity */
 .btn-access {
     background: var(--ink);
     color: var(--white);
@@ -690,7 +690,7 @@ ul, ol { list-style: none; }
 .who-label--no { color: var(--muted); }
 
 .who-list li { padding: var(--sp-xs) 0; padding-left: var(--sp-md); position: relative; color: var(--ink-light); line-height: 1.6; font-size: var(--text-small); }
-.who-list li::before { content: '—'; position: absolute; left: 0; color: var(--accent); }
+.who-list li::before { content: '-'; position: absolute; left: 0; color: var(--accent); }
 .who-list--muted li { color: var(--muted); }
 .who-list--muted li::before { color: var(--muted); }
 
@@ -814,6 +814,175 @@ ul, ol { list-style: none; }
 
 @media (max-width: 600px) {
     .footer-legal__inner { flex-direction: column; text-align: center; }
+}
+
+/* =====================================================================
+   SURVIVAL MODAL  (AY26-27 conditional open - layered above hero, not replacing it)
+   ===================================================================== */
+.survive-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--sp-md);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        opacity var(--duration) var(--ease-expo),
+        visibility var(--duration) var(--ease-expo);
+}
+
+.survive-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.survive-modal[hidden] {
+    display: none !important;
+}
+
+.survive-modal__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    cursor: pointer;
+}
+
+.survive-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 480px);
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: var(--sp-lg) var(--sp-md);
+    text-align: center;
+    box-shadow: 0 24px 64px rgba(26, 26, 26, 0.22);
+    transform: translateY(16px) scale(0.98);
+    transition: transform 0.45s var(--ease-expo);
+}
+
+.survive-modal.is-open .survive-modal__panel {
+    transform: translateY(0) scale(1);
+}
+
+.survive-modal__badge {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--sp-sm);
+}
+
+.survive-modal__countdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: var(--sp-md);
+}
+
+.survive-modal__time {
+    font-family: var(--font-mono);
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.survive-modal__time-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.survive-modal__title {
+    font-family: var(--font-serif);
+    font-size: clamp(26px, 4vw, 34px);
+    color: var(--ink);
+    margin-bottom: var(--sp-sm);
+    letter-spacing: -0.02em;
+}
+
+.survive-modal__lead {
+    font-size: var(--text-small);
+    color: var(--ink-light);
+    line-height: 1.6;
+    margin-bottom: var(--sp-md);
+    max-width: 36em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.survive-modal__lead strong {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.survive-modal__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-xs);
+    justify-content: center;
+    margin-bottom: var(--sp-sm);
+}
+
+.btn-survive-outline {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+    padding: 14px 28px;
+    border-radius: 4px;
+}
+
+.btn-survive-outline:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+    transform: translateY(-2px);
+}
+
+.survive-modal__dismiss {
+    display: inline-block;
+    margin-top: var(--sp-xs);
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: var(--text-small);
+    color: var(--muted);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 8px;
+    transition: color var(--duration-fast) var(--ease);
+}
+
+.survive-modal__dismiss:hover {
+    color: var(--ink);
+}
+
+body.survive-modal-open {
+    overflow: hidden;
+}
+
+@media (max-width: 480px) {
+    .survive-modal__ctas {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .survive-modal__ctas .btn {
+        width: 100%;
+    }
 }
 
 /* =====================================================================

@@ -1,6 +1,6 @@
 /* 
    HAC Investor Relations (IR)
-   Editorial warm palette — aligned with landing page
+   Editorial warm palette - aligned with landing page
    Source Serif 4 · Inter · JetBrains Mono
 */
 
@@ -573,6 +573,7 @@ a {
     margin: 48px 0;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 24px;
 }
 
